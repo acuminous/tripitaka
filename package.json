@@ -1,6 +1,6 @@
 {
   "name": "zenlog",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "```js const logger = foo.createLogger({   processors: [     timestamp(),     errors(),     json()   ],   transports: [     console,     emitter,   ] }); logger.log({ level: 'INFO', message: 'Some message', x: 'stuff' }); logger.info('Some message', { x: 'stuff' }) logger.info({ x: 'stuff' }); ```",
   "main": "index.js",
   "dependencies": {
@@ -34,5 +34,13 @@
     "json",
     "stdout",
     "stderr"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/acuminous/zenlog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/acuminous/zenlog/issues"
+  },
+  "homepage": "https://acuminous.github.io/zenlog/"
 }
