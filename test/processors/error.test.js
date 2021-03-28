@@ -12,7 +12,8 @@ describe('error', () => {
 
     const result = fn({ level, message });
 
-    eq(Object.keys(result).length, 2);
+    eq(Object.keys(result).length, 3);
+    eq(result.message, 'Oh Noes!');
     eq(Object.keys(result.ctx.error).length, 2);
     eq(result.ctx.error.message, 'Oh Noes!');
     match(result.ctx.error.stack, /^Error: Oh Noes!/);
