@@ -3,21 +3,23 @@ const { Level, processors: { human } } = require('../..');
 
 describe('human', () => {
 
-  const level = Level.INFO.name;
-  const message = 'ZenLog rocks!';
-
   it('should work out of the box', () => {
-    const timestamp = new Date();
     const fn = human();
-    const ctx = { timestamp };
-    const result = fn({ level, message, ctx });
-    eq(result, `${timestamp.toISOString()} [${Level.INFO.name}] ${message}`);
+    const result = fn({ record: { level: Level.INFO.name, message: 'ZenLog Rocks!' } });
+    eq(result, `[${Level.INFO.name}] ZenLog Rocks!`);
+  });
+
+  it('should work with errors out of the box', () => {
+    const fn = human();
+    const error = new Error('Oh Noes!');
+    const result = fn({ record: { level: Level.ERROR.name, message: 'ZenLog Errors!', error: { message: error.message, stack: error.stack } } });
+    eq(result, `[${Level.ERROR.name}] ZenLog Errors!`);
   });
 
   it('should support custom formats', () => {
-    const fn = human({ template: '%s %s %d', paths: ['ctx.user.firstName', 'ctx.user.lastName', 'ctx.user.age']});
-    const ctx = { user: { firstName: 'Bob', lastName: 'Holness', age: 63 } };
-    const result = fn({ level, message, ctx });
-    eq(result, 'Bob Holness 63');
+      const fn = human({ template: '%s %s %d', paths: ['user.firstName', 'user.lastName', 'user.age']});
+      const record = { level: Level.INFO.name, message: 'ZenLog Rocks!', user: { firstName: 'Bob', lastName: 'Holness', age: 63 } };
+      const result = fn({ record });
+      eq(result, 'Bob Holness 63');
+    });
   });
-});

@@ -1,67 +1,57 @@
 const { deepStrictEqual: eq } = require('assert');
-const { Level, processors: { augment } } = require('../..');
+const { processors: { augment } } = require('../..');
 
 describe('augment', () => {
 
-  const level = Level.INFO.name;
-  const message = 'ZenLog rocks!';
-
   describe('function', () => {
-    it('should augment the context with the results of the supplied function', () => {
-      const fn = augment({
-        source: () => {
-          return { x: 'y' };
-        }
-      });
-      const ctx = { a: 'b' };
-      const result = fn({ level, message, ctx });
-      eq(result, { level, message, ctx: { a: 'b', x: 'y' }});
+    it('should augment the record with the results of the supplied function', () => {
+      const source = () => {
+        return { x: 'y' };
+      };
+      const fn = augment({ source });
+      const result = fn({ record: { a: 'b' } });
+      eq(result, { a: 'b', x: 'y' });
     });
 
-    it('should prefer context to augmentation', () => {
-      const fn = augment({
-        source: () => {
-          return { x: 'y' };
-        }
-      });
-      const ctx = { x: 'z' };
-      const result = fn({ level, message, ctx });
-      eq(result, { level, message, ctx: { x: 'z' }});
+    it('should prefer source to record', () => {
+      const source = () => {
+        return { x: 'y' };
+      };
+      const fn = augment({ source });
+      const result = fn({ record: { x: 'z' } });
+      eq(result, { x: 'y' });
     });
 
-    it('should not mutate the context', () => {
-      const fn = augment({
-        source: () => {
-          return { x: 'y' };
-        }
-      });
-      const ctx = { a: 'b' };
-      fn({ level, message, ctx });
-      eq(ctx, { a: 'b' });
+    it('should not mutate the record', () => {
+      const source = () => {
+        return { x: 'y' };
+      };
+      const fn = augment({ source });
+      const record = { a: 'b' };
+      fn({ record });
+      eq(record, { a: 'b' });
     });
   });
 
   describe('object', () => {
 
-    it('should augment the context with the supplied object', () => {
-      const fn = augment({ source: { x: 'y' } });
-      const ctx = { a: 'b' };
-      const result = fn({ level, message, ctx });
-      eq(result, { level, message, ctx: { a: 'b', x: 'y' }});
+    it('should augment the source with the supplied object', () => {
+      const fn = augment({ source: { x: 'y' }});
+      const result = fn({ record: { a: 'b' }});
+      eq(result, { a: 'b', x: 'y' });
     });
 
-    it('should prefer context to augmentation', () => {
-      const fn = augment({ source: { x: 'y' } });
-      const ctx = { x: 'z' };
-      const result = fn({ level, message, ctx });
-      eq(result, { level, message, ctx: { x: 'z' }});
+    it('should prefer source to record', () => {
+      const fn = augment({ source: { x: 'y' }});
+      const result = fn({ record: { x: 'z' }});
+      eq(result, { x: 'y' });
     });
 
-    it('should not mutate the context', () => {
+    it('should not mutate the source', () => {
       const fn = augment({ source: { x: 'y' } });
-      const ctx = { a: 'b' };
-      fn(ctx);
-      eq(ctx, { a: 'b' });
+      const record = { a: 'b' };
+      fn({ record });
+      eq(record, { a: 'b' });
     });
   });
 

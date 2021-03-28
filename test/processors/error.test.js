@@ -1,58 +1,69 @@
 const { strictEqual: eq, match } = require('assert');
-const { Level, processors: { error } } = require('../..');
+const { processors: { error } } = require('../..');
 
 describe('error', () => {
 
-  const level = Level.INFO.name;
-  const message = 'ZenLog rocks!';
+  describe('message is an instance of error', () => {
 
-  it('should relocate to ctx.error if the message is an instance of Error', () => {
-    const fn = error();
-    const message = new Error('Oh Noes!');
+    it('should nest the error on the record', () => {
+      const fn = error();
+      const message = new Error('Oh Noes!');
+      const result = fn({ message });
 
-    const result = fn({ level, message });
+      eq(result.error.message, 'Oh Noes!');
+      match(result.error.stack, /^Error: Oh Noes!/);
+    });
 
-    eq(Object.keys(result).length, 3);
-    eq(result.message, 'Oh Noes!');
-    eq(Object.keys(result.ctx.error).length, 2);
-    eq(result.ctx.error.message, 'Oh Noes!');
-    match(result.ctx.error.stack, /^Error: Oh Noes!/);
+    it('should set the record message', () => {
+      const fn = error();
+      const message = new Error('Oh Noes!');
+      const result = fn({ message });
+
+      eq(result.message, 'Oh Noes!');
+    });
+
+    it('should nest with a custom property', () => {
+      const fn = error({ field: 'e' });
+      const message = new Error('Oh Noes!');
+      const result = fn({ message });
+
+      eq(result.e.message, 'Oh Noes!');
+      match(result.e.stack, /^Error: Oh Noes!/);
+    });
   });
 
-  it('should relocate to ctx.error if the context is an instance of Error', () => {
-    const fn = error();
-    const ctx = new Error('Oh Noes!');
+  describe('context is an instance of error', () => {
 
-    const result = fn({ level, message, ctx });
+    it('should nest the error on the record', () => {
+      const fn = error();
+      const ctx = new Error('Oh Noes!');
+      const result = fn({ message: 'ZenHub Errors!', ctx });
 
-    eq(Object.keys(result).length, 3);
-    eq(Object.keys(result.ctx.error).length, 2);
-    eq(result.ctx.error.message, 'Oh Noes!');
-    match(result.ctx.error.stack, /^Error: Oh Noes!/);
+      eq(result.error.message, 'Oh Noes!');
+      match(result.error.stack, /^Error: Oh Noes!/);
+    });
+
+    it('should nest with a custom property', () => {
+      const fn = error({ field: 'e' });
+      const ctx = new Error('Oh Noes!');
+      const result = fn({ message: 'ZenHub Errors!', ctx });
+
+      eq(result.e.message, 'Oh Noes!');
+      match(result.e.stack, /^Error: Oh Noes!/);
+    });
   });
 
-  it('should support custom nesting', () => {
-    const fn = error({ field: 'e' });
-    const ctx = new Error('Oh Noes!');
+  describe('context includes an instance of error', () => {
 
-    const result = fn({ level, message, ctx });
+    it('should correctly capture error details when provided via context', () => {
+      const fn = error();
+      const ctx = { a: 'b', error: new Error('Oh Noes!'), x: 'y' };
 
-    eq(Object.keys(result).length, 3);
-    eq(Object.keys(result.ctx.e).length, 2);
-    eq(result.ctx.e.message, 'Oh Noes!');
-    match(result.ctx.e.stack, /^Error: Oh Noes!/);
-  });
+      const result = fn({ ctx });
 
-  it('should correctly capture error details when provided via context', () => {
-    const fn = error();
-    const ctx = { a: 'b', error: new Error('Oh Noes!'), x: 'y' };
+      eq(result.error.message, 'Oh Noes!');
+      match(result.error.stack, /^Error: Oh Noes!/);
+    });
 
-    const result = fn({ level, message, ctx });
-
-    eq(Object.keys(result).length, 3);
-    eq(Object.keys(result.ctx).length, 3);
-    eq(Object.keys(result.ctx.error).length, 2);
-    eq(result.ctx.error.message, 'Oh Noes!');
-    match(result.ctx.error.stack, /^Error: Oh Noes!/);
   });
 });

@@ -57,32 +57,39 @@ You can customise this output through the use of [processors](#processors) and [
 
 ```js
 const { Logger, Level, processors, transports, } = require('zenlog');
-const { error, timestamp, condense, json } = processors;
+const { error, timestamp, json } = processors;
 const { json, human } = transports;
 
 const logger = new Logger({
+  level: Level.INFO,
   processors: [
     error(),
     timestamp(),
-    condense(),
     process.env.NODE_ENV === 'production' ? json() : human(),
   ],
   transports: [
     stream(),
   ],
-  level: Level.INFO,
 })
 ```
-The order of the processors is **extremely** important. The 'error' processor should always be first otherwise another processor may spread the context, transforming it from an instance of Error to a plain object.
+## Supressing logs
+You can suppress logs by setting the logging level as above, or by calling logger.disable(). You can renable the logger by calling logger.enable();
 
 ## Processors
-A processor is a function you can use them to mutate the ZenLog log record before it is delevered to the transports. Since they are chained together in an array, the output from one processor forms the input to the next processor, but most expect a ZenLog record to be supplied. i.e.
+A processor is a function you can use to mutate the ZenLog record before it is delevered to the transports. Since processors are chained together in an array, the record can be mutated in a series of steps. The process is called with a single object containing the following properties:
+
+| name    | type   | notes |
+|---------|--------|-------|
+| level   | Level  |       |
+| message | string |       |
+| ctx     | object |       |
+| record  | any    | Initialised to a shallow clone of the context. Be careful not to mutate |
 
 ```js
 const logger = new Logger({
   processors: [
-    ({ level, message, ctx }) => {
-      return { level, message, ctx: { ...ctx, timestamp: new Date() } };
+    ({ record }) => {
+      return { ...record, timestamp: new Date() } };
     },
     json(),
   ],
@@ -93,15 +100,13 @@ If you return false (or falsey) from a processor, the result will be skipped and
 The out-of-the-box processors are as follows...
 
 - [augment](#augment)
-- [condense](#condense)
 - [error](#error)
 - [human](#human)
 - [json](#json)
-- [rebase](#rebase)
 - [timestamp](#timestamp)
 
 ### augment
-Augments the log context with the supplied source. Use with [AsyncLocalStorage](https://nodejs.org/docs/latest-v14.x/api/async_hooks.html#async_hooks_class_asynclocalstorage) as a substitute for child loggers.
+Augments the record with the supplied source. If attributes are common to both the record and the source, the source wins. Use with [AsyncLocalStorage](https://nodejs.org/docs/latest-v14.x/api/async_hooks.html#async_hooks_class_asynclocalstorage) as a substitute for child loggers.
 
 | name   | type               | required | default | notes |
 |--------|--------------------|----------|---------|-------|
@@ -119,7 +124,7 @@ const logger = new Logger({
 logger.info('ZenLock Rocks!');
 ```
 ```json
-{"ctx":{"env":"production"},"message":"ZenLog Rocks!","level":"INFO"}
+{"env":"production","message":"ZenLog Rocks!","level":"INFO"}
 ```
 
 #### Function example
@@ -134,25 +139,30 @@ const logger = new Logger({
 logger.info('ZenLock Rocks!');
 ```
 ```json
-{"ctx":{"timestamp":"2021-03-28T17:43:12.012Z"},"message":"ZenLog Rocks!","level":"INFO"}
+{"timestamp":"2021-03-28T17:43:12.012Z","message":"ZenLog Rocks!","level":"INFO"}
 ```
 
-### condense
-A ZenLog record keeps the level, message and context separate, but this can be cumbersome when you eventually come to write the record out. The condense processer hoists the context.
+### buffer
+The buffer processor outputs the record as a buffer, optionally encoding it before doing so. For this processor to work, the record must previously have been converted to a string.
+
+| name           | type   | required | default | notes |
+|----------------|--------|----------|---------|-------|
+| inputEncoding  | string | no       |         |       |
+| outputEncoding | string | no       |         |       |
 
 ```js
+const source = () => ({ timestamp: new Date() });
 const logger = new Logger({
   processors: [
-    condense(),
+    buffer({ outputEncoding: 'hex' }),
     json(),
   ],
 });
-logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
+logger.info('ZenLock Rocks!');
 ```
-```json
-{"env":"production","message":"ZenLog Rocks!","level":"INFO"}
 ```
-In the event that the context contains either a message or level attribute, these will be lost in favour of the existing top level ones.
+5a656e48756220526f636b7321
+```
 
 ### error
 The error processor is important for logging errors. Without it they will not stringify correctly. To work properly this process must come first in the list of processors.
@@ -180,24 +190,23 @@ const logger = new Logger({
 logger.error("ZenLog Errors!", new Error('Oh Noes'));
 ```
 ```json
-{"ctx":{"error":{"message":"Oh Noes!"}},"message":"ZenLog Errors!","level":"ERROR"}
+"error":{"message":"Oh Noes!"}},"message":"ZenLog Errors!","level":"ERROR"
 ```
-
 
 ### human
 Uses Node's [format](https://nodejs.org/docs/latest-v14.x/api/util.html#util_util_format_format_args) function to create readable log messages. Only intended for use locally since it does not log the context.
 
 It has the following options:
 
-| name  | type    | required | default | notes |
-|-------|---------|----------|---------|-------|
-| template | string  | no       | '%o [%s] %s'   | |
-| paths | array | no       | ['ctx.timestamp', 'level', 'message'] |    | If you have previously used the condense processor you will need to change this to ['timestamp', 'level', 'message'] |
+| name     | type    | required | default              | notes |
+|----------|---------|----------|----------------------|-------|
+| template | string  | no       | '[%s] %s'            |       |
+| paths    | array   | no       | ['level', 'message'] |       |
 
 ```js
 const logger = new Logger({
   processors: [
-    human({ template: '%o [%s] (%d) - %s', paths: ['ctx.timestamp', 'level, 'ctx.pid', message'] }),
+    human({ template: '%o [%s] (%d) - %s', paths: ['timestamp', 'level', 'pid', 'message'] }),
   ],
 });
 logger.info('ZenLog Rocks!', { timestamp: new Date(), pid: process.pid })
@@ -226,27 +235,7 @@ const logger = new Logger({
 logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
 ```
 ```json
-{"ctx":{"env":"production"},"message":"ZenLog Rocks!","level":"INFO"}
-```
-
-### rebase
-Renames the context attribute. It has the following options:
-
-| name  | type    | required | default   | notes |
-|-------|---------|----------|-----------|-------|
-| field | string  | yes      |           | Specifies the value to use instead of 'ctx' |
-
-```js
-const logger = new Logger({
-  processors: [
-    rebase({ field: 'info' }),
-    json(),
-  ],
-});
-logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
-```
-```json
-{"info":{"env":"production"},"message":"ZenLog Rocks!","level":"INFO"}
+{"env":"production","message":"ZenLog Rocks!","level":"INFO"}
 ```
 
 ### timestamp

@@ -16,7 +16,7 @@ describe('Logger', () => {
     Object.values(streams).forEach(stream => {return stream.destroy();});
   });
 
-  it('should log messages', () => {
+ it('should log messages', () => {
     const ts = new Date();
     const logger = new Logger({
       processors: [
@@ -26,7 +26,6 @@ describe('Logger', () => {
             return ts;
           }
         }),
-        processors.condense(),
         processors.json(),
       ],
       transports: [
@@ -42,14 +41,14 @@ describe('Logger', () => {
     logger.warn('ZenLog warns!', { x: 'y' });
     logger.error('ZenLog errors!', new Error('Oh Noes!'));
 
-    eq(streams[Level.TRACE.name].lines, [`{"x":"y","timestamp":"${ts.toISOString()}","message":"ZenLog traces!","level":"TRACE"}`]);
-    eq(streams[Level.DEBUG.name].lines, [`{"x":"y","timestamp":"${ts.toISOString()}","message":"ZenLog debugs!","level":"DEBUG"}`]);
+    eq(streams[Level.TRACE.name].lines, [`{"level":"TRACE","message":"ZenLog traces!","x":"y","timestamp":"${ts.toISOString()}"}`]);
+    eq(streams[Level.DEBUG.name].lines, [`{"level":"DEBUG","message":"ZenLog debugs!","x":"y","timestamp":"${ts.toISOString()}"}`]);
     eq(streams[Level.INFO.name].lines, [
-      `{"x":"y","timestamp":"${ts.toISOString()}","message":"ZenLog rocks once!","level":"INFO"}`,
-      `{"timestamp":"${ts.toISOString()}","message":"ZenLog rocks twice!","level":"INFO"}`
+      `{"level":"INFO","message":"ZenLog rocks once!","x":"y","timestamp":"${ts.toISOString()}"}`,
+      `{"level":"INFO","message":"ZenLog rocks twice!","timestamp":"${ts.toISOString()}"}`
     ]);
-    eq(streams[Level.WARN.name].lines, [`{"x":"y","timestamp":"${ts.toISOString()}","message":"ZenLog warns!","level":"WARN"}`]);
-    eq(streams[Level.ERROR.name].lines, [`{"error":{"message":"Oh Noes!"},"timestamp":"${ts.toISOString()}","message":"ZenLog errors!","level":"ERROR"}`]);
+    eq(streams[Level.WARN.name].lines, [`{"level":"WARN","message":"ZenLog warns!","x":"y","timestamp":"${ts.toISOString()}"}`]);
+    eq(streams[Level.ERROR.name].lines, [`{"error":{"message":"Oh Noes!"},"level":"ERROR","message":"ZenLog errors!","timestamp":"${ts.toISOString()}"}`]);
   });
 
   it('should ignore falsy processors', () => {
@@ -63,7 +62,6 @@ describe('Logger', () => {
         () => {return false;},
         () => {return null;},
         () => {return undefined;},
-        processors.condense(),
         processors.json(),
       ],
       transports: [
@@ -73,7 +71,7 @@ describe('Logger', () => {
 
     logger.info('ZenLog rocks!', { x: 'y' });
 
-    eq(streams[Level.INFO.name].lines, [`{"x":"y","timestamp":"${ts.toISOString()}","message":"ZenLog rocks!","level":"INFO"}`]);
+    eq(streams[Level.INFO.name].lines, [`{"level":"INFO","message":"ZenLog rocks!","x":"y","timestamp":"${ts.toISOString()}"}`]);
   });
 
   it('should support being disabled', () => {
