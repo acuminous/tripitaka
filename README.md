@@ -38,9 +38,9 @@ logger.info(new Error('Works with other functions too!'));
 ```
 Under these circumstances the error will be nested to avoid clashing with any message attribute, e.g.
 ```
-{"error":{"message":"Oh Noes!","stack":"...","message":"ZenLog Errors!","level":"ERROR"}
-{"error":{"message":"Oh Noes!","stack":"...","level":"ERROR"}
-{"error":{"message":"Works with other functions too!","stack":"...","level":"INFO"}
+{"error":{"message":"Oh Noes!","stack":"..."},"message":"ZenLog Errors!","level":"ERROR"}
+{"error":{"message":"Oh Noes!","stack":"..."},"level":"ERROR"}
+{"error":{"message":"Works with other functions too!"},"stack":"...","level":"INFO"}
 ```
 
 ## Customisation
