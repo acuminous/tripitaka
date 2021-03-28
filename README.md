@@ -75,12 +75,35 @@ const logger = new Logger({
 ```
 The order of the processors is **extremely** important. The 'error' processor should always be first otherwise another processor may spread the context, transforming it from an instance of Error to a plain object.
 
-### Processors
+## Processors
+A processor is a function you can use them to mutate the ZenLog log record before it is delevered to the transports. Since they are chained together in an array, the output from one processor forms the input to the next processor, but most expect a ZenLog record to be supplied. i.e.
 
-#### augment
+```js
+const logger = new Logger({
+  processors: [
+    ({ level, message, ctx }) => {
+      return { level, message, ctx: { ...ctx, timestamp: new Date() } };
+    },
+    json(),
+  ],
+});
+```
+If you return false (or falsey) from a processor, the result will be skipped and the original (but potentially mutated) ZenLog record passed to the next processor in the chain.
+
+The out-of-the-box processors are as follows...
+
+- [augment](#augment)
+- [condense](#condense)
+- [error](#error)
+- [human](#human)
+- [json](#json)
+- [rebase](#rebase)
+- [timestamp](#timestamp)
+
+### augment
 Augments the log context with an object or function result. Use with [AsyncLocalStorage](https://nodejs.org/docs/latest-v14.x/api/async_hooks.html#async_hooks_class_asynclocalstorage) as a substitute for child loggers.
 
-##### Object based
+#### Object based
 ```js
 const logger = new Logger({
   processors: [
@@ -94,7 +117,7 @@ logger.info('ZenLock Rocks!');
 {"ctx":{"env":"production"},"message":"ZenLog Rocks!","level":"INFO"}
 ```
 
-##### Function based
+#### Function based
 ```js
 const logger = new Logger({
   processors: [
@@ -108,7 +131,7 @@ logger.info('ZenLock Rocks!');
 {"ctx":{"timestamp":"2021-03-28T17:43:12.012Z"},"message":"ZenLog Rocks!","level":"INFO"}
 ```
 
-#### condense
+### condense
 A ZenLog record keeps the level, message and context separate, but this can be cumbersome when you eventually come to write the record out. The condense processer hoists the context.
 
 ```js
@@ -125,7 +148,7 @@ logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
 ```
 In the event that the context contains either a message or level attribute, these will be lost in favour of the existing top level ones.
 
-#### error
+### error
 The error processor is important for logging errors. Without it they will not stringify correctly. To work properly this process must come first in the list of processors.
 
 The processor operates with the following logic:
@@ -155,7 +178,7 @@ logger.error("ZenLog Errors!", new Error('Oh Noes'));
 ```
 
 
-#### human
+### human
 Uses Node's [format](https://nodejs.org/docs/latest-v14.x/api/util.html#util_util_format_format_args) function to create readable log messages. Only intended for use locally since it does not log the context.
 
 It has the following options:
@@ -177,7 +200,7 @@ logger.info('ZenLog Rocks!', { timestamp: new Date(), pid: process.pid })
 2021-03-28T18:15:23.312Z [INFO] (69196) - ZenLog Rocks!
 ```
 
-#### json
+### json
 Uses [json-strinigfy-safe](https://www.npmjs.com/package/json-stringify-safe) to safely convert the ZenLog record to a json string.
 
 It has the following options:
@@ -200,7 +223,7 @@ logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
 {"ctx":{"env":"production"},"message":"ZenLog Rocks!","level":"INFO"}
 ```
 
-#### rebase
+### rebase
 Renames the context attribute. It has the following options:
 
 | name  | type    | required | default   | notes |
@@ -220,7 +243,7 @@ logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
 {"info":{"env":"production"},"message":"ZenLog Rocks!","level":"INFO"}
 ```
 
-#### timestamp
+### timestamp
 Adds a timestamp. It has the following options:
 
 | name  | type    | required | default   | notes |
