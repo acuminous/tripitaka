@@ -30,7 +30,7 @@ It left alone, this will write the following to stdout
 ```
 {"env":"production","timestamp":"2021-03-27T23:43:10.023Z","message":"ZenLog Rocks!","level":"INFO"}
 ```
-***** 1 error processor
+##### 1 error processor
 If you use the error processor (enabled by default), ZenLog will check if the context is an instance of Error, and nest it under the 'error' attribute,
 ```js
 logger.error('ZenLock Errors!', new Error('Oh Noes!'));
