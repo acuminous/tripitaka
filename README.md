@@ -35,7 +35,7 @@ The function arguments are always the same, a mandatory message and an optional 
 ```js
 logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
 ```
-Disregarding any other configuration, this will write the following to stdout
+Assuming the default configuration, this will write the following to stdout
 ```json
 {"env":"production","message":"ZenLog Rocks!","level":"INFO"}
 ```
