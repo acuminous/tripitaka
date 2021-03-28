@@ -22,21 +22,25 @@ ZenLog supports the same logging levels as console, i.e.
 * logger.warn(...)
 * logger.error(...)
 
-The function arguments are always the same<sup>[1](#1-error)</sup>, a mandatory message and an optional context, e.g.
+The function arguments are always the same, a mandatory message and an optional context, e.g.
 ```js
-logger.info('ZenLock Rocks!', { cwd: process.cwd() });
+logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
 ```
-It left alone, this will write the following to stdout
+Disregarding any other configuration, this will write the following to stdout
 ```
-{"env":"production","timestamp":"2021-03-27T23:43:10.023Z","message":"ZenLog Rocks!","level":"INFO"}
+{"env":"production","message":"ZenLog Rocks!","level":"INFO"}
 ```
-##### 1 error processor
-If you use the error processor (enabled by default), ZenLog will check if the context is an instance of Error, and nest it under the 'error' attribute,
-```js
+If you use the error processor (enabled by default), ZenLog also supports logging errors in place of the context, or even the message, e.g.
+```
 logger.error('ZenLock Errors!', new Error('Oh Noes!'));
+logger.error(new Error('Oh Noes!'));
+logger.info(new Error('Works with other functions too!'));
 ```
+Under these circumstances the error will be nested to avoid clashing with any message attribute, e.g.
 ```
-{"error":{"message":"Oh Noes!",stack":"...."},"timestamp":"2021-03-27T23:43:10.023Z","message":"ZenLog Errors!","level":"ERROR"}
+{"error":{"message":"Oh Noes!","stack":"...","message":"ZenLog Errors!","level":"ERROR"}
+{"error":{"message":"Oh Noes!","stack":"...","level":"ERROR"}
+{"error":{"message":"Works with other functions too!","stack":"...","level":"INFO"}
 ```
 
 ## Customisation
