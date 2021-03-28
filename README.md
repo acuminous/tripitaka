@@ -263,3 +263,60 @@ logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
 ```json
 {"info":{"ts":"2021-03-28T18:31:21.035Z","env":"production"},"message":"ZenLog Rocks!","level":"INFO"}
 ```
+
+## Transports
+Transports are functions which write the ZenLog record somewhere. Depending on the medium they are likely to take a string, or the ZenLog record. The available transports are
+
+- [stream](#stream)
+- [emitter](#emitter)
+
+### stream
+The stream transport writes a string to an output stream based on the level. It has the following options:
+
+| name    | type    | required | default   | notes |
+|---------|---------|----------|-----------|-------|
+| streams | object  | no       | See notes | By default TRACE, DEBUG and INFO messages will be output to stdout, while WARN and ERROR messages routed to stderr  |
+
+```js
+const logger = new Logger({
+  transports: [
+    stream({ 
+      streams: {
+        [Level.TRACE.name]: process.stdout,
+        [Level.DEBUG.name]: process.stdout,
+        [Level.INFO.name]: process.stdout,
+        [Level.WARN.name]: process.stdout,
+        [Level.ERROR.name]: process.stderr,    
+      }
+    }),
+  ],
+});
+logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
+```
+
+### emitter
+The emitter transport emits a ZenLog record as an event, which can be useful when testing. It has the following options:
+
+| name    | type         | required | default   | notes |
+|---------|--------------|----------|-----------|-------|
+| emitter | EventEmitter | no       | process   | Specify your own event emitter rather than the global process object |
+| events  | object       | no       | See notes | By default all log levels will be emitted with the 'log' event. Think twice about changing this to 'error', since unhandled error events will kill your node process. |
+
+```js
+const logger = new Logger({
+  transports: [
+    emitter({ 
+      events: {
+        [Level.TRACE.name]: 'log_trace',
+        [Level.DEBUG.name]: 'log_debug',
+        [Level.INFO.name]: 'log_info',
+        [Level.WARN.name]: 'log_warn',
+        [Level.ERROR.name]: 'log_error',
+      }
+    }),
+  ],
+});
+logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
+```
+
+
