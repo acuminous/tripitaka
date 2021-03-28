@@ -1,7 +1,13 @@
 # ZenLog
+[![Node.js CI](https://github.com/acuminous/zenlog/workflows/Node.js%20CI/badge.svg)](https://github.com/acuminous/zenlog/actions?query=workflow%3A%22Node.js+CI%22)
+[![NPM version](https://img.shields.io/npm/v/zenlog.svg?style=flat-square)](https://www.npmjs.com/package/zenlog)
+[![NPM downloads](https://img.shields.io/npm/dm/zenlog.svg?style=flat-square)](https://www.npmjs.com/package/zenlog)
 
-## Motivation
-I wrote ZenLog because my previous logger of choice, [winston](https://github.com/winstonjs/winston) has hundreds of [open issues](https://github.com/winstonjs/winston/issues), many of which are serious and have received no response for over a year. [Contributions](https://github.com/winstonjs/winston/graphs/contributors) mostly ceased in 2019.
+ZenLog is a low dependency, no frills logger for Node.js. I wrote it because my previous logger of choice, [winston](https://github.com/winstonjs/winston) has hundreds of [open issues](https://github.com/winstonjs/winston/issues), many of which are serious and have received no response for over a year. [Contributions](https://github.com/winstonjs/winston/graphs/contributors) mostly ceased in 2019. Winston's design also has some serious flaws which can make it hard to format messages and lead to mutation of the log context.
+
+ZenLog deliberately intensionally ships with only two transports. A streams based transport which will write to stdout and stderr (or other streams which you suppy), and an event emitter based transport which will emit events using the global process object (or another emitter which you supply). This library holds the opinion that external files, database and message brokers are all far better handled with a data collector such as [fluentd](https://www.fluentd.org/architecture), but you can of course write your own transports if you so wish.
+
+ZenLog also eschews child loggers. These were useful for stashing context, but can be more elegantly implemented via [AsyncLocalStorage](https://nodejs.org/docs/latest-v14.x/api/async_hooks.html#async_hooks_class_asynclocalstorage) or [continuation-local-storage](https://www.npmjs.com/package/continuation-local-storage).
 
 ## TL;DR
 ```js
@@ -68,6 +74,51 @@ The order of the processors is **extremely** important. The 'error' processor sh
 
 ### Processors
 
+#### augment
+Augments the log context with an object or function result. Use with [AsyncLocalStorage](https://nodejs.org/docs/latest-v14.x/api/async_hooks.html#async_hooks_class_asynclocalstorage) as a substitute for child loggers.
+
+##### Object based
+```js
+const logger = new Logger({
+  processors: [
+    augment({ env: process.env.NODE_ENV }),
+  ],
+});
+logger.info('ZenLock Rocks!');
+```
+```
+{"ctx:{"env":"production"},"message":"ZenLog Rocks!","level":"INFO"}
+```
+
+##### Function based
+```js
+const logger = new Logger({
+  processors: [
+    augment(() => ({ timestamp: new Date() })),
+  ],
+});
+logger.info('ZenLock Rocks!');
+```
+```
+{"ctx":{"timestamp":"2021-03-28T17:43:12.012Z"},"message":"ZenLog Rocks!","level":"INFO"}
+```
+
+#### condense
+A ZenLog record keeps the level, message and context separate, but this can be cumbersome when you eventually come to write the record out. The condense processer hoists the context.
+
+```js
+const logger = new Logger({
+  processors: [
+    condense(),
+  ],
+});
+logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV);
+```
+```
+{"env":"production","message":"ZenLog Rocks!","level":"INFO"}
+```
+In the event that the context contains either a message or level attribute, these will be lost in favour of the existing top level ones.
+
 #### error
 The error processor is important for logging errors. Without it they will not stringify correctly. The processor operates with the following logic
 
@@ -89,3 +140,5 @@ const logger = new Logger({
   ],
 });
 ```
+
+#### 
