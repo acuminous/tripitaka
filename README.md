@@ -101,13 +101,18 @@ The out-of-the-box processors are as follows...
 - [timestamp](#timestamp)
 
 ### augment
-Augments the log context with an object or function result. Use with [AsyncLocalStorage](https://nodejs.org/docs/latest-v14.x/api/async_hooks.html#async_hooks_class_asynclocalstorage) as a substitute for child loggers.
+Augments the log context with the supplied source. Use with [AsyncLocalStorage](https://nodejs.org/docs/latest-v14.x/api/async_hooks.html#async_hooks_class_asynclocalstorage) as a substitute for child loggers.
 
-#### Object based
+| name   | type               | required | default | notes |
+|--------|--------------------|----------|---------|-------|
+| source | object or function | yes      |         |       |
+
+#### Object example
 ```js
+const source = { env: process.env.NODE_ENV };
 const logger = new Logger({
   processors: [
-    augment({ env: process.env.NODE_ENV }),
+    augment({ source }),
     json(),
   ],
 });
@@ -117,11 +122,12 @@ logger.info('ZenLock Rocks!');
 {"ctx":{"env":"production"},"message":"ZenLog Rocks!","level":"INFO"}
 ```
 
-#### Function based
+#### Function example
 ```js
+const source = () => ({ timestamp: new Date() });
 const logger = new Logger({
   processors: [
-    augment(() => ({ timestamp: new Date() })),
+    augment({ source }),
     json(),
   ],
 });
