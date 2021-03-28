@@ -168,7 +168,7 @@ It has the following options:
 const logger = new Logger({
   processors: [
     error({ field: 'err', stack: false }),
-    json(),    
+    json(),
   ],
 });
 logger.error("ZenLog Errors!", new Error('Oh Noes'));
@@ -194,7 +194,7 @@ const logger = new Logger({
     human({ template: '%o [%s] (%d) - %s', paths: ['ctx.timestamp', 'level, 'ctx.pid', message'] }),
   ],
 });
-logger.info('ZenLog Rocks!', { timestamp: new Date(), pid: process.pid }) 
+logger.info('ZenLog Rocks!', { timestamp: new Date(), pid: process.pid })
 ```
 ```
 2021-03-28T18:15:23.312Z [INFO] (69196) - ZenLog Rocks!
@@ -208,7 +208,7 @@ It has the following options:
 | name       | type     | required | default   | notes |
 |------------|----------|----------|-----------|-------|
 | serializer | function | no       | null      |       |
-| indent     | number   | no       | undefined |       | 
+| indent     | number   | no       | undefined |       |
 | decyler    | function | no       | () => {}  | Determines how circular references are handled. The default behaviour is to silently drop the attribute |
 
 ```js
@@ -265,7 +265,14 @@ logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
 ```
 
 ## Transports
-Transports are functions which write the ZenLog record somewhere. Depending on the medium they are likely to take a string, or the ZenLog record. The available transports are
+Transports are functions which write the ZenLog record somewhere. The only parameter is an object, which should container the following properties.
+
+| name   | type   | notes                              |
+|--------|--------|------------------------------------|
+| level  | Level  |                                    |
+| record | any    | Likely to be an object, string or a Buffer. It all depends on the processors you have selected |
+
+The available transports are
 
 - [stream](#stream)
 - [emitter](#emitter)
@@ -280,13 +287,13 @@ The stream transport writes a string to an output stream based on the level. It 
 ```js
 const logger = new Logger({
   transports: [
-    stream({ 
+    stream({
       streams: {
         [Level.TRACE.name]: process.stdout,
         [Level.DEBUG.name]: process.stdout,
         [Level.INFO.name]: process.stdout,
         [Level.WARN.name]: process.stdout,
-        [Level.ERROR.name]: process.stderr,    
+        [Level.ERROR.name]: process.stderr,
       }
     }),
   ],
@@ -305,7 +312,7 @@ The emitter transport emits a ZenLog record as an event, which can be useful whe
 ```js
 const logger = new Logger({
   transports: [
-    emitter({ 
+    emitter({
       events: {
         [Level.TRACE.name]: 'log_trace',
         [Level.DEBUG.name]: 'log_debug',
@@ -318,5 +325,3 @@ const logger = new Logger({
 });
 logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
 ```
-
-

@@ -10,7 +10,7 @@ describe('emitter', () => {
       eq(record, { x: 'y' });
       done();
     });
-    fn(Level.INFO.name, { x: 'y' });
+    fn({ level: Level.INFO, record: { x: 'y' } });
   });
 
   it('should use the specified event', (t, done) => {
@@ -24,7 +24,7 @@ describe('emitter', () => {
       eq(record, { x: 'y' });
       done();
     });
-    fn(Level.INFO.name, { x: 'y' });
+    fn({ level: Level.INFO, record: { x: 'y' } });
   });
 
   it('should use the specified emitter', (t, done) => {
@@ -35,6 +35,6 @@ describe('emitter', () => {
       eq(record, { x: 'y' });
       done();
     });
-    fn(Level.INFO.name, { x: 'y' });
+    fn({ level: Level.INFO, record: { x: 'y' } });
   });
 });

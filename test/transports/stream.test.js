@@ -6,8 +6,8 @@ describe('stream', () => {
 
   it('should work out of the box', () => {
     const fn = stream();
-    fn(Level.INFO.name, '');
-    fn(Level.ERROR.name, '');
+    fn({ level: Level.INFO, record: '' });
+    fn({ level: Level.ERROR, record: '' });
   });
 
   it('should use the specified streams', () => {
@@ -20,8 +20,8 @@ describe('stream', () => {
           [Level.ERROR.name]: error,
         }
       });
-      fn(Level.INFO.name, 'Nothing to see here');
-      fn(Level.ERROR.name, 'Oh Noes!');
+      fn({ level: Level.INFO, record: 'Nothing to see here' });
+      fn({ level: Level.ERROR, record: 'Oh Noes!' });
 
       eq(info.lines, ['Nothing to see here']);
       eq(error.lines, ['Oh Noes!']);
