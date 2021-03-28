@@ -1,6 +1,8 @@
 const { EOL } = require('os');
 const { Harness, Suite, SpecReporter, syntax } = require('zunit');
 
+require('./support/polyfill');
+
 Object.entries(syntax).forEach(([keyword, fn]) => {
   global[keyword] = fn;
 });
