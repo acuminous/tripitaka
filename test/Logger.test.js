@@ -2,7 +2,7 @@ const { deepStrictEqual: eq } = require('assert');
 const { TestOutputStream }  = require('./support');
 const { Level, Logger, processors, transports } = require('..');
 
-describe('stream', () => {
+describe('Logger', () => {
 
   let streams;
 
@@ -21,9 +21,11 @@ describe('stream', () => {
     const logger = new Logger({
       processors: [
         processors.error({ stack: false }),
-        processors.timestamp({ getTimestamp: () => {
-          return ts;
-        } }),
+        processors.timestamp({
+          getTimestamp: () => {
+            return ts;
+          }
+        }),
         processors.condense(),
         processors.json(),
       ],
