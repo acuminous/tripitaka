@@ -47,22 +47,22 @@ Under these circumstances the error will be nested to avoid clashing with any me
 You can customise this output through the use of [processors](#processors) and [transports](#transports). By default ZenLog ships with the following configuration.
 
 ```js
-  const { Logger, Level, processors, transports, } = require('zenlog');
-  const { error, timestamp, condense, json } = processors;
-  const { json, human } = transports;
+const { Logger, Level, processors, transports, } = require('zenlog');
+const { error, timestamp, condense, json } = processors;
+const { json, human } = transports;
 
-  const logger = new Logger({
-    processors: [
-      error(),
-      timestamp(),
-      condense(),
-      process.env.NODE_ENV === 'production' ? json() : human(),
-    ],
-    transports: [
-      stream(),
-    ],
-    level: Level.INFO,
-  })
+const logger = new Logger({
+  processors: [
+    error(),
+    timestamp(),
+    condense(),
+    process.env.NODE_ENV === 'production' ? json() : human(),
+  ],
+  transports: [
+    stream(),
+  ],
+  level: Level.INFO,
+})
 ```
 The order of the processors is **extremely** important. The 'error' processor should always be first otherwise another processor may spread the context, transforming it from an instance of Error to a plain object.
 
