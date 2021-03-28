@@ -1,0 +1,7 @@
+node_modules
+coverage
+*.log
+.codeclimate
+.idea
+.vscode
+.nyc_output

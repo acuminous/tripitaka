@@ -1,0 +1,38 @@
+{
+  "name": "zenlog",
+  "version": "0.0.1",
+  "description": "```js const logger = foo.createLogger({   processors: [     timestamp(),     errors(),     json()   ],   transports: [     console,     emitter,   ] }); logger.log({ level: 'INFO', message: 'Some message', x: 'stuff' }); logger.info('Some message', { x: 'stuff' }) logger.info({ x: 'stuff' }); ```",
+  "main": "index.js",
+  "dependencies": {
+    "dot-prop": "^6.0.1",
+    "json-stringify-safe": "^5.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-esnext": "^4.1.0",
+    "husky": "^5.2.0",
+    "nyc": "^15.1.0",
+    "zunit": "^3.0.4"
+  },
+  "scripts": {
+    "coverage": "nyc --report html --reporter lcov --reporter text-summary node test",
+    "lint": "eslint .",
+    "test": "node test",
+    "prepare": "husky install"
+  },
+  "author": "Stephen Cresswell",
+  "license": "ISC",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "keywords": [
+    "log",
+    "winston",
+    "bunyan",
+    "alternative",
+    "json",
+    "stdout",
+    "stderr"
+  ]
+}
