@@ -219,3 +219,24 @@ logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
 ```json
 {"info":{"env":"production"},"message":"ZenLog Rocks!","level":"INFO"}
 ```
+
+#### timestamp
+Adds a timestamp. It has the following options:
+
+| name  | type    | required | default   | notes |
+|-------|---------|----------|-----------|-------|
+| field | string  | no      | 'timestamp'          | Specifies the name of the timestamp attribute |
+| getTimestamp | function  | no      | () => new Date(); | Overrides how the timestamp is aquired (useful for fixing the timestamp when testing) |
+
+```js
+const logger = new Logger({
+  processors: [
+    timestamp({ field: 'tx' }),
+    json(),
+  ],
+});
+logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
+```
+```json
+{"info":{"ts":"2021-03-28T18:31:21.035Z","env":"production"},"message":"ZenLog Rocks!","level":"INFO"}
+```
