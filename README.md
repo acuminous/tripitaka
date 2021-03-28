@@ -5,7 +5,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/33f343b0fd8beafb90aa/maintainability)](https://codeclimate.com/github/acuminous/zenlog/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/33f343b0fd8beafb90aa/test_coverage)](https://codeclimate.com/github/acuminous/zenlog/test_coverage)
 [![Code Style](https://img.shields.io/badge/code%20style-esnext-brightgreen.svg)](https://www.npmjs.com/package/eslint-config-esnext)
-[![Try zUnit](https://img.shields.io/badge/Try-zUnit-brightgreen)](https://github.com/acuminous/zUnit)
+[![Try zUnit](https://img.shields.io/badge/Try-zUnit-brightgreen)](https://www.npmjs.com/package/zUnit)
 
 ZenLog is a low dependency, no frills logger for Node.js. I wrote it because my previous logger of choice, [winston](https://github.com/winstonjs/winston) has hundreds of [open issues](https://github.com/winstonjs/winston/issues), many of which are serious and have received no response for over a year. [Contributions](https://github.com/winstonjs/winston/graphs/contributors) mostly ceased in 2019. Winston's design also has some serious flaws which can make it hard to format messages and lead to mutation of the log context.
 
@@ -85,12 +85,13 @@ Augments the log context with an object or function result. Use with [AsyncLocal
 const logger = new Logger({
   processors: [
     augment({ env: process.env.NODE_ENV }),
+    json(),
   ],
 });
 logger.info('ZenLock Rocks!');
 ```
 ```json
-{"ctx:{"env":"production"},"message":"ZenLog Rocks!","level":"INFO"}
+{"ctx":{"env":"production"},"message":"ZenLog Rocks!","level":"INFO"}
 ```
 
 ##### Function based
@@ -98,6 +99,7 @@ logger.info('ZenLock Rocks!');
 const logger = new Logger({
   processors: [
     augment(() => ({ timestamp: new Date() })),
+    json(),
   ],
 });
 logger.info('ZenLock Rocks!');
@@ -113,6 +115,7 @@ A ZenLog record keeps the level, message and context separate, but this can be c
 const logger = new Logger({
   processors: [
     condense(),
+    json(),
   ],
 });
 logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
@@ -142,12 +145,13 @@ It has the following options:
 const logger = new Logger({
   processors: [
     error({ field: 'err', stack: false }),
+    json(),    
   ],
 });
 logger.error("ZenLog Errors!", new Error('Oh Noes'));
 ```
 ```json
-{"error":{"message":"Oh Noes!"},"message":"ZenLog Errors!","level":"ERROR"}
+{"ctx":{"error":{"message":"Oh Noes!"}},"message":"ZenLog Errors!","level":"ERROR"}
 ```
 
 
@@ -171,4 +175,47 @@ logger.info('ZenLog Rocks!', { timestamp: new Date(), pid: process.pid })
 ```
 ```
 2021-03-28T18:15:23.312Z [INFO] (69196) - ZenLog Rocks!
+```
+
+#### json
+Uses [json-strinigfy-safe](https://www.npmjs.com/package/json-stringify-safe) to safely convert the ZenLog record to a json string.
+
+It has the following options:
+
+| name       | type     | required | default   | notes |
+|------------|----------|----------|-----------|-------|
+| serializer | function | no       | null      |       |
+| indent     | number   | no       | undefined |       | 
+| decyler    | function | no       | () => {}  | Determines how circular references are handled. The default behaviour is to silently drop the attribute |
+
+```js
+const logger = new Logger({
+  processors: [
+    json(),
+  ],
+});
+logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
+```
+```json
+{"ctx":{"env":"production"},"message":"ZenLog Rocks!","level":"INFO"}
+```
+
+#### rebase
+Renames the context attribute. It has the following options:
+
+| name  | type    | required | default   | notes |
+|-------|---------|----------|-----------|-------|
+| field | string  | yes      |           | Specifies the value to use instead of 'ctx' |
+
+```js
+const logger = new Logger({
+  processors: [
+    rebase({ field: 'info' }),
+    json(),
+  ],
+});
+logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
+```
+```json
+{"info":{"env":"production"},"message":"ZenLog Rocks!","level":"INFO"}
 ```
