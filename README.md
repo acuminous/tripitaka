@@ -81,3 +81,11 @@ It has the following options:
 |-------|---------|----------|---------|-------|
 | field | string  | no       | error   | If the context is an instance of Error, it will be nested under an attribute with this name |
 | stack | boolean | no       | true    | Controls whether the stack trace will be logged |
+
+```js
+const logger = new Logger({
+  processors: [
+    error({ field: 'err', stack: false }),
+  ],
+});
+```
