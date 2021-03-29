@@ -37,7 +37,7 @@ describe('error', () => {
     it('should nest the error on the record', () => {
       const fn = error();
       const ctx = new Error('Oooh, Demons!');
-      const result = fn({ message: 'ZenHub Errors!', ctx });
+      const result = fn({ message: 'Oooh, Demons!', ctx });
 
       eq(result.error.message, 'Oooh, Demons!');
       match(result.error.stack, /^Error: Oooh, Demons!/);
@@ -46,7 +46,7 @@ describe('error', () => {
     it('should nest with a custom property', () => {
       const fn = error({ field: 'e' });
       const ctx = new Error('Oooh, Demons!');
-      const result = fn({ message: 'ZenHub Errors!', ctx });
+      const result = fn({ message: 'Oooh, Demons!', ctx });
 
       eq(result.e.message, 'Oooh, Demons!');
       match(result.e.stack, /^Error: Oooh, Demons!/);
