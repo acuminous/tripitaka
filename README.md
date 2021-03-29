@@ -2,8 +2,8 @@
 [![Node.js CI](https://github.com/acuminous/tripitaka/workflows/Node.js%20CI/badge.svg)](https://github.com/acuminous/tripitaka/actions?query=workflow%3A%22Node.js+CI%22)
 [![NPM version](https://img.shields.io/npm/v/tripitaka.svg?style=flat-square)](https://www.npmjs.com/package/tripitaka)
 [![NPM downloads](https://img.shields.io/npm/dm/tripitaka.svg?style=flat-square)](https://www.npmjs.com/package/tripitaka)
-[![Maintainability](https://api.codeclimate.com/v1/badges/33f343b0fd8beafb90aa/maintainability)](https://codeclimate.com/github/acuminous/tripitaka/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/33f343b0fd8beafb90aa/test_coverage)](https://codeclimate.com/github/acuminous/tripitaka/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/7321a236e3d434fe0c06/maintainability)](https://codeclimate.com/github/acuminous/tripitaka/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/7321a236e3d434fe0c06/test_coverage)](https://codeclimate.com/github/acuminous/tripitaka/test_coverage)
 [![Code Style](https://img.shields.io/badge/code%20style-esnext-brightgreen.svg)](https://www.npmjs.com/package/eslint-config-esnext)
 [![Discover zUnit](https://img.shields.io/badge/Discover-zUnit-brightgreen)](https://www.npmjs.com/package/zUnit)
 
