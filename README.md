@@ -43,13 +43,13 @@ If you use the error processor (enabled by default), ZenLog also supports loggin
 ```
 logger.error('ZenLock Errors!', new Error('Oh Noes!'));
 logger.error(new Error('Oh Noes!'));
-logger.info(new Error('Meh!'));
+logger.info(new Error('Meh'));
 ```
 Under these circumstances the error will be nested to avoid clashing with any message attribute, e.g.
 ```
 {"error":{"message":"Oh Noes!","stack":"..."},"message":"ZenLog Errors!","level":"ERROR"}
 {"error":{"message":"Oh Noes!","stack":"..."},"level":"ERROR"}
-{"error":{"message":"Works with other functions too!"},"stack":"...","level":"INFO"}
+{"error":{"message":"Meh"},"stack":"...","level":"INFO"}
 ```
 
 ## Customisation
