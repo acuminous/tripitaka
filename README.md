@@ -1,29 +1,29 @@
-# ZenLog
-[![Node.js CI](https://github.com/acuminous/zenlog/workflows/Node.js%20CI/badge.svg)](https://github.com/acuminous/zenlog/actions?query=workflow%3A%22Node.js+CI%22)
-[![NPM version](https://img.shields.io/npm/v/zenlog.svg?style=flat-square)](https://www.npmjs.com/package/zenlog)
-[![NPM downloads](https://img.shields.io/npm/dm/zenlog.svg?style=flat-square)](https://www.npmjs.com/package/zenlog)
-[![Maintainability](https://api.codeclimate.com/v1/badges/33f343b0fd8beafb90aa/maintainability)](https://codeclimate.com/github/acuminous/zenlog/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/33f343b0fd8beafb90aa/test_coverage)](https://codeclimate.com/github/acuminous/zenlog/test_coverage)
+# Tripitaka
+[![Node.js CI](https://github.com/acuminous/tripitaka/workflows/Node.js%20CI/badge.svg)](https://github.com/acuminous/tripitaka/actions?query=workflow%3A%22Node.js+CI%22)
+[![NPM version](https://img.shields.io/npm/v/tripitaka.svg?style=flat-square)](https://www.npmjs.com/package/tripitaka)
+[![NPM downloads](https://img.shields.io/npm/dm/tripitaka.svg?style=flat-square)](https://www.npmjs.com/package/tripitaka)
+[![Maintainability](https://api.codeclimate.com/v1/badges/33f343b0fd8beafb90aa/maintainability)](https://codeclimate.com/github/acuminous/tripitaka/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/33f343b0fd8beafb90aa/test_coverage)](https://codeclimate.com/github/acuminous/tripitaka/test_coverage)
 [![Code Style](https://img.shields.io/badge/code%20style-esnext-brightgreen.svg)](https://www.npmjs.com/package/eslint-config-esnext)
 [![Discover zUnit](https://img.shields.io/badge/Discover-zUnit-brightgreen)](https://www.npmjs.com/package/zUnit)
 
-ZenLog is a low dependency, no frills logger for Node.js. I wrote it because my previous logger of choice, [winston](https://github.com/winstonjs/winston) has hundreds of [open issues](https://github.com/winstonjs/winston/issues), many of which are serious and have received no response for over a year. [Contributions](https://github.com/winstonjs/winston/graphs/contributors) mostly ceased in 2019. Winston's design also has some serious flaws which can make it hard to format messages and lead to mutation of the log context.
+Tripitaka is a low dependency, no frills logger for Node.js. I wrote it because my previous logger of choice, [winston](https://github.com/winstonjs/winston) has hundreds of [open issues](https://github.com/winstonjs/winston/issues), many of which are serious and have received no response for over a year. [Contributions](https://github.com/winstonjs/winston/graphs/contributors) mostly ceased in 2019. Winston's design also has some serious flaws which can make it hard to format messages and lead to mutation of the log context.
 
 ## TL;DR
 ```js
-const { Logger } = require('zenlog');
+const { Logger } = require('tripitaka');
 const logger = new Logger();
-logger.info('ZenLog Rocks!', { env: process.env.NODE_ENV });
+logger.info('How blissful it is, for one who has nothing', { env: process.env.NODE_ENV });
 ```
 ```
-{"env":"production","timestamp":"2021-03-27T23:43:10.023Z","message":"ZenLog Rocks!","level":"INFO"}
+{"env":"production","timestamp":"2021-03-27T23:43:10.023Z","message":"How blissful it is, for one who has nothing","level":"INFO"}
 ```
 
 ## Design Princials
-ZenLog intensionally ships with only two transports. A streams based transport which will write to stdout and stderr (or other streams which you supply), and an event emitter based transport which will emit events using the global process object (or another emitter which you supply). This library holds the opinion that external files, database and message brokers are all far better handled with a data collector such as [fluentd](https://www.fluentd.org/architecture), but you can write your own transports if you so wish. ZenLog also eschews child loggers. These were useful for stashing context, but are more elegantly implemented via [AsyncLocalStorage](https://nodejs.org/docs/latest-v14.x/api/async_hooks.html#async_hooks_class_asynclocalstorage) or [continuation-local-storage](https://www.npmjs.com/package/continuation-local-storage).
+Tripitaka intensionally ships with only two transports. A streams based transport which will write to stdout and stderr (or other streams which you supply), and an event emitter based transport which will emit events using the global process object (or another emitter which you supply). This library holds the opinion that external files, database and message brokers are all far better handled with a data collector such as [fluentd](https://www.fluentd.org/architecture), but you can write your own transports if you so wish. Tripitaka also eschews child loggers. These were useful for stashing context, but are more elegantly implemented via [AsyncLocalStorage](https://nodejs.org/docs/latest-v14.x/api/async_hooks.html#async_hooks_class_asynclocalstorage) or [continuation-local-storage](https://www.npmjs.com/package/continuation-local-storage).
 
 ## API
-ZenLog supports the same logging levels as console, i.e.
+Tripitaka supports the same logging levels as console, i.e.
 
 * logger.trace(...)
 * logger.debug(...)
@@ -33,30 +33,30 @@ ZenLog supports the same logging levels as console, i.e.
 
 The function arguments are always the same, a mandatory message and an optional context, e.g.
 ```js
-logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
+logger.info('How blissful it is, for one who has nothing', { env: process.env.NODE_ENV });
 ```
 Assuming the default configuration, this will write the following to stdout
 ```json
-{"env":"production","message":"ZenLog Rocks!","level":"INFO"}
+{"env":"production","message":"How blissful it is, for one who has nothing","level":"INFO"}
 ```
-If you use the error processor (enabled by default), ZenLog also supports logging errors in place of the context, or even the message, e.g.
+If you use the error processor (enabled by default), Tripitaka also supports logging errors in place of the context, or even the message, e.g.
 ```
-logger.error('ZenLock Errors!', new Error('Oh Noes!'));
-logger.error(new Error('Oh Noes!'));
-logger.info(new Error('Meh'));
+logger.error('I forbid it!', new Error('Oooh, Demons!'));
+logger.error(new Error('Oooh, Demons!'));
+logger.info(new Error('Hey Buddah!'));
 ```
 Under these circumstances the error will be nested to avoid clashing with any message attribute, e.g.
 ```
-{"error":{"message":"Oh Noes!","stack":"..."},"message":"ZenLog Errors!","level":"ERROR"}
-{"error":{"message":"Oh Noes!","stack":"..."},"level":"ERROR"}
-{"error":{"message":"Meh"},"stack":"...","level":"INFO"}
+{"error":{"message":"Oooh, Demons!","stack":"..."},"message":"I forbid it!","level":"ERROR"}
+{"error":{"message":"Oooh, Demons!","stack":"..."},"level":"ERROR"}
+{"error":{"message":"'Hey Buddah!'"},"stack":"...","level":"INFO"}
 ```
 
 ## Customisation
-You can customise this output through the use of [processors](#processors) and [transports](#transports). By default ZenLog ships with the following configuration.
+You can customise this output through the use of [processors](#processors) and [transports](#transports). By default Tripitaka ships with the following configuration.
 
 ```js
-const { Logger, Level, processors, transports, } = require('zenlog');
+const { Logger, Level, processors, transports, } = require('tripitaka');
 const { error, timestamp, json } = processors;
 const { json, human } = transports;
 
@@ -76,7 +76,7 @@ const logger = new Logger({
 You can suppress logs by setting the logging level as above, or by calling logger.disable(). You can renable the logger by calling logger.enable();
 
 ## Processors
-A processor is a function you can use to mutate the ZenLog record before it is delevered to the transports. Since processors are chained together in an array, the record can be mutated in a series of steps. The process is called with a single object containing the following properties:
+A processor is a function you can use to mutate the Tripitaka record before it is delevered to the transports. Since processors are chained together in an array, the record can be mutated in a series of steps. The process is called with a single object containing the following properties:
 
 | name    | type   | notes |
 |---------|--------|-------|
@@ -95,7 +95,7 @@ const logger = new Logger({
   ],
 });
 ```
-If you return false (or falsey) from a processor, the result will be skipped and the original (but potentially mutated) ZenLog record passed to the next processor in the chain.
+If you return false (or falsey) from a processor, the result will be skipped and the original (but potentially mutated) Tripitaka record passed to the next processor in the chain.
 
 The out-of-the-box processors are as follows...
 
@@ -121,10 +121,10 @@ const logger = new Logger({
     json(),
   ],
 });
-logger.info('ZenLock Rocks!');
+logger.info('How blissful it is, for one who has nothing');
 ```
 ```json
-{"env":"production","message":"ZenLog Rocks!","level":"INFO"}
+{"env":"production","message":"How blissful it is, for one who has nothing","level":"INFO"}
 ```
 
 #### Function example
@@ -136,10 +136,10 @@ const logger = new Logger({
     json(),
   ],
 });
-logger.info('ZenLock Rocks!');
+logger.info('How blissful it is, for one who has nothing');
 ```
 ```json
-{"timestamp":"2021-03-28T17:43:12.012Z","message":"ZenLog Rocks!","level":"INFO"}
+{"timestamp":"2021-03-28T17:43:12.012Z","message":"How blissful it is, for one who has nothing","level":"INFO"}
 ```
 
 ### buffer
@@ -158,7 +158,7 @@ const logger = new Logger({
     json(),
   ],
 });
-logger.info('ZenLock Rocks!');
+logger.info('How blissful it is, for one who has nothing');
 ```
 ```
 5a656e48756220526f636b7321
@@ -187,10 +187,10 @@ const logger = new Logger({
     json(),
   ],
 });
-logger.error("ZenLog Errors!", new Error('Oh Noes'));
+logger.error("I forbid it!", new Error('Oh Noes'));
 ```
 ```json
-"error":{"message":"Oh Noes!"}},"message":"ZenLog Errors!","level":"ERROR"
+"error":{"message":"Oooh, Demons!"}},"message":"I forbid it!","level":"ERROR"
 ```
 
 ### human
@@ -209,14 +209,14 @@ const logger = new Logger({
     human({ template: '%o [%s] (%d) - %s', paths: ['timestamp', 'level', 'pid', 'message'] }),
   ],
 });
-logger.info('ZenLog Rocks!', { timestamp: new Date(), pid: process.pid })
+logger.info('How blissful it is, for one who has nothing', { timestamp: new Date(), pid: process.pid })
 ```
 ```
-2021-03-28T18:15:23.312Z [INFO] (69196) - ZenLog Rocks!
+2021-03-28T18:15:23.312Z [INFO] (69196) - How blissful it is, for one who has nothing
 ```
 
 ### json
-Uses [json-strinigfy-safe](https://www.npmjs.com/package/json-stringify-safe) to safely convert the ZenLog record to a json string.
+Uses [json-strinigfy-safe](https://www.npmjs.com/package/json-stringify-safe) to safely convert the Tripitaka record to a json string.
 
 It has the following options:
 
@@ -232,10 +232,10 @@ const logger = new Logger({
     json(),
   ],
 });
-logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
+logger.info('How blissful it is, for one who has nothing', { env: process.env.NODE_ENV });
 ```
 ```json
-{"env":"production","message":"ZenLog Rocks!","level":"INFO"}
+{"env":"production","message":"How blissful it is, for one who has nothing","level":"INFO"}
 ```
 
 ### timestamp
@@ -253,14 +253,14 @@ const logger = new Logger({
     json(),
   ],
 });
-logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
+logger.info('How blissful it is, for one who has nothing', { env: process.env.NODE_ENV });
 ```
 ```json
-{"info":{"ts":"2021-03-28T18:31:21.035Z","env":"production"},"message":"ZenLog Rocks!","level":"INFO"}
+{"info":{"ts":"2021-03-28T18:31:21.035Z","env":"production"},"message":"How blissful it is, for one who has nothing","level":"INFO"}
 ```
 
 ## Transports
-Transports are functions which write the ZenLog record somewhere. The only parameter is an object, which should container the following properties.
+Transports are functions which write the Tripitaka record somewhere. The only parameter is an object, which should container the following properties.
 
 | name   | type   | notes                              |
 |--------|--------|------------------------------------|
@@ -294,11 +294,11 @@ const logger = new Logger({
     }),
   ],
 });
-logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
+logger.info('How blissful it is, for one who has nothing', { env: process.env.NODE_ENV });
 ```
 
 ### emitter
-The emitter transport emits a ZenLog record as an event, which can be useful when testing. It has the following options:
+The emitter transport emits a Tripitaka record as an event, which can be useful when testing. It has the following options:
 
 | name    | type         | required | default     | notes |
 |---------|--------------|----------|-------------|-------|
@@ -320,5 +320,5 @@ const logger = new Logger({
     }),
   ],
 });
-logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
+logger.info('How blissful it is, for one who has nothing', { env: process.env.NODE_ENV });
 ```

@@ -34,21 +34,21 @@ describe('Logger', () => {
       level: Level.TRACE,
     });
 
-    logger.trace('ZenLog traces!', { x: 'y' });
-    logger.debug('ZenLog debugs!', { x: 'y' });
-    logger.info('ZenLog rocks once!', { x: 'y' });
-    logger.info('ZenLog rocks twice!');
-    logger.warn('ZenLog warns!', { x: 'y' });
-    logger.error('ZenLog errors!', new Error('Oh Noes!'));
+    logger.trace('Tripitaka traces!', { x: 'y' });
+    logger.debug('Tripitaka debugs!', { x: 'y' });
+    logger.info('Tripitaka rocks once!', { x: 'y' });
+    logger.info('Tripitaka rocks twice!');
+    logger.warn('Tripitaka warns!', { x: 'y' });
+    logger.error('Tripitaka errors!', new Error('Oooh, Demons!'));
 
-    eq(streams[Level.TRACE.name].lines, [`{"level":"TRACE","message":"ZenLog traces!","x":"y","timestamp":"${ts.toISOString()}"}`]);
-    eq(streams[Level.DEBUG.name].lines, [`{"level":"DEBUG","message":"ZenLog debugs!","x":"y","timestamp":"${ts.toISOString()}"}`]);
+    eq(streams[Level.TRACE.name].lines, [`{"level":"TRACE","message":"Tripitaka traces!","x":"y","timestamp":"${ts.toISOString()}"}`]);
+    eq(streams[Level.DEBUG.name].lines, [`{"level":"DEBUG","message":"Tripitaka debugs!","x":"y","timestamp":"${ts.toISOString()}"}`]);
     eq(streams[Level.INFO.name].lines, [
-      `{"level":"INFO","message":"ZenLog rocks once!","x":"y","timestamp":"${ts.toISOString()}"}`,
-      `{"level":"INFO","message":"ZenLog rocks twice!","timestamp":"${ts.toISOString()}"}`
+      `{"level":"INFO","message":"Tripitaka rocks once!","x":"y","timestamp":"${ts.toISOString()}"}`,
+      `{"level":"INFO","message":"Tripitaka rocks twice!","timestamp":"${ts.toISOString()}"}`
     ]);
-    eq(streams[Level.WARN.name].lines, [`{"level":"WARN","message":"ZenLog warns!","x":"y","timestamp":"${ts.toISOString()}"}`]);
-    eq(streams[Level.ERROR.name].lines, [`{"error":{"message":"Oh Noes!"},"level":"ERROR","message":"ZenLog errors!","timestamp":"${ts.toISOString()}"}`]);
+    eq(streams[Level.WARN.name].lines, [`{"level":"WARN","message":"Tripitaka warns!","x":"y","timestamp":"${ts.toISOString()}"}`]);
+    eq(streams[Level.ERROR.name].lines, [`{"error":{"message":"Oooh, Demons!"},"level":"ERROR","message":"Tripitaka errors!","timestamp":"${ts.toISOString()}"}`]);
   });
 
   it('should ignore falsy processors', () => {
@@ -69,9 +69,9 @@ describe('Logger', () => {
       ]
     });
 
-    logger.info('ZenLog rocks!', { x: 'y' });
+    logger.info('Tripitaka rocks!', { x: 'y' });
 
-    eq(streams[Level.INFO.name].lines, [`{"level":"INFO","message":"ZenLog rocks!","x":"y","timestamp":"${ts.toISOString()}"}`]);
+    eq(streams[Level.INFO.name].lines, [`{"level":"INFO","message":"Tripitaka rocks!","x":"y","timestamp":"${ts.toISOString()}"}`]);
   });
 
   it('should support being disabled', () => {
@@ -82,7 +82,7 @@ describe('Logger', () => {
     });
 
     logger.disable();
-    logger.info('ZenLog rocks!', { x: 'y' });
+    logger.info('Tripitaka rocks!', { x: 'y' });
     eq(streams[Level.INFO.name].lines.length, 0);
   });
 
@@ -96,7 +96,7 @@ describe('Logger', () => {
     logger.disable();
     logger.enable();
 
-    logger.info('ZenLog rocks!', { x: 'y' });
+    logger.info('Tripitaka rocks!', { x: 'y' });
     eq(streams[Level.INFO.name].lines.length, 1);
   });
 });

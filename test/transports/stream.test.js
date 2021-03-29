@@ -21,10 +21,10 @@ describe('stream', () => {
         }
       });
       fn({ level: Level.INFO, record: 'Nothing to see here' });
-      fn({ level: Level.ERROR, record: 'Oh Noes!' });
+      fn({ level: Level.ERROR, record: 'Oooh, Demons!' });
 
       eq(info.lines, ['Nothing to see here']);
-      eq(error.lines, ['Oh Noes!']);
+      eq(error.lines, ['Oooh, Demons!']);
     } finally {
       info.destroy();
       error.destroy();

@@ -7,7 +7,7 @@ Object.entries(syntax).forEach(([keyword, fn]) => {
   global[keyword] = fn;
 });
 
-const suite = new Suite('ZenLog').discover();
+const suite = new Suite('Tripitaka').discover();
 const harness = new Harness(suite);
 
 const interactive = String(process.env.CI).toLowerCase() !== 'true';

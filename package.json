@@ -1,5 +1,5 @@
 {
-  "name": "zenlog",
+  "name": "tripitaka",
   "version": "1.0.0",
   "description": "```js const logger = foo.createLogger({   processors: [     timestamp(),     errors(),     json()   ],   transports: [     console,     emitter,   ] }); logger.log({ level: 'INFO', message: 'Some message', x: 'stuff' }); logger.info('Some message', { x: 'stuff' }) logger.info({ x: 'stuff' }); ```",
   "main": "index.js",
@@ -31,19 +31,24 @@
   },
   "keywords": [
     "log",
+    "logging",
+    "logger",
     "winston",
     "bunyan",
     "alternative",
     "json",
     "stdout",
-    "stderr"
+    "stderr",
+    "fludentd",
+    "elasticsearch",
+    "elk"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/acuminous/zenlog.git"
+    "url": "git+https://github.com/acuminous/tripitaka.git"
   },
   "bugs": {
-    "url": "https://github.com/acuminous/zenlog/issues"
+    "url": "https://github.com/acuminous/tripitaka/issues"
   },
-  "homepage": "https://acuminous.github.io/zenlog/"
+  "homepage": "https://acuminous.github.io/tripitaka/"
 }
