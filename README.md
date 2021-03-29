@@ -194,25 +194,18 @@ logger.error("I forbid it!", new Error('Oh Noes'));
 ```
 
 ### human
-Uses Node's [format](https://nodejs.org/docs/latest-v14.x/api/util.html#util_util_format_format_args) function to create readable log messages. Only intended for use locally since it does not log the context.
-
-It has the following options:
-
-| name     | type    | required | default              | notes |
-|----------|---------|----------|----------------------|-------|
-| template | string  | no       | '[%s] %s'            |       |
-| paths    | array   | no       | ['level', 'message'] |       |
+Converts the record into a human readable form. Only intended for use locally since it does not log the context.
 
 ```js
 const logger = new Logger({
   processors: [
-    human({ template: '%o [%s] (%d) - %s', paths: ['timestamp', 'level', 'pid', 'message'] }),
+    human(),
   ],
 });
 logger.info('How blissful it is, for one who has nothing', { timestamp: new Date(), pid: process.pid })
 ```
 ```
-2021-03-28T18:15:23.312Z [INFO] (69196) - How blissful it is, for one who has nothing
+2021-03-28 18:15:23 [INFO] How blissful it is, for one who has nothing
 ```
 
 ### json
