@@ -30,4 +30,22 @@ describe('stream', () => {
       error.destroy();
     }
   });
+
+  it('should adhere to the specified logging level', () => {
+    const info = new TestOutputStream();
+
+    try {
+      const fn = stream({
+        level: Level.ERROR,
+        streams: {
+          [Level.INFO.name]: info,
+        }
+      });
+      fn({ level: Level.INFO, record: 'Nothing to see here' });
+
+      eq(info.lines.length, 0);
+    } finally {
+      info.destroy();
+    }
+  });
 });

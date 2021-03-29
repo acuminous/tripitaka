@@ -275,9 +275,10 @@ The available transports are
 ### stream
 The stream transport writes a string to an output stream based on the level. It has the following options:
 
-| name    | type    | required | default   | notes |
-|---------|---------|----------|-----------|-------|
-| streams | object  | no       | See notes | By default TRACE, DEBUG and INFO messages will be output to stdout, while WARN and ERROR messages routed to stderr  |
+| name    | type    | required | default     | notes |
+|---------|---------|----------|-------------|-------|
+| level   | Level   | no       | Level.TRACE | The minimum log level for this transport  |
+| streams | object  | no       | See notes   | By default TRACE, DEBUG and INFO messages will be output to stdout, while WARN and ERROR messages routed to stderr  |
 
 ```js
 const logger = new Logger({
@@ -299,10 +300,11 @@ logger.info('ZenLock Rocks!', { env: process.env.NODE_ENV });
 ### emitter
 The emitter transport emits a ZenLog record as an event, which can be useful when testing. It has the following options:
 
-| name    | type         | required | default   | notes |
-|---------|--------------|----------|-----------|-------|
-| emitter | EventEmitter | no       | process   | Specify your own event emitter rather than the global process object |
-| events  | object       | no       | See notes | By default all log levels will be emitted with the 'log' event. Think twice about changing this to 'error', since unhandled error events will kill your node process. |
+| name    | type         | required | default     | notes |
+|---------|--------------|----------|-------------|-------|
+| level   | Level        | no       | Level.TRACE | The minimum log level for this transport  |
+| emitter | EventEmitter | no       | process     | Specify your own event emitter rather than the global process object |
+| events  | object       | no       | See notes  | By default all log levels will be emitted with the 'log' event. Think twice about changing this to 'error', since unhandled error events will kill your node process. |
 
 ```js
 const logger = new Logger({
