@@ -109,7 +109,7 @@ The out-of-the-box processors are as follows...
 - [timestamp](#timestamp)
 
 ### augment
-Augments the record with the supplied source. If attributes are common to both the record and the source, the source wins. Use with [AsyncLocalStorage](https://nodejs.org/docs/latest-v14.x/api/async_hooks.html#async_hooks_class_asynclocalstorage) as a substitute for child loggers.
+Augments the record with the supplied source. If attributes are common to both the record and the source, the source wins. Use with [AsyncLocalStorage](https://nodejs.org/docs/latest-v14.x/api/async_hooks.html#async_hooks_class_asynclocalstorage) as a substitute for child loggers. See the [express example](https://github.com/acuminous/tripitaka/blob/main/examples/express/index.js) how.
 
 | name   | type               | required | default | notes |
 |--------|--------------------|----------|---------|-------|
