@@ -43,7 +43,7 @@ If you use the error processor (enabled by default), ZenLog also supports loggin
 ```
 logger.error('ZenLock Errors!', new Error('Oh Noes!'));
 logger.error(new Error('Oh Noes!'));
-logger.info(new Error('Works with other functions too!'));
+logger.info(new Error('Meh!'));
 ```
 Under these circumstances the error will be nested to avoid clashing with any message attribute, e.g.
 ```
