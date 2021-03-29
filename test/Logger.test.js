@@ -20,6 +20,7 @@ describe('Logger', () => {
     const ts = new Date();
     const logger = new Logger({
       processors: [
+        processors.context(),
         processors.error({ stack: false }),
         processors.timestamp({
           getTimestamp: () => {

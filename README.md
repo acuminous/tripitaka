@@ -57,12 +57,13 @@ You can customise this output through the use of [processors](#processors) and [
 
 ```js
 const { Logger, Level, processors, transports, } = require('tripitaka');
-const { error, timestamp, json } = processors;
+const { context, error, timestamp, json } = processors;
 const { json, human } = transports;
 
 const logger = new Logger({
   level: Level.INFO,
   processors: [
+    context(),
     error(),
     timestamp(),
     process.env.NODE_ENV === 'production' ? json() : human(),
@@ -100,6 +101,8 @@ If you return false (or falsey) from a processor, the result will be skipped and
 The out-of-the-box processors are as follows...
 
 - [augment](#augment)
+- [buffer](#buffer)
+- [context](#context)
 - [error](#error)
 - [human](#human)
 - [json](#json)
@@ -151,7 +154,6 @@ The buffer processor outputs the record as a buffer, optionally encoding it befo
 | outputEncoding | string | no       |         |       |
 
 ```js
-const source = () => ({ timestamp: new Date() });
 const logger = new Logger({
   processors: [
     buffer({ outputEncoding: 'hex' }),
@@ -162,6 +164,22 @@ logger.info('How blissful it is, for one who has nothing');
 ```
 ```
 5a656e48756220526f636b7321
+```
+
+### context
+Performs a shallow copy of the context into the record.
+
+```js
+const logger = new Logger({
+  processors: [
+    context(),
+    json(),
+  ],
+});
+logger.info('How blissful it is, for one who has nothing', { env: process.env.NODE_ENV });
+```
+```
+{"env":"production","message":"How blissful it is, for one who has nothing","level":"INFO"}
 ```
 
 ### error
