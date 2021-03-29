@@ -1,21 +1,11 @@
-const { Logger, processors } = require('../..');
 const { v4: uuid } = require('uuid');
 const express = require('express');
 const { AsyncLocalStorage } = require('async_hooks');
+const LoggerFactory = require('./LoggerFactory')
 
-const { augment, context, error, timestamp, json } = processors;
 const app = express();
 const als = new AsyncLocalStorage();
-
-const logger = new Logger({
-  processors: [
-    context(),
-    error(),
-    augment({ source: () => Object.fromEntries(als.getStore()) }),
-    timestamp(),
-    json(),
-  ]
-});
+LoggerFactory.init(als);
 
 app.use((req, res, next) => {
   als.run(new Map(), () => {
@@ -26,9 +16,10 @@ app.use((req, res, next) => {
   });
 });
 
-app.get('/foo', (req, res) => {
-  logger.info('Hello world');
-  res.send('Hello world\n');
+app.get('/status', (req, res) => {
+  const logger = LoggerFactory.getInstance();
+  logger.info('checking status');
+  res.send('OK\n');
 })
 
 app.listen(3000, () => {
