@@ -260,7 +260,7 @@ Adds a timestamp. It has the following options:
 ```js
 const logger = new Logger({
   processors: [
-    timestamp({ field: 'tx' }),
+    timestamp({ field: 'ts' }),
     json(),
   ],
 });
