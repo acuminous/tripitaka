@@ -303,7 +303,7 @@ const logger = new Logger({
 logger.info('How blissful it is, for one who has nothing', { env: process.env.NODE_ENV });
 ```
 ```json
-{"info":{"ts":"2021-03-28T18:31:21.035Z","env":"production"},"message":"How blissful it is, for one who has nothing","level":"INFO"}
+{"ts":"2021-03-28T18:31:21.035Z","env":"production","message":"How blissful it is, for one who has nothing","level":"INFO"}
 ```
 
 ## Transports
