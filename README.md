@@ -5,9 +5,9 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/7321a236e3d434fe0c06/maintainability)](https://codeclimate.com/github/acuminous/tripitaka/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/7321a236e3d434fe0c06/test_coverage)](https://codeclimate.com/github/acuminous/tripitaka/test_coverage)
 [![Code Style](https://img.shields.io/badge/code%20style-esnext-brightgreen.svg)](https://www.npmjs.com/package/eslint-config-esnext)
-[![Discover zUnit](https://img.shields.io/badge/Discover-zUnit-brightgreen)](https://www.npmjs.com/package/zUnit)
+[![Discover zUnit](https://img.shields.io/badge/Discover-zUnit-brightgreen)](https://www.npmjs.com/package/zunit)
 
-Tripitaka is a low dependency, no frills logger for Node.js. It is named after the buddist monk from the TV series, [Monkey](https://en.wikipedia.org/wiki/Monkey_(TV_series)) due to shared values of simplicity and mindfulness, and also because Tripitaka is a term given to ancient collections of Buddhist scriptures, which loosely connects with logging. I wrote Tripitaka because, sadly my previous logger of choice, [winston](https://github.com/winstonjs/winston) has fallen into disrepair. It has hundreds of [open issues](https://github.com/winstonjs/winston/issues), many of which are serious and not received a response in over a year. [Contributions](https://github.com/winstonjs/winston/graphs/contributors) mostly ceased in 2019. Winston's design also has some serious flaws which can make it hard to format messages and lead to mutation of the log context.
+Tripitaka is a low dependency, no frills logger for Node.js. It is named after the buddhist monk from the TV series, [Monkey](https://en.wikipedia.org/wiki/Monkey_(TV_series)) due to shared values of simplicity and mindfulness, and also because Tripitaka is a term given to ancient collections of Buddhist scriptures, which loosely connects with logging. I wrote Tripitaka because, sadly my previous logger of choice, [winston](https://github.com/winstonjs/winston) has fallen into disrepair. It has hundreds of [open issues](https://github.com/winstonjs/winston/issues), many of which are serious and not received a response in over a year. [Contributions](https://github.com/winstonjs/winston/graphs/contributors) mostly ceased in 2019. Winston's design also has some serious flaws which can make it hard to format messages and lead to mutation of the log context.
 
 ## TL;DR
 ```js
@@ -19,8 +19,8 @@ logger.info('How blissful it is, for one who has nothing', { env: process.env.NO
 {"env":"production","timestamp":"2021-03-27T23:43:10.023Z","message":"How blissful it is, for one who has nothing","level":"INFO"}
 ```
 
-## Design Principals
-Tripitaka intensionally ships with only two transports. A streams based transport which will write to stdout and stderr (or other streams which you supply), and an event emitter based transport which will emit events using the global process object (or another emitter which you supply). This library holds the opinion that external files, database and message brokers are all far better handled with a data collector such as [fluentd](https://www.fluentd.org/architecture), but you can write your own transports if you so wish. Tripitaka also eschews child loggers. These were useful for stashing context, but are more elegantly implemented via [AsyncLocalStorage](https://nodejs.org/docs/latest-v14.x/api/async_hooks.html#async_hooks_class_asynclocalstorage) or [continuation-local-storage](https://www.npmjs.com/package/continuation-local-storage). See the [express example](https://github.com/acuminous/tripitaka/blob/main/examples/express/index.js) for how.
+## Design Principles
+Tripitaka intentionally ships with only two transports. A streams-based transport which will write to `stdout` and `stderr` (or other streams which you supply), and an event emitter based transport which will emit events using the global process object (or another emitter which you supply). This library holds the opinion that external files, database and message brokers are all far better handled with a data collector such as [fluentd](https://www.fluentd.org/architecture), but you can write your own transports if you so wish. Tripitaka also eschews child loggers. These were useful for stashing context, but are more elegantly implemented via [AsyncLocalStorage](https://nodejs.org/docs/latest-v14.x/api/async_hooks.html#async_hooks_class_asynclocalstorage) or [continuation-local-storage](https://www.npmjs.com/package/continuation-local-storage). See the [express example](https://github.com/acuminous/tripitaka/blob/main/examples/express/index.js) for how.
 
 ## API
 Tripitaka supports the same logging levels as console, i.e.
@@ -73,11 +73,11 @@ const logger = new Logger({
   ],
 })
 ```
-## Supressing logs
-You can suppress logs by setting the logging level as above, or by calling logger.disable(). You can renable the logger by calling logger.enable();
+## Suppressing logs
+You can suppress logs by setting the logging level as above, or by calling logger.disable(). You can re-enable the logger by calling logger.enable();
 
 ## Processors
-A processor is a function you can use to mutate the Tripitaka record before it is delevered to the transports. Since processors are chained together in an array, the record can be mutated in a series of steps. The process is called with a single object containing the following properties:
+A processor is a function you can use to mutate the Tripitaka record before it is delivered to the transports. Since processors are chained together in an array, the record can be mutated in a series of steps. The process is called with a single object containing the following properties:
 
 | name    | type   | notes |
 |---------|--------|-------|
@@ -96,7 +96,7 @@ const logger = new Logger({
   ],
 });
 ```
-If you return false (or falsey) from a processor, the result will be skipped and the original (but potentially mutated) Tripitaka record passed to the next processor in the chain.
+If you return false (or falsy) from a processor, the result will be skipped and the original (but potentially mutated) Tripitaka record passed to the next processor in the chain.
 
 The out-of-the-box processors are as follows...
 
@@ -227,7 +227,7 @@ logger.info('How blissful it is, for one who has nothing', { timestamp: new Date
 ```
 
 ### json
-Uses [json-strinigfy-safe](https://www.npmjs.com/package/json-stringify-safe) to safely convert the Tripitaka record to a json string.
+Uses [json-stringify-safe](https://www.npmjs.com/package/json-stringify-safe) to safely convert the Tripitaka record to a json string.
 
 It has the following options:
 
@@ -235,7 +235,7 @@ It has the following options:
 |------------|----------|----------|-----------|-------|
 | serializer | function | no       | null      |       |
 | indent     | number   | no       | undefined |       |
-| decyler    | function | no       | () => {}  | Determines how circular references are handled. The default behaviour is to silently drop the attribute |
+| decycler    | function | no       | () => {}  | Determines how circular references are handled. The default behaviour is to silently drop the attribute |
 
 ```js
 const logger = new Logger({
