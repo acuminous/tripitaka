@@ -242,7 +242,7 @@ It has the following options:
 | paths              | array    | no       | []        | Specifies the paths of the fields to map      |
 | reportComplexTypes | boolean  | no       | false     | Causes the processor to throw an error if value type is an object, function or symbol |
 
-NaN values will always be silently dropped as this could cause the field to by dyanmically mapped as a string instead of a number.
+NaN and Infinite values are always silently dropped as they could cause the field to by dynamically mapped as a string instead of a number.
 
 ```js
 const reportComplexTypes = process.env.NODE_ENV !== 'production';
