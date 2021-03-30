@@ -20,7 +20,7 @@ logger.info('How blissful it is, for one who has nothing', { env: process.env.NO
 ```
 
 ## Design Principals
-Tripitaka intensionally ships with only two transports. A streams based transport which will write to stdout and stderr (or other streams which you supply), and an event emitter based transport which will emit events using the global process object (or another emitter which you supply). This library holds the opinion that external files, database and message brokers are all far better handled with a data collector such as [fluentd](https://www.fluentd.org/architecture), but you can write your own transports if you so wish. Tripitaka also eschews child loggers. These were useful for stashing context, but are more elegantly implemented via [AsyncLocalStorage](https://nodejs.org/docs/latest-v14.x/api/async_hooks.html#async_hooks_class_asynclocalstorage) or [continuation-local-storage](https://www.npmjs.com/package/continuation-local-storage).
+Tripitaka intensionally ships with only two transports. A streams based transport which will write to stdout and stderr (or other streams which you supply), and an event emitter based transport which will emit events using the global process object (or another emitter which you supply). This library holds the opinion that external files, database and message brokers are all far better handled with a data collector such as [fluentd](https://www.fluentd.org/architecture), but you can write your own transports if you so wish. Tripitaka also eschews child loggers. These were useful for stashing context, but are more elegantly implemented via [AsyncLocalStorage](https://nodejs.org/docs/latest-v14.x/api/async_hooks.html#async_hooks_class_asynclocalstorage) or [continuation-local-storage](https://www.npmjs.com/package/continuation-local-storage). See the [express example](https://github.com/acuminous/tripitaka/blob/main/examples/express/index.js) for how.
 
 ## API
 Tripitaka supports the same logging levels as console, i.e.
@@ -109,7 +109,7 @@ The out-of-the-box processors are as follows...
 - [timestamp](#timestamp)
 
 ### augment
-Augments the record with the supplied source. If attributes are common to both the record and the source, the source wins. Use with [AsyncLocalStorage](https://nodejs.org/docs/latest-v14.x/api/async_hooks.html#async_hooks_class_asynclocalstorage) as a substitute for child loggers. See the [express example](https://github.com/acuminous/tripitaka/blob/main/examples/express/index.js) how.
+Augments the record with the supplied source. If attributes are common to both the record and the source, the source wins. Use with [AsyncLocalStorage](https://nodejs.org/docs/latest-v14.x/api/async_hooks.html#async_hooks_class_asynclocalstorage) as a substitute for child loggers. See the [express example](https://github.com/acuminous/tripitaka/blob/main/examples/express/index.js) for how.
 
 | name   | type               | required | default | notes |
 |--------|--------------------|----------|---------|-------|
