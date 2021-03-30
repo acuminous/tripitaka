@@ -1,6 +1,6 @@
 {
   "name": "tripitaka",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A low dependency, no frills logger for Node.js",
   "main": "index.js",
   "dependencies": {
