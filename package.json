@@ -4,6 +4,7 @@
   "description": "```js const logger = foo.createLogger({   processors: [     timestamp(),     errors(),     json()   ],   transports: [     console,     emitter,   ] }); logger.log({ level: 'INFO', message: 'Some message', x: 'stuff' }); logger.info('Some message', { x: 'stuff' }) logger.info({ x: 'stuff' }); ```",
   "main": "index.js",
   "dependencies": {
+    "dot-prop": "^6.0.1",
     "json-stringify-safe": "^5.0.1"
   },
   "devDependencies": {
@@ -40,7 +41,8 @@
     "stderr",
     "fludentd",
     "elasticsearch",
-    "elk"
+    "elk",
+    "mapping explosion"
   ],
   "repository": {
     "type": "git",

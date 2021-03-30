@@ -105,6 +105,7 @@ The out-of-the-box processors are as follows...
 - [context](#context)
 - [error](#error)
 - [human](#human)
+- [index](#index)
 - [json](#json)
 - [timestamp](#timestamp)
 
@@ -120,6 +121,7 @@ Augments the record with the supplied source. If attributes are common to both t
 const source = { env: process.env.NODE_ENV };
 const logger = new Logger({
   processors: [
+    context(),
     augment({ source }),
     json(),
   ],
@@ -135,6 +137,7 @@ logger.info('How blissful it is, for one who has nothing');
 const source = () => ({ timestamp: new Date() });
 const logger = new Logger({
   processors: [
+    context(),
     augment({ source }),
     json(),
   ],
@@ -156,6 +159,7 @@ The buffer processor outputs the record as a buffer, optionally encoding it befo
 ```js
 const logger = new Logger({
   processors: [
+    context(),
     buffer({ outputEncoding: 'hex' }),
     json(),
   ],
@@ -201,6 +205,7 @@ It has the following options:
 ```js
 const logger = new Logger({
   processors: [
+    context(),
     error({ field: 'err', stack: false }),
     json(),
   ],
@@ -217,6 +222,7 @@ Converts the record into a human readable form. Only intended for use locally si
 ```js
 const logger = new Logger({
   processors: [
+    context(),
     human(),
   ],
 });
@@ -225,6 +231,34 @@ logger.info('How blissful it is, for one who has nothing', { timestamp: new Date
 ```
 2021-03-28 18:15:23 [INFO] How blissful it is, for one who has nothing
 ```
+### index
+Creates a sub document of simple values from the specified paths. This is useful to avoid [mapping explosion](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html#mapping-limit-settings) when writing logs to Elasticsearch. The idea is to disable dynamic mapping by default in your Elasticsearch configuration, and specifically enable it only for the named sub document. Since the processor only copies fields with simple values into the index, you should remain in control of the Elasticsearch index, but still be able to search by key terms and inspect the full log context.
+
+It has the following options:
+
+| name               | type     | required | default   | notes |
+|--------------------|----------|----------|-----------|-------|
+| field              | string   | no       | 'fields'  | Specifies the name of the sub document |
+| paths              | array    | no       | []        | Specifies the paths of the fields to map      |
+| reportComplexTypes | boolean  | no       | false     | Causes the processor to throw an error if value type is an object, function or symbol |
+
+NaN values will always be silently dropped as this could cause the field to by dyanmically mapped as a string instead of a number.
+
+```js
+const reportComplexTypes = process.env.NODE_ENV !== 'production';
+const logger = new Logger({
+  processors: [
+    context(),
+    index({ field:"@fields", paths: ['character.name'], reportComplexTypes }),
+    json(),
+  ],
+});
+logger.info('How blissful it is, for one who has nothing', { character: { name: 'Monkey', nature: 'Irrepressible' } });
+```
+```json
+{"message":"How blissful it is, for one who has nothing","level":"INFO","character":{"name":"Monkey","nature":"Irrepresible"},"@fields":{"name":"Monkey"}}
+```
+
 
 ### json
 Uses [json-stringify-safe](https://www.npmjs.com/package/json-stringify-safe) to safely convert the Tripitaka record to a json string.
@@ -240,6 +274,7 @@ It has the following options:
 ```js
 const logger = new Logger({
   processors: [
+    context(),
     json(),
   ],
 });
@@ -260,6 +295,7 @@ Adds a timestamp. It has the following options:
 ```js
 const logger = new Logger({
   processors: [
+    context(),
     timestamp({ field: 'ts' }),
     json(),
   ],
