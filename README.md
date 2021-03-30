@@ -235,7 +235,7 @@ It has the following options:
 |------------|----------|----------|-----------|-------|
 | serializer | function | no       | null      |       |
 | indent     | number   | no       | undefined |       |
-| decyler    | function | no       | () => {}  | Determines how circular references are handled. The default behaviour is to silently drop the attribute |
+| decycler    | function | no       | () => {}  | Determines how circular references are handled. The default behaviour is to silently drop the attribute |
 
 ```js
 const logger = new Logger({
