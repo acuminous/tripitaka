@@ -49,7 +49,7 @@ Under these circumstances the error will be nested to avoid clashing with any me
 ```
 {"error":{"message":"Oooh, Demons!","stack":"..."},"message":"I forbid it!","level":"ERROR"}
 {"error":{"message":"Oooh, Demons!","stack":"..."},"level":"ERROR"}
-{"error":{"message":"'Hey Buddah!'"},"stack":"...","level":"INFO"}
+{"error":{"message":"Hey Buddah!"},"stack":"...","level":"INFO"}
 ```
 
 ## Customisation
