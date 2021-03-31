@@ -89,6 +89,7 @@ The processor is called with a single object containing the following properties
 | ctx     | object |       |
 | record  | any    | Initialised to a shallow clone of the context. Be careful not to mutate |
 
+#### example
 ```js
 const logger = new Logger({
   processors: [
