@@ -57,8 +57,8 @@ You can customise this output through the use of [processors](#processors) and [
 
 ```js
 const { Logger, Level, processors, transports, } = require('tripitaka');
-const { context, error, timestamp, json } = processors;
-const { json, human } = transports;
+const { context, error, timestamp, json, human } = processors;
+const { stream } = transports;
 
 const logger = new Logger({
   level: Level.INFO,
