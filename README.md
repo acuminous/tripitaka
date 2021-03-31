@@ -7,7 +7,7 @@
 [![Code Style](https://img.shields.io/badge/code%20style-esnext-brightgreen.svg)](https://www.npmjs.com/package/eslint-config-esnext)
 [![Discover zUnit](https://img.shields.io/badge/Discover-zUnit-brightgreen)](https://www.npmjs.com/package/zunit)
 
-Tripitaka is a low dependency, no frills logger for Node.js. It is named after the buddhist monk from the TV series, [Monkey](https://en.wikipedia.org/wiki/Monkey_(TV_series)) due to shared values of simplicity and mindfulness, and also because Tripitaka is a term given to ancient collections of Buddhist scriptures, which loosely connects with logging. I wrote Tripitaka because, sadly my previous logger of choice, [winston](https://github.com/winstonjs/winston) has fallen into disrepair.
+Tripitaka is a no-frills, low dependency logger, designed to play nicely with tools like fluentd and Elasticsearch. It is named after the buddhist monk from the TV series, [Monkey](https://en.wikipedia.org/wiki/Monkey_(TV_series)) due to shared values of simplicity and mindfulness, and also because Tripitaka is a term given to ancient collections of Buddhist scriptures, which loosely connects with logging. I wrote Tripitaka because, sadly my previous logger of choice, [winston](https://github.com/winstonjs/winston) has fallen into disrepair.
 
 ## TL;DR
 ```js

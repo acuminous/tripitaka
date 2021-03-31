@@ -1,7 +1,7 @@
 {
   "name": "tripitaka",
   "version": "1.0.3",
-  "description": "A low dependency, no frills logger for Node.js",
+  "description": "A no-frills, low dependency logger, designed to play nicely with tools like fluentd and Elasticsearch",
   "main": "index.js",
   "dependencies": {
     "dot-prop": "^6.0.1",
@@ -33,13 +33,14 @@
     "log",
     "logging",
     "logger",
+    "simple",
     "winston",
     "bunyan",
     "alternative",
     "json",
     "stdout",
     "stderr",
-    "fludentd",
+    "fluentd",
     "elasticsearch",
     "elk",
     "mapping explosion"
