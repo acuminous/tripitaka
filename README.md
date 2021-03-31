@@ -40,7 +40,7 @@ Assuming the default configuration, this will write the following to stdout
 {"env":"production","message":"How blissful it is, for one who has nothing","level":"INFO"}
 ```
 If you use the error processor (enabled by default), Tripitaka also supports logging errors in place of the context, or even the message, e.g.
-```
+```js
 logger.error('I forbid it!', new Error('Oooh, Demons!'));
 logger.error(new Error('Oooh, Demons!'));
 logger.info(new Error('Hey Buddah!'));
