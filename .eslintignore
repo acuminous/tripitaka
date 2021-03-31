@@ -1,2 +1,2 @@
-examples
 coverage
+**/node_modules

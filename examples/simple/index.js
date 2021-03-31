@@ -15,9 +15,9 @@ const logger = new Logger({
 });
 
 setInterval(() => {
-  logger.info('Hey Buddah!', { pid: process.pid })
+  logger.info('Hey Buddah!', { pid: process.pid });
 }, 1000);
 
 setInterval(() => {
-  logger.error('I love a good fight!', new Error('Oooh, Demons!'), { pid: process.pid })
+  logger.error('I love a good fight!', new Error('Oooh, Demons!'), { pid: process.pid });
 }, 3000);

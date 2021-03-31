@@ -7,7 +7,7 @@
 [![Code Style](https://img.shields.io/badge/code%20style-esnext-brightgreen.svg)](https://www.npmjs.com/package/eslint-config-esnext)
 [![Discover zUnit](https://img.shields.io/badge/Discover-zUnit-brightgreen)](https://www.npmjs.com/package/zunit)
 
-Tripitaka is a no-frills, low dependency logger, designed to play nicely with tools like fluentd and Elasticsearch. It is named after the buddhist monk from the TV series, [Monkey](https://en.wikipedia.org/wiki/Monkey_(TV_series)) due to shared values of simplicity and mindfulness, and also because Tripitaka is a term given to ancient collections of Buddhist scriptures, which loosely connects with logging. I wrote Tripitaka because, sadly my previous logger of choice, [winston](https://github.com/winstonjs/winston) has fallen into disrepair.
+Tripitaka is a low dependency, no frills logger, designed to play nicely with tools like fluentd and Elasticsearch. It is named after the buddhist monk from the TV series, [Monkey](https://en.wikipedia.org/wiki/Monkey_(TV_series)) due to shared values of simplicity and mindfulness, and also because Tripitaka is a term given to ancient collections of Buddhist scriptures, which loosely connects with logging. I wrote Tripitaka because, sadly my previous logger of choice, [winston](https://github.com/winstonjs/winston) has fallen into disrepair.
 
 ## TL;DR
 ```js
@@ -158,6 +158,7 @@ The buffer processor outputs the record as a buffer, optionally encoding it befo
 | inputEncoding  | string | no       |         |       |
 | outputEncoding | string | no       |         |       |
 
+#### example
 ```js
 const logger = new Logger({
   processors: [
@@ -175,6 +176,7 @@ logger.info('How blissful it is, for one who has nothing');
 ### context
 Performs a shallow copy of the context into the record.
 
+#### example
 ```js
 const logger = new Logger({
   processors: [
@@ -204,6 +206,7 @@ It has the following options:
 | field | string  | no       | error   | If the context is an instance of Error, it will be nested under an attribute with this name |
 | stack | boolean | no       | true    | Controls whether the stack trace will be logged |
 
+#### example
 ```js
 const logger = new Logger({
   processors: [
@@ -247,6 +250,7 @@ It has the following options:
 
 NaN and Infinite values are always silently dropped as they could cause the field to by dynamically mapped as a string instead of a number.
 
+#### example
 ```js
 const reportComplexTypes = process.env.NODE_ENV !== 'production';
 const logger = new Logger({
@@ -273,6 +277,7 @@ It has the following options:
 | indent     | number   | no       | undefined |       |
 | decycler    | function | no       | () => {}  | Determines how circular references are handled. The default behaviour is to silently drop the attribute |
 
+#### example
 ```js
 const logger = new Logger({
   processors: [
@@ -294,6 +299,7 @@ Adds a timestamp. It has the following options:
 | field | string  | no      | 'timestamp'          | Specifies the name of the timestamp attribute |
 | getTimestamp | function  | no      | () => new Date(); | Overrides how the timestamp is aquired (useful for fixing the timestamp when testing) |
 
+#### example
 ```js
 const logger = new Logger({
   processors: [
@@ -329,6 +335,7 @@ The stream transport writes a string to an output stream based on the level. It 
 | level   | Level   | no       | Level.TRACE | The minimum log level for this transport  |
 | streams | object  | no       | See notes   | By default TRACE, DEBUG and INFO messages will be output to stdout, while WARN and ERROR messages routed to stderr  |
 
+#### example
 ```js
 const logger = new Logger({
   transports: [
@@ -355,6 +362,7 @@ The emitter transport emits a Tripitaka record as an event, which can be useful 
 | emitter | EventEmitter | no       | process     | Specify your own event emitter rather than the global process object |
 | events  | object       | no       | See notes  | By default all log levels will be emitted with the 'log' event. Think twice about changing this to 'error', since unhandled error events will kill your node process. |
 
+#### example
 ```js
 const logger = new Logger({
   transports: [
