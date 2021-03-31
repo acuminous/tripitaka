@@ -74,7 +74,7 @@ const logger = new Logger({
 })
 ```
 ## Suppressing logs
-You can suppress logs by setting the logging level as above, or by calling logger.disable(). You can re-enable the logger by calling logger.enable();
+You can suppress logs by setting the logging level as when you create a `Logger` instance as above, or by calling `logger.disable()`. You can re-enable the logger by calling `logger.enable()`.
 
 ## Processors
 A processor is a function you can use to mutate the Tripitaka record before it is delivered to the transports. Since processors are chained together in an array, the record can be mutated over a series of steps. Any truthy value that you return from a processor will be passed to the next processor.
