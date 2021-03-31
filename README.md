@@ -87,7 +87,7 @@ The processor is called with a single object containing the following properties
 | level   | Level  |       |
 | message | string |       |
 | ctx     | object |       |
-| record  | any    | Initialised to a shallow clone of the context. Be careful not to mutate |
+| record  | any    | Initialised to a shallow clone of the context. Be careful not to mutate nested attributes |
 
 #### example
 ```js
