@@ -164,8 +164,8 @@ The buffer processor outputs the record as a buffer, optionally encoding it befo
 const logger = new Logger({
   processors: [
     context(),
-    buffer({ outputEncoding: 'hex' }),
     json(),
+    buffer({ outputEncoding: 'hex' }),    
   ],
 });
 logger.info('How blissful it is, for one who has nothing');
