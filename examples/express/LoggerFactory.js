@@ -1,5 +1,5 @@
 const { Logger, processors } = require('../..');
-const { augment, context, error, index, json, timestamp } = processors;
+const { augment, error, index, json, timestamp } = processors;
 let logger;
 
 module.exports = class LoggerFactory {
@@ -7,7 +7,6 @@ module.exports = class LoggerFactory {
   static init(als) {
     logger = new Logger({
       processors: [
-        context(),
         error(),
         augment({ source: () => {return Object.fromEntries(als.getStore());} }),
         timestamp(),

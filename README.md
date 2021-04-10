@@ -63,7 +63,7 @@ const { stream } = transports;
 const logger = new Logger({
   level: Level.INFO,
   processors: [
-    error(),  
+    error(),
     timestamp(),
     process.env.NODE_ENV === 'production' ? json() : human(),
   ],
@@ -165,7 +165,7 @@ const logger = new Logger({
   processors: [
     error(),
     json(),
-    buffer({ outputEncoding: 'hex' }),    
+    buffer({ outputEncoding: 'hex' }),
   ],
 });
 logger.info('How blissful it is, for one who has nothing');
@@ -175,7 +175,7 @@ logger.info('How blissful it is, for one who has nothing');
 ```
 
 ### context
-Performs a shallow copy of the context into the record.
+Performs a shallow copy of the context into the record. You should prefer the [error](###error) processor as it has the same behaviour, but also prepares Error instances for serialisation.
 
 #### example
 ```js
@@ -192,7 +192,7 @@ logger.info('How blissful it is, for one who has nothing', { env: process.env.NO
 ```
 
 ### error
-The error processor is important for logging errors - without it they will not stringify correctly. It is best to put this processor first in the list of processors, as if another processor fires first, it may incorrectly copy the error object. If you use the error processor there is no need to also use the context processor.
+The error processor is important for logging errors - without it they will not serialize correctly. It is best to put this processor first in the list of processors, as if another processor fires first, it may incorrectly handle the error object. If you use the error processor there is no need to also use the context processor.
 
 The processor operates with the following logic:
 
