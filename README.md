@@ -63,8 +63,8 @@ const { stream } = transports;
 const logger = new Logger({
   level: Level.INFO,
   processors: [
+    error(),  
     context(),
-    error(),
     timestamp(),
     process.env.NODE_ENV === 'production' ? json() : human(),
   ],
@@ -192,7 +192,7 @@ logger.info('How blissful it is, for one who has nothing', { env: process.env.NO
 ```
 
 ### error
-The error processor is important for logging errors. Without it they will not stringify correctly. To work properly this process must come first in the list of processors.
+The error processor is important for logging errors - without it they will not stringify correctly. It is best to put this processor first in the list of processors, as if another processor fires first, it may incorrectly copy the error object.
 
 The processor operates with the following logic:
 
