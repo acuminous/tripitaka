@@ -15,7 +15,7 @@
     "zunit": "^3.0.7"
   },
   "scripts": {
-    "coverage": "nyc --report html --reporter lcov --reporter text-summary node test",
+    "coverage": "nyc --report html --reporter lcov --reporter text-summary zUnit",
     "lint": "eslint .",
     "test": "zUnit",
     "prepare": "husky install"
