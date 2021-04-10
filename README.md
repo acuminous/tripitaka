@@ -43,13 +43,13 @@ If you use the error processor (enabled by default), Tripitaka also supports log
 ```js
 logger.error('I forbid it!', new Error('Oooh, Demons!'));
 logger.error(new Error('Oooh, Demons!'));
-logger.info(new Error('Hey Buddah!'));
+logger.info(new Error('Oooh, Demons!'));
 ```
 Under these circumstances the error will be nested to avoid clashing with any message attribute, e.g.
 ```
 {"error":{"message":"Oooh, Demons!","stack":"..."},"message":"I forbid it!","level":"ERROR"}
 {"error":{"message":"Oooh, Demons!","stack":"..."},"level":"ERROR"}
-{"error":{"message":"Hey Buddah!"},"stack":"...","level":"INFO"}
+{"error":{"message":"Oooh, Demons!","stack":"..."},level":"INFO"}
 ```
 
 ## Customisation
