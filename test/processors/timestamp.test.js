@@ -12,9 +12,7 @@ describe('timestamp', () => {
   it('should decorate context with a timestamp', () => {
     const ts = new Date();
     const fn = timestamp({
-      getTimestamp: () => {
-        return ts;
-      }
+      getTimestamp: () => ts,
     });
     const result = fn({ record: {} });
     eq(result, { timestamp: ts });
@@ -23,9 +21,7 @@ describe('timestamp', () => {
   it('should use the specified key', () => {
     const ts = new Date();
     const fn = timestamp({ field: 'xtimestamp',
-      getTimestamp: () => {
-        return ts;
-      }
+      getTimestamp: () => ts,
     });
     const result = fn({ record: {} });
     eq(result, { xtimestamp: ts });

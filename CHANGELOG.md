@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 - Update to zUnit 3.0.7
+- Minor tidy up
 
 ## [1.0.4]
 - Improve readme

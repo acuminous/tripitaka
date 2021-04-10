@@ -8,7 +8,9 @@ module.exports = class LoggerFactory {
     logger = new Logger({
       processors: [
         error(),
-        augment({ source: () => {return Object.fromEntries(als.getStore());} }),
+        augment({
+          source: () => Object.fromEntries(als.getStore())
+        }),
         timestamp(),
         index({ paths: [
           'request.url',

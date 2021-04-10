@@ -6,7 +6,7 @@
   "rules": {
     "import/no-commonjs": "off",
     "import/no-nodejs-modules": "off",
-    "arrow-body-style": ["error", "always"],
-    "semi": ["error", "always"],
+    "arrow-body-style": "off",
+    "semi": ["error", "always"]
   }
 }

@@ -12,7 +12,7 @@ LoggerFactory.init(als);
 app.locals.als = als;
 
 app.use((req, res, next) => {
-  als.run(new Map(), () => {return next();});
+  als.run(new Map(), () => next());
 });
 
 app.get('/characters', logRequest, listCharacters);

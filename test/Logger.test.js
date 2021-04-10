@@ -13,7 +13,7 @@ describe('Logger', () => {
   });
 
   afterEach(() => {
-    Object.values(streams).forEach(stream => {return stream.destroy();});
+    Object.values(streams).forEach(stream => stream.destroy());
   });
 
  it('should log messages', () => {
@@ -23,9 +23,7 @@ describe('Logger', () => {
         processors.context(),
         processors.error({ stack: false }),
         processors.timestamp({
-          getTimestamp: () => {
-            return ts;
-          }
+          getTimestamp: () => ts,
         }),
         processors.json(),
       ],
@@ -57,12 +55,12 @@ describe('Logger', () => {
     const logger = new Logger({
       processors: [
         processors.error({ stack: false }),
-        processors.timestamp({ getTimestamp: () => {
-          return ts;
-        } }),
-        () => {return false;},
-        () => {return null;},
-        () => {return undefined;},
+        processors.timestamp({
+          getTimestamp: () => ts,
+        }),
+        () => false,
+        () => null,
+        () => undefined,
         processors.json(),
       ],
       transports: [
