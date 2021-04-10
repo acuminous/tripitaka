@@ -57,14 +57,13 @@ You can customise this output through the use of [processors](#processors) and [
 
 ```js
 const { Logger, Level, processors, transports, } = require('tripitaka');
-const { context, error, timestamp, json, human } = processors;
+const { error, timestamp, json, human } = processors;
 const { stream } = transports;
 
 const logger = new Logger({
   level: Level.INFO,
   processors: [
     error(),  
-    context(),
     timestamp(),
     process.env.NODE_ENV === 'production' ? json() : human(),
   ],
@@ -93,6 +92,7 @@ The processor is called with a single object containing the following properties
 ```js
 const logger = new Logger({
   processors: [
+    error(),
     ({ record }) => {
       return { ...record, timestamp: new Date() } };
     },
@@ -124,7 +124,7 @@ Augments the record with the supplied source. If attributes are common to both t
 const source = { env: process.env.NODE_ENV };
 const logger = new Logger({
   processors: [
-    context(),
+    error(),
     augment({ source }),
     json(),
   ],
@@ -140,7 +140,7 @@ logger.info('How blissful it is, for one who has nothing');
 const source = () => ({ timestamp: new Date() });
 const logger = new Logger({
   processors: [
-    context(),
+    error(),
     augment({ source }),
     json(),
   ],
@@ -163,7 +163,7 @@ The buffer processor outputs the record as a buffer, optionally encoding it befo
 ```js
 const logger = new Logger({
   processors: [
-    context(),
+    error(),
     json(),
     buffer({ outputEncoding: 'hex' }),    
   ],
@@ -192,7 +192,7 @@ logger.info('How blissful it is, for one who has nothing', { env: process.env.NO
 ```
 
 ### error
-The error processor is important for logging errors - without it they will not stringify correctly. It is best to put this processor first in the list of processors, as if another processor fires first, it may incorrectly copy the error object.
+The error processor is important for logging errors - without it they will not stringify correctly. It is best to put this processor first in the list of processors, as if another processor fires first, it may incorrectly copy the error object. If you use the error processor there is no need to also use the context processor.
 
 The processor operates with the following logic:
 
@@ -211,7 +211,6 @@ It has the following options:
 ```js
 const logger = new Logger({
   processors: [
-    context(),
     error({ field: 'err', stack: false }),
     json(),
   ],
@@ -228,7 +227,7 @@ Converts the record into a human readable form. Only intended for use locally si
 ```js
 const logger = new Logger({
   processors: [
-    context(),
+    error(),
     human(),
   ],
 });
@@ -256,7 +255,7 @@ NaN and Infinite values are always silently dropped as they could cause the fiel
 const reportComplexTypes = process.env.NODE_ENV !== 'production';
 const logger = new Logger({
   processors: [
-    context(),
+    error(),
     index({ field:"@fields", paths: ['character.name'], reportComplexTypes }),
     json(),
   ],
@@ -282,7 +281,7 @@ It has the following options:
 ```js
 const logger = new Logger({
   processors: [
-    context(),
+    error(),
     json(),
   ],
 });
@@ -304,7 +303,7 @@ Adds a timestamp. It has the following options:
 ```js
 const logger = new Logger({
   processors: [
-    context(),
+    error(),
     timestamp({ field: 'ts' }),
     json(),
   ],
