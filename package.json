@@ -12,12 +12,12 @@
     "eslint-config-esnext": "^4.1.0",
     "husky": "^5.2.0",
     "nyc": "^15.1.0",
-    "zunit": "^3.0.4"
+    "zunit": "^3.0.7"
   },
   "scripts": {
     "coverage": "nyc --report html --reporter lcov --reporter text-summary node test",
     "lint": "eslint .",
-    "test": "node test",
+    "test": "zUnit",
     "prepare": "husky install"
   },
   "author": "Stephen Cresswell",
@@ -52,5 +52,8 @@
   "bugs": {
     "url": "https://github.com/acuminous/tripitaka/issues"
   },
-  "homepage": "https://acuminous.github.io/tripitaka/"
+  "homepage": "https://acuminous.github.io/tripitaka/",
+  "zUnit": {
+    "pollute": true
+  }
 }
