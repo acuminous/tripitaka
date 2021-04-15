@@ -12,7 +12,7 @@
     "eslint-config-esnext": "^4.1.0",
     "husky": "^5.2.0",
     "nyc": "^15.1.0",
-    "zunit": "^3.0.7"
+    "zunit": "^3.2.0"
   },
   "scripts": {
     "coverage": "nyc --report html --reporter lcov --reporter text-summary zUnit",

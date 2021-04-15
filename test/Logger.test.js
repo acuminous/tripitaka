@@ -47,7 +47,7 @@ describe('Logger', () => {
       `{"level":"INFO","message":"Tripitaka rocks twice!","timestamp":"${ts.toISOString()}"}`
     ]);
     eq(streams[Level.WARN.name].lines, [`{"level":"WARN","message":"Tripitaka warns!","x":"y","timestamp":"${ts.toISOString()}"}`]);
-    eq(streams[Level.ERROR.name].lines, [`{"error":{"message":"Oooh, Demons!"},"level":"ERROR","message":"Tripitaka errors!","timestamp":"${ts.toISOString()}"}`]);
+    eq(streams[Level.ERROR.name].lines, [`{"level":"ERROR","message":"Tripitaka errors!","error":{"message":"Oooh, Demons!"},"timestamp":"${ts.toISOString()}"}`]);
   });
 
   it('should ignore falsy processors', () => {

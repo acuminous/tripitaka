@@ -13,7 +13,7 @@ describe('human', () => {
     const fn = human();
     const error = new Error('Oooh, Demons!');
     const result = fn({ record: { level: Level.ERROR.name, message: 'I forbid it!', error: { message: error.message, stack: error.stack } } });
-    match(result, /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[ERROR\] Oooh, Demons!/);
+    match(result, /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \[ERROR\] I forbid it!/);
     match(result, /Error: Oooh, Demons!/);
   });
 });
