@@ -20,6 +20,7 @@
     "test": "zUnit",
     "prepare": "husky install"
   },
+  "types": "index.d.ts",
   "author": "Stephen Cresswell",
   "license": "ISC",
   "directories": {
