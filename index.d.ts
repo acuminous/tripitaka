@@ -1,7 +1,17 @@
-type Processor = ({ level: Level, message: any, ctx: any, record: any }) => any;
+type Processor = (params: {
+  level: Level,
+  message: any,
+  ctx: any,
+  record: any,
+}) => any;
+
 type ProcessorFactory = (...any) => Processor;
 
-type Transport = ({ level: Level, record: any }) => any;
+type Transport = (params: {
+  level: Level,
+  record: any,
+}) => any;
+
 type TransportFactory = (...any) => Transport;
 
 export class Level {
@@ -21,7 +31,12 @@ export class Logger {
     processors?: ProcessorFactory[],
     transports?: TransportFactory[],
   });
-};
+  trace(...any);
+  debug(...any);
+  info(...any);
+  warn(...any);
+  error(...any);
+}
 
 export const processors: {
   augment: ProcessorFactory;
