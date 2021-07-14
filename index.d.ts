@@ -5,14 +5,14 @@ type Processor = (params: {
   record: any,
 }) => any;
 
-type ProcessorFactory = (...any) => Processor;
+type ProcessorFactory = (...args: any[]) => Processor;
 
 type Transport = (params: {
   level: Level,
   record: any,
 }) => any;
 
-type TransportFactory = (...any) => Transport;
+type TransportFactory = (...args: any[]) => Transport;
 
 export class Level {
   name: string;
