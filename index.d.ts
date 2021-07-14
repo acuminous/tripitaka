@@ -31,11 +31,11 @@ export class Logger {
     processors?: ProcessorFactory[],
     transports?: TransportFactory[],
   });
-  trace(message: any, context?: any);
-  debug(message: any, context?: any);
-  info(message: any, context?: any);
-  warn(message: any, context?: any);
-  error(message: any, context?: any);
+  trace(message: any, context?: any): void;
+  debug(message: any, context?: any): void;
+  info(message: any, context?: any): void;
+  warn(message: any, context?: any): void;
+  error(message: any, context?: any): void;
 }
 
 export const processors: {
