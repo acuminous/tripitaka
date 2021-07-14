@@ -1,6 +1,6 @@
 {
   "name": "tripitaka",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "A low dependency, no frills logger, designed to play nicely with tools like fluentd and Elasticsearch",
   "main": "index.js",
   "dependencies": {
