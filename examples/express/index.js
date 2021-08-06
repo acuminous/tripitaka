@@ -1,6 +1,7 @@
 const express = require('express');
 const { AsyncLocalStorage } = require('async_hooks');
 const LoggerFactory = require('./LoggerFactory');
+const correlateRequest = require('./middleware/correlate-request');
 const logRequest = require('./middleware/log-request');
 const getCharacter = require('./middleware/get-character');
 const listCharacters = require('./middleware/list-characters');
@@ -11,9 +12,7 @@ const als = new AsyncLocalStorage();
 LoggerFactory.init(als);
 app.locals.als = als;
 
-app.use((req, res, next) => {
-  als.run(new Map(), () => next());
-});
+app.use(correlateRequest);
 
 app.get('/characters', logRequest, listCharacters);
 app.get('/characters/:id', logRequest, getCharacter);
