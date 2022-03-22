@@ -215,10 +215,10 @@ const logger = new Logger({
     json(),
   ],
 });
-logger.error("I forbid it!", new Error('Oh Noes'));
+logger.error("I forbid it!", new Error('Oooh, Demons!'));
 ```
 ```json
-"error":{"message":"Oooh, Demons!"}},"message":"I forbid it!","level":"ERROR"
+{"error":{"message":"Oooh, Demons!"},"message":"I forbid it!","level":"ERROR"}
 ```
 
 ### human
