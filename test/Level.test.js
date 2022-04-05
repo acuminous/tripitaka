@@ -35,4 +35,12 @@ describe('Level', () => {
     eq(Level.ERROR.satisfies(Level.ERROR), true);
   });
 
+  it("should convert string to correct level", () => {
+    eq(Level.lookup("TRACE").equals(Level.TRACE), true);
+    eq(Level.lookup("DEBUG").equals(Level.DEBUG), true);
+    eq(Level.lookup("INFO").equals(Level.INFO), true);
+    eq(Level.lookup("WARN").equals(Level.WARN), true);
+    eq(Level.lookup("ERROR").equals(Level.ERROR), true);
+  });
+
 });
