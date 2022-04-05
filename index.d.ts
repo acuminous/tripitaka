@@ -23,6 +23,7 @@ export class Level {
   static INFO: Level;
   static WARN: Level;
   static ERROR: Level;
+  static lookup(name: string) : Level;
 }
 
 export class Logger {
