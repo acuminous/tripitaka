@@ -39,6 +39,7 @@ describe('Logger', () => {
     logger.info('Tripitaka rocks twice!');
     logger.warn('Tripitaka warns!', { x: 'y' });
     logger.error('Tripitaka errors!', new Error('Oooh, Demons!'));
+    logger.error(new Error('Oooh, Demons!'));
 
     eq(streams[Level.TRACE.name].lines, [`{"level":"TRACE","message":"Tripitaka traces!","x":"y","timestamp":"${ts.toISOString()}"}`]);
     eq(streams[Level.DEBUG.name].lines, [`{"level":"DEBUG","message":"Tripitaka debugs!","x":"y","timestamp":"${ts.toISOString()}"}`]);
@@ -47,7 +48,10 @@ describe('Logger', () => {
       `{"level":"INFO","message":"Tripitaka rocks twice!","timestamp":"${ts.toISOString()}"}`
     ]);
     eq(streams[Level.WARN.name].lines, [`{"level":"WARN","message":"Tripitaka warns!","x":"y","timestamp":"${ts.toISOString()}"}`]);
-    eq(streams[Level.ERROR.name].lines, [`{"level":"ERROR","message":"Tripitaka errors!","error":{"message":"Oooh, Demons!"},"timestamp":"${ts.toISOString()}"}`]);
+    eq(streams[Level.ERROR.name].lines, [
+      `{"level":"ERROR","message":"Tripitaka errors!","error":{"message":"Oooh, Demons!"},"timestamp":"${ts.toISOString()}"}`,
+      `{"level":"ERROR","message":"Oooh, Demons!","error":{"message":"Oooh, Demons!"},"timestamp":"${ts.toISOString()}"}`
+      ]);
   });
 
   it('should ignore falsy processors', () => {

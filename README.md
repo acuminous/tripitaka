@@ -46,10 +46,10 @@ If you use the context processor (enabled by default), Tripitaka also supports l
 logger.error('I forbid it!', new Error('Oooh, Demons!'));
 logger.error(new Error('Oooh, Demons!'));
 ```
-Under these circumstances the error will be nested to avoid clashing with any message attribute, e.g.
+Under these circumstances the error will be nested under a configurable attribute to potential clashes, and the log record message defaulted to the error message, e.g.
 ```
 {"error":{"message":"Oooh, Demons!","stack":"..."},"message":"I forbid it!","level":"ERROR"}
-{"error":{"message":"Oooh, Demons!","stack":"..."},"level":"ERROR"}
+{"error":{"message":"Oooh, Demons!","stack":"..."},"message":"Oooh, Demons!","level":"ERROR"}
 ```
 
 ## Customisation
