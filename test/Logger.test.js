@@ -16,7 +16,7 @@ describe('Logger', () => {
     Object.values(streams).forEach(stream => stream.destroy());
   });
 
- it('should log messages', () => {
+  it('should log messages', () => {
     const ts = new Date();
     const logger = new Logger({
       processors: [

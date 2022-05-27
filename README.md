@@ -11,12 +11,14 @@ Tripitaka is a low dependency, no frills logger, designed to play nicely with to
 
 ## TL;DR
 ```js
-const { Logger } = require('tripitaka');
+const { Logger } = require('.');
 const logger = new Logger();
-logger.info('How blissful it is, for one who has nothing', { env: process.env.NODE_ENV });
+const book = { title: 'Monkey', author: 'Wu Ch\'eng-en', ISBN10: '9780140441116' };
+logger.info('Retrieved book', { book });
 ```
 ```
-{"env":"production","timestamp":"2021-03-27T23:43:10.023Z","message":"How blissful it is, for one who has nothing","level":"INFO"}
+NODE_ENV=production node index.js
+{"level":"INFO","message":"Retrieved book","book":{"title":"Monkey","author":"Wu Ch'eng-en","ISBN10":"9780140441116"},"timestamp":"2022-05-27T18:21:17.371Z"}
 ```
 
 ## Design Principles
