@@ -13,7 +13,7 @@ Tripitaka is a low dependency, no frills logger, designed to play nicely with to
 ## TL;DR
 
 ```js
-const { Logger } = require(".");
+const { Logger } = require("tripitaka");
 const logger = new Logger();
 const book = {
   title: "Monkey",
