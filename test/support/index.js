@@ -1,4 +1,4 @@
-const TestOutputStream = require('./TestOutputStream');
+const TestOutputStream = require("./TestOutputStream");
 
 module.exports = {
   TestOutputStream,

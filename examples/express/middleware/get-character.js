@@ -1,5 +1,5 @@
-const LoggerFactory = require('../LoggerFactory');
-const characters = require('../db/characters');
+const LoggerFactory = require("../LoggerFactory");
+const characters = require("../db/characters");
 
 module.exports = (req, res, next) => {
   const logger = LoggerFactory.getInstance();
@@ -10,6 +10,6 @@ module.exports = (req, res, next) => {
     return next();
   }
 
-  logger.info('Found character', { character });
+  logger.info("Found character", { character });
   res.json(character);
 };

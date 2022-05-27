@@ -1,16 +1,13 @@
 type Processor = (params: {
-  level: Level,
-  message: any,
-  ctx: any,
-  record: any,
+  level: Level;
+  message: any;
+  ctx: any;
+  record: any;
 }) => any;
 
 type ProcessorFactory = (...args: any[]) => Processor;
 
-type Transport = (params: {
-  level: Level,
-  record: any,
-}) => any;
+type Transport = (params: { level: Level; record: any }) => any;
 
 type TransportFactory = (...args: any[]) => Transport;
 
@@ -23,14 +20,14 @@ export class Level {
   static INFO: Level;
   static WARN: Level;
   static ERROR: Level;
-  static lookup(name: string) : Level;
+  static lookup(name: string): Level;
 }
 
 export class Logger {
   constructor(options?: {
-    level?: Level,
-    processors?: ProcessorFactory[],
-    transports?: TransportFactory[],
+    level?: Level;
+    processors?: ProcessorFactory[];
+    transports?: TransportFactory[];
   });
   trace(message: any, context?: any): void;
   debug(message: any, context?: any): void;

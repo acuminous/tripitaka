@@ -1,9 +1,8 @@
-const { deepStrictEqual: eq } = require('assert');
-const { TestOutputStream }  = require('./support');
-const { Level, Logger, processors, transports } = require('..');
+const { deepStrictEqual: eq } = require("assert");
+const { TestOutputStream } = require("./support");
+const { Level, Logger, processors, transports } = require("..");
 
-describe('Logger', () => {
-
+describe("Logger", () => {
   let streams;
 
   beforeEach(() => {
@@ -13,10 +12,10 @@ describe('Logger', () => {
   });
 
   afterEach(() => {
-    Object.values(streams).forEach(stream => stream.destroy());
+    Object.values(streams).forEach((stream) => stream.destroy());
   });
 
-  it('should log messages', () => {
+  it("should log messages", () => {
     const ts = new Date();
     const logger = new Logger({
       processors: [
@@ -27,38 +26,42 @@ describe('Logger', () => {
         processors.empty(),
         processors.json(),
       ],
-      transports: [
-        transports.stream({ streams })
-      ],
+      transports: [transports.stream({ streams })],
       level: Level.TRACE,
     });
 
-    logger.trace('Tripitaka traces!', { x: 'y' });
-    logger.debug('Tripitaka debugs!', { x: 'y' });
-    logger.info('Tripitaka rocks once!', { x: 'y' });
-    logger.info('Tripitaka rocks twice!');
+    logger.trace("Tripitaka traces!", { x: "y" });
+    logger.debug("Tripitaka debugs!", { x: "y" });
+    logger.info("Tripitaka rocks once!", { x: "y" });
+    logger.info("Tripitaka rocks twice!");
     logger.info();
-    logger.warn('Tripitaka warns!', { x: 'y' });
-    logger.error('Tripitaka errors!', new Error('Oooh, Demons!'));
-    logger.error(new Error('Oooh, Demons!'));
+    logger.warn("Tripitaka warns!", { x: "y" });
+    logger.error("Tripitaka errors!", new Error("Oooh, Demons!"));
+    logger.error(new Error("Oooh, Demons!"));
     logger.error();
 
-    eq(streams[Level.TRACE.name].lines, [`{"level":"TRACE","message":"Tripitaka traces!","x":"y","timestamp":"${ts.toISOString()}"}`]);
-    eq(streams[Level.DEBUG.name].lines, [`{"level":"DEBUG","message":"Tripitaka debugs!","x":"y","timestamp":"${ts.toISOString()}"}`]);
+    eq(streams[Level.TRACE.name].lines, [
+      `{"level":"TRACE","message":"Tripitaka traces!","x":"y","timestamp":"${ts.toISOString()}"}`,
+    ]);
+    eq(streams[Level.DEBUG.name].lines, [
+      `{"level":"DEBUG","message":"Tripitaka debugs!","x":"y","timestamp":"${ts.toISOString()}"}`,
+    ]);
     eq(streams[Level.INFO.name].lines, [
       `{"level":"INFO","message":"Tripitaka rocks once!","x":"y","timestamp":"${ts.toISOString()}"}`,
       `{"level":"INFO","message":"Tripitaka rocks twice!","timestamp":"${ts.toISOString()}"}`,
-      `{"level":"INFO","message":"Empty message logged at Test._fn (/Users/steve/Development/acuminous/tripitaka/test/Logger.test.js:40:12)","timestamp":"${ts.toISOString()}"}`,
+      `{"level":"INFO","message":"Empty message logged at Test._fn (/Users/steve/Development/acuminous/tripitaka/test/Logger.test.js:37:12)","timestamp":"${ts.toISOString()}"}`,
     ]);
-    eq(streams[Level.WARN.name].lines, [`{"level":"WARN","message":"Tripitaka warns!","x":"y","timestamp":"${ts.toISOString()}"}`]);
+    eq(streams[Level.WARN.name].lines, [
+      `{"level":"WARN","message":"Tripitaka warns!","x":"y","timestamp":"${ts.toISOString()}"}`,
+    ]);
     eq(streams[Level.ERROR.name].lines, [
       `{"level":"ERROR","message":"Tripitaka errors!","error":{"message":"Oooh, Demons!"},"timestamp":"${ts.toISOString()}"}`,
       `{"level":"ERROR","message":"Oooh, Demons!","error":{"message":"Oooh, Demons!"},"timestamp":"${ts.toISOString()}"}`,
-      `{"level":"ERROR","message":"Empty message logged at Test._fn (/Users/steve/Development/acuminous/tripitaka/test/Logger.test.js:44:12)","timestamp":"${ts.toISOString()}"}`
-      ]);
+      `{"level":"ERROR","message":"Empty message logged at Test._fn (/Users/steve/Development/acuminous/tripitaka/test/Logger.test.js:41:12)","timestamp":"${ts.toISOString()}"}`,
+    ]);
   });
 
-  it('should ignore falsy processors', () => {
+  it("should ignore falsy processors", () => {
     const ts = new Date();
     const logger = new Logger({
       processors: [
@@ -71,39 +74,35 @@ describe('Logger', () => {
         () => undefined,
         processors.json(),
       ],
-      transports: [
-        transports.stream({ streams })
-      ]
+      transports: [transports.stream({ streams })],
     });
 
-    logger.info('Tripitaka rocks!', { x: 'y' });
+    logger.info("Tripitaka rocks!", { x: "y" });
 
-    eq(streams[Level.INFO.name].lines, [`{"level":"INFO","message":"Tripitaka rocks!","x":"y","timestamp":"${ts.toISOString()}"}`]);
+    eq(streams[Level.INFO.name].lines, [
+      `{"level":"INFO","message":"Tripitaka rocks!","x":"y","timestamp":"${ts.toISOString()}"}`,
+    ]);
   });
 
-  it('should support being disabled', () => {
+  it("should support being disabled", () => {
     const logger = new Logger({
-      transports: [
-        transports.stream({ streams })
-      ],
+      transports: [transports.stream({ streams })],
     });
 
     logger.disable();
-    logger.info('Tripitaka rocks!', { x: 'y' });
+    logger.info("Tripitaka rocks!", { x: "y" });
     eq(streams[Level.INFO.name].lines.length, 0);
   });
 
-  it('should support being enabled', () => {
+  it("should support being enabled", () => {
     const logger = new Logger({
-      transports: [
-        transports.stream({ streams })
-      ],
+      transports: [transports.stream({ streams })],
     });
 
     logger.disable();
     logger.enable();
 
-    logger.info('Tripitaka rocks!', { x: 'y' });
+    logger.info("Tripitaka rocks!", { x: "y" });
     eq(streams[Level.INFO.name].lines.length, 1);
   });
 });

@@ -1,7 +1,6 @@
-const LoggerFactory = require('../LoggerFactory');
+const LoggerFactory = require("../LoggerFactory");
 
 module.exports = (req, res, next) => {
-
   const request = {
     method: req.method,
     url: req.originalUrl,
@@ -10,17 +9,20 @@ module.exports = (req, res, next) => {
     start: Date.now(),
   };
 
-  res.once('finish', function() {
-
+  res.once("finish", function () {
     request.duration = Date.now() - request.start;
     /* eslint-disable-next-line no-invalid-this */
     request.status = this.statusCode;
 
     const logger = LoggerFactory.getInstance();
     if (request.status < 400) {
-      logger.info(`${request.method} ${request.url} ${request.status}`, { request });
+      logger.info(`${request.method} ${request.url} ${request.status}`, {
+        request,
+      });
     } else {
-      logger.error(`${request.method} ${request.url} ${request.status}`, { request });
+      logger.error(`${request.method} ${request.url} ${request.status}`, {
+        request,
+      });
     }
   });
 
