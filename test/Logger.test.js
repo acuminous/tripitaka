@@ -49,7 +49,7 @@ describe("Logger", () => {
     eq(streams[Level.INFO.name].lines, [
       `{"level":"INFO","message":"Tripitaka rocks once!","x":"y","timestamp":"${ts.toISOString()}"}`,
       `{"level":"INFO","message":"Tripitaka rocks twice!","timestamp":"${ts.toISOString()}"}`,
-      `{"level":"INFO","message":"Empty message logged at Test._fn (/Users/steve/Development/acuminous/tripitaka/test/Logger.test.js:37:12)","timestamp":"${ts.toISOString()}"}`,
+      `{"level":"INFO","message":"Empty message logged at Test._fn (${__filename}:37:12)","timestamp":"${ts.toISOString()}"}`,
     ]);
     eq(streams[Level.WARN.name].lines, [
       `{"level":"WARN","message":"Tripitaka warns!","x":"y","timestamp":"${ts.toISOString()}"}`,
@@ -57,7 +57,7 @@ describe("Logger", () => {
     eq(streams[Level.ERROR.name].lines, [
       `{"level":"ERROR","message":"Tripitaka errors!","error":{"message":"Oooh, Demons!"},"timestamp":"${ts.toISOString()}"}`,
       `{"level":"ERROR","message":"Oooh, Demons!","error":{"message":"Oooh, Demons!"},"timestamp":"${ts.toISOString()}"}`,
-      `{"level":"ERROR","message":"Empty message logged at Test._fn (/Users/steve/Development/acuminous/tripitaka/test/Logger.test.js:41:12)","timestamp":"${ts.toISOString()}"}`,
+      `{"level":"ERROR","message":"Empty message logged at Test._fn (${__filename}:41:12)","timestamp":"${ts.toISOString()}"}`,
     ]);
   });
 

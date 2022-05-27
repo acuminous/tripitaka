@@ -1,4 +1,4 @@
-const { match } = require("assert");
+const { strictEqual: eq } = require("assert");
 const {
   processors: { empty },
 } = require("../..");
@@ -7,9 +7,6 @@ describe("empty", () => {
   it("should work out of the box", () => {
     const fn = empty({ index: 2 });
     const result = fn({ record: {} });
-    match(
-      result.message,
-      /^Empty message logged at .*\/test\/processors\/empty.test.js:\d+:\d+/
-    );
+    eq(result.message, `Empty message logged at Test._fn (${__filename}:9:20)`);
   });
 });
