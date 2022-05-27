@@ -20,11 +20,11 @@ describe('Logger', () => {
     const ts = new Date();
     const logger = new Logger({
       processors: [
-        processors.context(),
         processors.context({ stack: false }),
         processors.timestamp({
           getTimestamp: () => ts,
         }),
+        processors.empty(),
         processors.json(),
       ],
       transports: [
@@ -37,20 +37,24 @@ describe('Logger', () => {
     logger.debug('Tripitaka debugs!', { x: 'y' });
     logger.info('Tripitaka rocks once!', { x: 'y' });
     logger.info('Tripitaka rocks twice!');
+    logger.info();
     logger.warn('Tripitaka warns!', { x: 'y' });
     logger.error('Tripitaka errors!', new Error('Oooh, Demons!'));
     logger.error(new Error('Oooh, Demons!'));
+    logger.error();
 
     eq(streams[Level.TRACE.name].lines, [`{"level":"TRACE","message":"Tripitaka traces!","x":"y","timestamp":"${ts.toISOString()}"}`]);
     eq(streams[Level.DEBUG.name].lines, [`{"level":"DEBUG","message":"Tripitaka debugs!","x":"y","timestamp":"${ts.toISOString()}"}`]);
     eq(streams[Level.INFO.name].lines, [
       `{"level":"INFO","message":"Tripitaka rocks once!","x":"y","timestamp":"${ts.toISOString()}"}`,
-      `{"level":"INFO","message":"Tripitaka rocks twice!","timestamp":"${ts.toISOString()}"}`
+      `{"level":"INFO","message":"Tripitaka rocks twice!","timestamp":"${ts.toISOString()}"}`,
+      `{"level":"INFO","message":"Empty message logged at Test._fn (/Users/steve/Development/acuminous/tripitaka/test/Logger.test.js:40:12)","timestamp":"${ts.toISOString()}"}`,
     ]);
     eq(streams[Level.WARN.name].lines, [`{"level":"WARN","message":"Tripitaka warns!","x":"y","timestamp":"${ts.toISOString()}"}`]);
     eq(streams[Level.ERROR.name].lines, [
       `{"level":"ERROR","message":"Tripitaka errors!","error":{"message":"Oooh, Demons!"},"timestamp":"${ts.toISOString()}"}`,
-      `{"level":"ERROR","message":"Oooh, Demons!","error":{"message":"Oooh, Demons!"},"timestamp":"${ts.toISOString()}"}`
+      `{"level":"ERROR","message":"Oooh, Demons!","error":{"message":"Oooh, Demons!"},"timestamp":"${ts.toISOString()}"}`,
+      `{"level":"ERROR","message":"Empty message logged at Test._fn (/Users/steve/Development/acuminous/tripitaka/test/Logger.test.js:44:12)","timestamp":"${ts.toISOString()}"}`
       ]);
   });
 

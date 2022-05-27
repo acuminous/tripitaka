@@ -6,6 +6,7 @@ and this project adheres to Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## 3.0.0
 - Port the error processor functionality to the context processor and deprecate the error processor. See https://github.com/acuminous/tripitaka/issues/8
+- Add empty processor
 
 ## 2.1.7
 - Added Level.lookup to typscript definitions

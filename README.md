@@ -106,6 +106,7 @@ The out-of-the-box processors are as follows...
 - [augment](#augment)
 - [buffer](#buffer)
 - [context](#context)
+- [empty](#empty)
 - [human](#human)
 - [index](#index)
 - [json](#json)
@@ -203,6 +204,24 @@ logger.error("I forbid it!", new Error('Oooh, Demons!'));
 ```
 ```json
 {"error":{"message":"Oooh, Demons!"},"message":"I forbid it!","level":"ERROR"}
+```
+
+### empty
+Logs a message when attempts are made to log an undefined, null or empty message
+
+#### example
+```js
+const logger = new Logger({
+  processors: [
+    context({ errorField: 'err', stack: false }),
+    empty(),
+    json(),
+  ],
+});
+logger.error(undefined);
+```
+```json
+{"message":"Empty message logged at Test._fn (/opt/acuminous/tripitaka/index.js:9:5)","level":"ERROR"}
 ```
 
 ### human
