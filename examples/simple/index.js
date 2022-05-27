@@ -1,10 +1,10 @@
 const { Logger, processors, transports } = require('../..');
-const { error, timestamp, json, human } = processors;
+const { context, timestamp, json, human } = processors;
 const { stream } = transports;
 
 const logger = new Logger({
   processors: [
-    error(),
+    context(),
     timestamp(),
     process.env.NODE_ENV === 'production' ? json() : human(),
   ],
