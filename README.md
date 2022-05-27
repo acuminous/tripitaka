@@ -37,21 +37,19 @@ The function arguments are always the same, a mandatory message and an optional 
 ```js
 logger.info('How blissful it is, for one who has nothing', { env: process.env.NODE_ENV });
 ```
-Assuming the default configuration, this will write the following to stdout
+Assuming the default configuration, this will write the following to stdout when run in a production environment
 ```json
 {"env":"production","message":"How blissful it is, for one who has nothing","level":"INFO"}
 ```
-If you use the error processor (enabled by default), Tripitaka also supports logging errors in place of the context, or even the message, e.g.
+If you use the context processor (enabled by default), Tripitaka also supports logging errors in place of the context, or even the message, e.g.
 ```js
 logger.error('I forbid it!', new Error('Oooh, Demons!'));
 logger.error(new Error('Oooh, Demons!'));
-logger.info(new Error('Oooh, Demons!'));
 ```
 Under these circumstances the error will be nested to avoid clashing with any message attribute, e.g.
 ```
 {"error":{"message":"Oooh, Demons!","stack":"..."},"message":"I forbid it!","level":"ERROR"}
 {"error":{"message":"Oooh, Demons!","stack":"..."},"level":"ERROR"}
-{"error":{"message":"Oooh, Demons!","stack":"..."},level":"INFO"}
 ```
 
 ## Customisation
@@ -59,13 +57,13 @@ You can customise this output through the use of [processors](#processors) and [
 
 ```js
 const { Logger, Level, processors, transports, } = require('tripitaka');
-const { error, timestamp, json, human } = processors;
+const { context, timestamp, json, human } = processors;
 const { stream } = transports;
 
 const logger = new Logger({
   level: Level.INFO,
   processors: [
-    error(),
+    context(),
     timestamp(),
     process.env.NODE_ENV === 'production' ? json() : human(),
   ],
@@ -78,7 +76,7 @@ const logger = new Logger({
 You can suppress logs by setting the logging level as when you create a `Logger` instance as above, or by calling `logger.disable()`. You can re-enable the logger by calling `logger.enable()`.
 
 ## Processors
-A processor is a function you can use to mutate the Tripitaka record before it is delivered to the transports. Since processors are chained together in an array, the record can be mutated over a series of steps. Any truthy value that you return from a processor will be passed to the next processor.
+A processor is a function you can use to mutate the Tripitaka log record before it is delivered to the transports. Since processors are chained together in an array, the record can be mutated over a series of steps.
 
 
 The processor is called with a single object containing the following properties:
@@ -94,9 +92,9 @@ The processor is called with a single object containing the following properties
 ```js
 const logger = new Logger({
   processors: [
-    error(),
+    context(),
     ({ record }) => {
-      return { ...record, timestamp: new Date() } };
+      return { ...record, timestamp: new Date() };
     },
     json(),
   ],
@@ -108,7 +106,6 @@ The out-of-the-box processors are as follows...
 - [augment](#augment)
 - [buffer](#buffer)
 - [context](#context)
-- [error](#error)
 - [human](#human)
 - [index](#index)
 - [json](#json)
@@ -122,11 +119,12 @@ Augments the record with the supplied source. If attributes are common to both t
 | source | object or function | yes      |         |       |
 
 #### Object example
+Use an object when the source data is static
 ```js
 const source = { env: process.env.NODE_ENV };
 const logger = new Logger({
   processors: [
-    error(),
+    context(),
     augment({ source }),
     json(),
   ],
@@ -138,11 +136,12 @@ logger.info('How blissful it is, for one who has nothing');
 ```
 
 #### Function example
+Use a function when the source data is dynamic
 ```js
 const source = () => ({ timestamp: new Date() });
 const logger = new Logger({
   processors: [
-    error(),
+    context(),
     augment({ source }),
     json(),
   ],
@@ -165,7 +164,7 @@ The buffer processor outputs the record as a buffer, optionally encoding it befo
 ```js
 const logger = new Logger({
   processors: [
-    error(),
+    context(),
     json(),
     buffer({ outputEncoding: 'hex' }),
   ],
@@ -173,28 +172,11 @@ const logger = new Logger({
 logger.info('How blissful it is, for one who has nothing');
 ```
 ```
-5a656e48756220526f636b7321
+7b226c6576656c223a22494e464f222c226d657373616765223a22486f7720626c69737366756c2069742069732c20666f72206f6e652077686f20686173206e6f7468696e67227d
 ```
 
 ### context
-Performs a shallow copy of the context into the record. You should prefer the [error](###error) processor as it has the same behaviour, but also prepares Error instances for serialisation.
-
-#### example
-```js
-const logger = new Logger({
-  processors: [
-    context(),
-    json(),
-  ],
-});
-logger.info('How blissful it is, for one who has nothing', { env: process.env.NODE_ENV });
-```
-```
-{"env":"production","message":"How blissful it is, for one who has nothing","level":"INFO"}
-```
-
-### error
-The error processor is important for logging errors - without it they will not serialize correctly. It is best to put this processor first in the list of processors, as if another processor fires first, it may incorrectly handle the error object. If you use the error processor there is no need to also use the context processor.
+Performs a shallow copy of the context into the record. It also understands how to handle errors - without it they will not serialize correctly. It is best to put this processor first in the list of processors, as if another processor fires first, it may incorrectly handle the error object.
 
 The processor operates with the following logic:
 
@@ -204,16 +186,16 @@ The processor operates with the following logic:
 
 It has the following options:
 
-| name  | type    | required | default | notes |
-|-------|---------|----------|---------|-------|
-| field | string  | no       | error   | If the context is an instance of Error, it will be nested under an attribute with this name |
-| stack | boolean | no       | true    | Controls whether the stack trace will be logged |
+| name       | type    | required | default | notes |
+|------------|---------|----------|---------|-------|
+| errorField | string  | no       | 'error' | If the context is an instance of Error, it will be nested under an attribute with this name |
+| stack      | boolean | no       | true    | Controls whether the stack trace will be logged |
 
 #### example
 ```js
 const logger = new Logger({
   processors: [
-    error({ field: 'err', stack: false }),
+    context({ errorField: 'err', stack: false }),
     json(),
   ],
 });
@@ -229,7 +211,7 @@ Converts the record into a human readable form. Only intended for use locally si
 ```js
 const logger = new Logger({
   processors: [
-    error(),
+    context(),
     human(),
   ],
 });
@@ -257,7 +239,7 @@ NaN and Infinite values are always silently dropped as they could cause the fiel
 const reportComplexTypes = process.env.NODE_ENV !== 'production';
 const logger = new Logger({
   processors: [
-    error(),
+    context(),
     index({ field:"@fields", paths: ['character.name'], reportComplexTypes }),
     json(),
   ],
@@ -277,13 +259,13 @@ It has the following options:
 |------------|----------|----------|-----------|-------|
 | serializer | function | no       | null      |       |
 | indent     | number   | no       | undefined |       |
-| decycler    | function | no       | () => {}  | Determines how circular references are handled. The default behaviour is to silently drop the attribute |
+| decycler   | function | no       | () => {}  | Determines how circular references are handled. The default behaviour is to silently drop the attribute |
 
 #### example
 ```js
 const logger = new Logger({
   processors: [
-    error(),
+    context(),
     json(),
   ],
 });
@@ -296,16 +278,16 @@ logger.info('How blissful it is, for one who has nothing', { env: process.env.NO
 ### timestamp
 Adds a timestamp. It has the following options:
 
-| name  | type    | required | default   | notes |
-|-------|---------|----------|-----------|-------|
-| field | string  | no      | 'timestamp'          | Specifies the name of the timestamp attribute |
-| getTimestamp | function  | no      | () => new Date(); | Overrides how the timestamp is aquired (useful for fixing the timestamp when testing) |
+| name         | type     | required | default           | notes |
+|--------------|----------|----------|-------------------|-------|
+| field        | string   | no       | 'timestamp'       | Specifies the name of the timestamp attribute |
+| getTimestamp | function | no       | () => new Date(); | Overrides how the timestamp is aquired (useful for fixing the timestamp when testing) |
 
 #### example
 ```js
 const logger = new Logger({
   processors: [
-    error(),
+    context(),
     timestamp({ field: 'ts' }),
     json(),
   ],
@@ -362,7 +344,7 @@ The emitter transport emits a Tripitaka record as an event, which can be useful 
 |---------|--------------|----------|-------------|-------|
 | level   | Level        | no       | Level.TRACE | The minimum log level for this transport  |
 | emitter | EventEmitter | no       | process     | Specify your own event emitter rather than the global process object |
-| events  | object       | no       | See notes  | By default all log levels will be emitted with the 'log' event. Think twice about changing this to 'error', since unhandled error events will kill your node process. |
+| events  | object       | no       | See notes   | By default all log levels will be emitted with the 'log' event. Think twice about changing this to 'error', since unhandled error events will kill your node process. |
 
 #### example
 ```js

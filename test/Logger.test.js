@@ -21,7 +21,7 @@ describe('Logger', () => {
     const logger = new Logger({
       processors: [
         processors.context(),
-        processors.error({ stack: false }),
+        processors.context({ stack: false }),
         processors.timestamp({
           getTimestamp: () => ts,
         }),
@@ -54,7 +54,7 @@ describe('Logger', () => {
     const ts = new Date();
     const logger = new Logger({
       processors: [
-        processors.error({ stack: false }),
+        processors.context({ stack: false }),
         processors.timestamp({
           getTimestamp: () => ts,
         }),
