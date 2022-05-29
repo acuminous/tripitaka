@@ -29,17 +29,19 @@ export class Logger {
     processors?: ProcessorFactory[];
     transports?: TransportFactory[];
   });
-  trace(message: any, context?: any): void;
-  debug(message: any, context?: any): void;
-  info(message: any, context?: any): void;
-  warn(message: any, context?: any): void;
-  error(message: any, context?: any): void;
+  trace(message: String, context?: any): void;
+  debug(message: String, context?: any): void;
+  info(message: String, context?: any): void;
+  warn(message: String, context?: any): void;
+  error(message: String, context?: any): void;
+  error(context: Error): void;
 }
 
 export const processors: {
   augment: ProcessorFactory;
   buffer: ProcessorFactory;
   context: ProcessorFactory;
+  empty: ProcessorFactory;
   error: ProcessorFactory;
   human: ProcessorFactory;
   index: ProcessorFactory;
