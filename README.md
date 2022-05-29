@@ -292,11 +292,12 @@ Converts the record into a human readable form. Only intended for local use.
 
 It has the following options:
 
-| name       | type     | required | default   | notes                                                                                                   |
-| ---------- | -------- | -------- | --------- | ------------------------------------------------------------------------------------------------------- |
-| serializer | function | no       | null      |                                                                                                         |
-| indent     | number   | no       | undefined |                                                                                                         |
-| decycler   | function | no       | () => {}  | Determines how circular references are handled. The default behaviour is to silently drop the attribute |
+| name       | type     | required | default   | notes                                                                                                                              |
+| ---------- | -------- | -------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| serializer | function | no       | null      |                                                                                                                                    |
+| indent     | number   | no       | undefined |                                                                                                                                    |
+| decycler   | function | no       | () => {}  | Determines how circular references are handled. The default behaviour is to silently drop the attribute                            |
+| colours    | integer  | no       | undefined | Defaults to auto detecting colour support. Specify 0 to disable, 1 for basic colours, 2 for 256 colour support or 3 for Truecolour |
 
 #### example
 
