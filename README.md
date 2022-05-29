@@ -30,19 +30,19 @@ NODE_ENV=production node index.js
 
 ## Design Principles
 
-Tripitaka intentionally ships with only two transports. A streams-based transport which will write to `stdout` and `stderr` (or other streams which you supply), and an event emitter based transport which will emit events using the global process object (or another emitter which you supply). This library holds the opinion that external files, database and message brokers are all far better handled with a data collector such as [fluentd](https://www.fluentd.org/architecture), but you can write your own transports if you so wish. Tripitaka also eschews child loggers. These were useful for stashing context, but are more elegantly implemented via [AsyncLocalStorage](https://nodejs.org/docs/latest-v14.x/api/async_hooks.html#async_hooks_class_asynclocalstorage) or [continuation-local-storage](https://www.npmjs.com/package/continuation-local-storage). See the [express example](https://github.com/acuminous/tripitaka/blob/main/examples/express/index.js) for how.
+Tripitaka intentionally ships with only two transports. A streams-based transport which will write to `stdout` and `stderr` (or other streams which you supply), and an event emitter based transport which will emit events using the global process object (or another emitter which you supply). This library holds the opinion that external files, database and message brokers are all far better handled with a data collector such as [fluentd](https://www.fluentd.org/architecture), but you can write your own transports if you so wish. Tripitaka also eschews child loggers. These are useful for stashing context, but more elegantly implemented via [AsyncLocalStorage](https://nodejs.org/docs/latest-v14.x/api/async_hooks.html#async_hooks_class_asynclocalstorage) or [continuation-local-storage](https://www.npmjs.com/package/continuation-local-storage). See the [express example](https://github.com/acuminous/tripitaka/blob/main/examples/express/index.js) for how.
 
-## API
+## Usage
 
 Tripitaka supports the same logging levels as console, i.e.
 
-- logger.trace(...)
-- logger.debug(...)
-- logger.info(...)
-- logger.warn(...)
-- logger.error(...)
+- logger.trace(message, context)
+- logger.debug(message, context)
+- logger.info(message, context)
+- logger.warn(message, context)
+- logger.error(message, context)
 
-The function arguments are always the same, a mandatory message and an optional context, e.g.
+The function arguments are always the same, a message and a context, e.g.
 
 ```js
 logger.info("How blissful it is, for one who has nothing", {
@@ -60,18 +60,43 @@ Assuming the default configuration, this will write the following to stdout when
 }
 ```
 
-If you use the context processor (enabled by default), Tripitaka also supports logging errors in place of the context, or even the message, e.g.
+If you use the context processor (enabled by default), the context may be an Object, Array or Error. Both errors and array are automatically nested under configurable attributes, which default to "error" and "items" respectively, e.g.
 
 ```js
+logger.info("How blissful it is, for one who has nothing", [1, 2, 3]);
 logger.error("I forbid it!", new Error("Oooh, Demons!"));
+```
+
+```json
+{"items":[1,2,3],"message":"How blissful it is, for one who has nothing","level":"INFO"}
+{"error":{"message":"Oooh, Demons!","stack":"..."},"message":"Oooh, Demons!","level":"ERROR"}
+```
+
+If you use the empty processor (enabled by default), and you neglect to log a message, Tripitaka will report this
+
+```js
+logger.info({ env: process.env.NODE_ENV });
+```
+
+```json
+{
+  "message": "Empty message logged at Test._fn (/opt/acuminous/tripitaka/index.js:9:5)",
+  "env": "production"
+}
+```
+
+The exception to this is when you are just logging an Error, in which case the log record message will default to the error message e.g.
+
+```js
 logger.error(new Error("Oooh, Demons!"));
 ```
 
-Under these circumstances the error will be nested under a configurable attribute to potential clashes, and the log record message defaulted to the error message, e.g.
-
-```
-{"error":{"message":"Oooh, Demons!","stack":"..."},"message":"I forbid it!","level":"ERROR"}
-{"error":{"message":"Oooh, Demons!","stack":"..."},"message":"Oooh, Demons!","level":"ERROR"}
+```json
+{
+  "error": { "message": "Oooh, Demons!", "stack": "..." },
+  "message": "Oooh, Demons!",
+  "level": "ERROR"
+}
 ```
 
 ## Customisation
@@ -212,14 +237,16 @@ Performs a shallow copy of the context into the record. It also understands how 
 
 The processor operates with the following logic:
 
-- If the message is an instance of Error, it will be treated as the context object (see below).
-- If the context is an instance of Error, it will be converted it to a plain object and assigned to the property specified by the field option.
-- Otherwise if any top level context properties are instances of Error, they will be converted to plain objects
+- If the message is an Error, it will be converted to a plain object and assigned to the property specified by the `errorField` option.
+- If the context is an Error, it will be converted to a plain object and assigned to the property specified by the `errorField` option.
+- If the context is an Array, it will be converted to a plain object and assigned to the property specified by the `arrayField` option.
+- Otherwise if any top level context properties are Errors, they will be converted to plain objects
 
 It has the following options:
 
 | name       | type    | required | default | notes                                                                                       |
 | ---------- | ------- | -------- | ------- | ------------------------------------------------------------------------------------------- |
+| arrayField | string  | no       | 'items' | If the context is an instance of Array, it will be nested under an attribute with this name |
 | errorField | string  | no       | 'error' | If the context is an instance of Error, it will be nested under an attribute with this name |
 | stack      | boolean | no       | true    | Controls whether the stack trace will be logged                                             |
 
