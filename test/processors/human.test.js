@@ -19,7 +19,7 @@ describe("human", () => {
     );
   });
 
-  it("should work with errors out of the box", () => {
+  it("should work with errors", () => {
     const fn = human({ colours: 0 });
     const error = new Error("Oooh, Demons!");
     const result = fn({

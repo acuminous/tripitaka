@@ -179,6 +179,48 @@ describe("Logger", () => {
     ]);
   });
 
+  it("should support humans", () => {
+    const logger = new Logger({
+      processors: [
+        processors.context(),
+        processors.timestamp({
+          getTimestamp: () => new Date("2022-05-29T13:14:15.001Z"),
+        }),
+        processors.empty(),
+        processors.human({ colours: 0 }),
+      ],
+      transports: [transports.stream({ streams })],
+      level: Level.TRACE,
+    });
+
+    logger.info("Tripitaka rocks!", { x: "y" });
+    logger.info("Tripitaka rocks!");
+    logger.error(new Error("Oooh, Demons!"));
+
+    eq(
+      streams[Level.INFO.name].lines[0],
+      "2022-05-29 13:14:15 INFO  Tripitaka rocks!"
+    );
+    eq(streams[Level.INFO.name].lines[1], "{");
+    eq(streams[Level.INFO.name].lines[2], '  "x": "y"');
+    eq(streams[Level.INFO.name].lines[3], "}");
+    eq(
+      streams[Level.INFO.name].lines[4],
+      "2022-05-29 13:14:15 INFO  Tripitaka rocks!"
+    );
+    eq(streams[Level.INFO.name].lines.length, 5);
+    eq(
+      streams[Level.ERROR.name].lines[0],
+      "2022-05-29 13:14:15 ERROR Oooh, Demons!"
+    );
+    eq(streams[Level.ERROR.name].lines[1], "Error: Oooh, Demons!");
+    eq(
+      streams[Level.ERROR.name].lines[2],
+      `    at Test._fn (${__filename}:198:18)`
+    );
+    eq(streams[Level.ERROR.name].lines.length, 12);
+  });
+
   it("should support being disabled", () => {
     const logger = new Logger({
       transports: [transports.stream({ streams })],
