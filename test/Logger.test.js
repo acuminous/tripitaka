@@ -198,6 +198,6 @@ describe("Logger", () => {
     logger.enable();
 
     logger.info("Tripitaka rocks!", { x: "y" });
-    eq(streams[Level.INFO.name].lines.length, 1);
+    eq(streams[Level.INFO.name].lines.length, 4);
   });
 });

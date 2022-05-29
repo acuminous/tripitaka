@@ -10,6 +10,7 @@ and this project adheres to Semantic Versioning](https://semver.org/spec/v2.0.0.
 - Port the error processor functionality to the context processor and deprecate the error processor. See https://github.com/acuminous/tripitaka/issues/8
 - Support Array contexts
 - Add empty processor for reporting missing messages
+- Improve the human processor
 - Introduce to prettier
 
 ## 2.1.7

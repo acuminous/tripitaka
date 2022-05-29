@@ -237,7 +237,6 @@ Performs a shallow copy of the context into the record. It also understands how 
 
 The processor operates with the following logic:
 
-- If the message is an Error, it will be converted to a plain object and assigned to the property specified by the `errorField` option.
 - If the context is an Error, it will be converted to a plain object and assigned to the property specified by the `errorField` option.
 - If the context is an Array, it will be converted to a plain object and assigned to the property specified by the `arrayField` option.
 - Otherwise if any top level context properties are Errors, they will be converted to plain objects
@@ -289,20 +288,38 @@ logger.error(undefined);
 
 ### human
 
-Converts the record into a human readable form. Only intended for use locally since it does not log the context.
+Converts the record into a human readable form. Only intended for local use.
+
+It has the following options:
+
+| name       | type     | required | default   | notes                                                                                                   |
+| ---------- | -------- | -------- | --------- | ------------------------------------------------------------------------------------------------------- |
+| serializer | function | no       | null      |                                                                                                         |
+| indent     | number   | no       | undefined |                                                                                                         |
+| decycler   | function | no       | () => {}  | Determines how circular references are handled. The default behaviour is to silently drop the attribute |
+
+#### example
 
 ```js
 const logger = new Logger({
   processors: [context(), human()],
 });
 logger.info("How blissful it is, for one who has nothing", {
-  timestamp: new Date(),
   pid: process.pid,
+  ...process.memoryUsage(),
 });
 ```
 
-```
-2021-03-28 18:15:23 [INFO] How blissful it is, for one who has nothing
+```json
+2021-03-28 18:15:23 INFO  How blissful it is, for one who has nothing
+{
+  "pid": 53072,
+  "rss": 31997952,
+  "heapTotal": 6938624,
+  "heapUsed": 5361608,
+  "external": 356316,
+  "arrayBuffers": 25566
+}
 ```
 
 ### index
