@@ -35,6 +35,8 @@ export class Logger {
   warn(message: String, context?: any): void;
   error(message: String, context?: any): void;
   error(context: Error): void;
+  enable();
+  disable();
 }
 
 export const processors: {
