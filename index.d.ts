@@ -15,6 +15,7 @@ export class Level {
   name: string;
   method: string;
   value: number;
+  satisfies(other: Level): boolean;
   static TRACE: Level;
   static DEBUG: Level;
   static INFO: Level;
