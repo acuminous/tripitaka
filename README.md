@@ -311,7 +311,7 @@ logger.info("How blissful it is, for one who has nothing", {
 });
 ```
 
-```json
+```
 2021-03-28 18:15:23 INFO  How blissful it is, for one who has nothing
 {
   "pid": 53072,
