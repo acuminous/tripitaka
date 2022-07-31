@@ -9,6 +9,18 @@ and this project adheres to Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 - Add .npmignore
 
+## 3.0.4
+
+- Added missing return types to enable and disable methods for typescript
+
+## 3.0.3
+
+- Exposed satisfies method to typescript
+
+## 3.0.2
+
+- Add missing logger.disable and logger.enable methods to types
+
 ## 3.0.1
 
 - Fix bug where messages were being treated as context items
