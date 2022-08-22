@@ -50,6 +50,7 @@ export const processors: {
   index: ProcessorFactory;
   json: ProcessorFactory;
   timestamp: ProcessorFactory;
+  datadog: ProcessorFactory;
 };
 
 export const transports: {

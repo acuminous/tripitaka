@@ -160,6 +160,7 @@ The out-of-the-box processors are as follows...
 - [index](#index)
 - [json](#json)
 - [timestamp](#timestamp)
+- [datadog](#datadog)
 
 ### augment
 
@@ -419,6 +420,36 @@ logger.info("How blissful it is, for one who has nothing", {
   "env": "production",
   "message": "How blissful it is, for one who has nothing",
   "level": "INFO"
+}
+```
+
+### datadog
+
+Injects Datadog object to link logs with APM events:
+
+#### example
+
+```js
+const logger = new Logger({
+  processors: [context(), datadog(), json()],
+});
+logger.info("How blissful it is, for one who has nothing", {
+  env: process.env.NODE_ENV,
+});
+```
+
+```json
+{
+  "env": "production",
+  "message": "How blissful it is, for one who has nothing",
+  "level": "INFO",
+  "dd": {
+    "trace_id": "8171558781539659567",
+    "span_id": "6706824917493320824",
+    "service": "test-service",
+    "version": "0.1",
+    "env": "production"
+  }
 }
 ```
 
