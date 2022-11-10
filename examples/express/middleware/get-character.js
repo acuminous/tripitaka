@@ -1,5 +1,5 @@
 const LoggerFactory = require("../LoggerFactory");
-const characters = require("../db/characters");
+const characters = require("../db/characters.json");
 
 module.exports = (req, res, next) => {
   const logger = LoggerFactory.getInstance();

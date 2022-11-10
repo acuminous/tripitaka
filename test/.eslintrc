@@ -1,4 +1,7 @@
 {
+  "rules": {
+    "no-regex-spaces": 0
+  },
   "globals": {
     "describe": "readonly",
     "xdescribe": "readonly",

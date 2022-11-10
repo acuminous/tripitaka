@@ -1,4 +1,4 @@
-const characters = require("../db/characters");
+const characters = require("../db/characters.json");
 const LoggerFactory = require("../LoggerFactory");
 
 module.exports = (req, res) => {

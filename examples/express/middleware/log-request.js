@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
     start: Date.now(),
   };
 
-  res.once("finish", function () {
+  res.once("finish", function onFinish() {
     request.duration = Date.now() - request.start;
     /* eslint-disable-next-line no-invalid-this */
     request.status = this.statusCode;

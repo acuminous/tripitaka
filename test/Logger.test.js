@@ -6,6 +6,7 @@ describe("Logger", () => {
   let streams;
 
   beforeEach(() => {
+    /* eslint-disable-next-line no-shadow */
     streams = Object.values(Level).reduce((streams, level) => {
       return { ...streams, [level.name]: new TestOutputStream() };
     }, {});
@@ -99,15 +100,15 @@ describe("Logger", () => {
     );
     eq(
       streams[Level.ERROR.name].lines[4],
-      `{"level":"ERROR","message":"Empty message logged at Test._fn (${__filename}:80:12)","error":{"message":"Oooh, Demons!"},"timestamp":"${ts.toISOString()}"}`
+      `{"level":"ERROR","message":"Empty message logged at Test._fn (${__filename}:81:12)","error":{"message":"Oooh, Demons!"},"timestamp":"${ts.toISOString()}"}`
     );
     eq(
       streams[Level.ERROR.name].lines[5],
-      `{"level":"ERROR","message":"Empty message logged at Test._fn (${__filename}:81:12)","items":[{"message":"Oooh, Demons!"}],"timestamp":"${ts.toISOString()}"}`
+      `{"level":"ERROR","message":"Empty message logged at Test._fn (${__filename}:82:12)","items":[{"message":"Oooh, Demons!"}],"timestamp":"${ts.toISOString()}"}`
     );
     eq(
       streams[Level.ERROR.name].lines[6],
-      `{"level":"ERROR","message":"Empty message logged at Test._fn (${__filename}:82:12)","timestamp":"${ts.toISOString()}"}`
+      `{"level":"ERROR","message":"Empty message logged at Test._fn (${__filename}:83:12)","timestamp":"${ts.toISOString()}"}`
     );
     eq(streams[Level.ERROR.name].lines.length, 7);
   });
@@ -143,15 +144,15 @@ describe("Logger", () => {
     );
     eq(
       streams[Level.INFO.name].lines[2],
-      `{"level":"INFO","message":"Empty message logged at Test._fn (${__filename}:132:12)","x":"y","timestamp":"${ts.toISOString()}"}`
+      `{"level":"INFO","message":"Empty message logged at Test._fn (${__filename}:133:12)","x":"y","timestamp":"${ts.toISOString()}"}`
     );
     eq(
       streams[Level.INFO.name].lines[3],
-      `{"level":"INFO","message":"Empty message logged at Test._fn (${__filename}:133:12)","items":[{"x":"y"}],"timestamp":"${ts.toISOString()}"}`
+      `{"level":"INFO","message":"Empty message logged at Test._fn (${__filename}:134:12)","items":[{"x":"y"}],"timestamp":"${ts.toISOString()}"}`
     );
     eq(
       streams[Level.INFO.name].lines[4],
-      `{"level":"INFO","message":"Empty message logged at Test._fn (${__filename}:134:12)","timestamp":"${ts.toISOString()}"}`
+      `{"level":"INFO","message":"Empty message logged at Test._fn (${__filename}:135:12)","timestamp":"${ts.toISOString()}"}`
     );
     eq(streams[Level.INFO.name].lines.length, 5);
   });
@@ -216,7 +217,7 @@ describe("Logger", () => {
     eq(streams[Level.ERROR.name].lines[1], "Error: Oooh, Demons!");
     eq(
       streams[Level.ERROR.name].lines[2],
-      `    at Test._fn (${__filename}:198:18)`
+      `    at Test._fn (${__filename}:199:18)`
     );
     eq(streams[Level.ERROR.name].lines.length, 12);
   });

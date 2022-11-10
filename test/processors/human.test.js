@@ -13,6 +13,7 @@ describe("human", () => {
         message: "How blissful it is, for one who has nothing",
       },
     });
+
     match(
       result,
       /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} INFO  How blissful it is, for one who has nothing$/

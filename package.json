@@ -9,7 +9,8 @@
     "json-stringify-safe": "^5.0.1"
   },
   "devDependencies": {
-    "eslint": "^8.16.0",
+    "eslint": "^8.27.0",
+    "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "husky": "^8.0.1",
@@ -20,7 +21,8 @@
   },
   "scripts": {
     "coverage": "nyc --report html --reporter lcov --reporter text-summary zUnit",
-    "lint": "npx prettier --check .",
+    "lint": "eslint .",
+    "prettier": "prettier --check .",
     "lint-staged": "lint-staged",
     "test": "zUnit",
     "prepare": "husky install"
@@ -52,6 +54,7 @@
     "mapping explosion"
   ],
   "lint-staged": {
+    "**/*.js": "eslint --fix",
     "**/*": "prettier --write --ignore-unknown"
   },
   "repository": {
