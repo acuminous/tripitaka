@@ -249,9 +249,6 @@ describe("Logger", () => {
     const logger = new Logger({
       processors: [
         processors.context({ stack: false }),
-        // processors.timestamp({
-        //   getTimestamp: () => ts,
-        // }),
         processors.empty(),
         processors.json(),
       ],
