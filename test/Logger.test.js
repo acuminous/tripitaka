@@ -243,4 +243,33 @@ describe("Logger", () => {
     logger.info("Tripitaka rocks!", { x: "y" });
     eq(streams[Level.INFO.name].lines.length, 4);
   });
+
+  it("should add processor after construction", () => {
+    const ts = new Date();
+    const logger = new Logger({
+      processors: [
+        processors.context({ stack: false }),
+        // processors.timestamp({
+        //   getTimestamp: () => ts,
+        // }),
+        processors.empty(),
+        processors.json(),
+      ],
+      transports: [transports.stream({ streams })],
+      level: Level.TRACE,
+    });
+
+    logger.addProcessor(
+      processors.timestamp({
+        getTimestamp: () => ts,
+      })
+    );
+
+    logger.info("Tripitaka rocks!", { x: "y" });
+
+    eq(
+      streams[Level.INFO.name].lines[0],
+      `{"level":"INFO","message":"Tripitaka rocks!","timestamp":"${ts.toISOString()}","x":"y"}`
+    );
+  });
 });
