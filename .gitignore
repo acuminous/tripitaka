@@ -6,3 +6,4 @@ coverage
 .vscode
 .nyc_output
 .DS_Store
+package-lock.json
