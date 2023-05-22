@@ -219,6 +219,10 @@ describe("Logger", () => {
       streams[Level.ERROR.name].lines[2],
       `    at Test._fn (${__filename}:199:18)`
     );
+
+    // eslint-disable-next-line no-console
+    console.log(streams[Level.ERROR.name].lines.join("\n"));
+
     eq(streams[Level.ERROR.name].lines.length, 12);
   });
 
