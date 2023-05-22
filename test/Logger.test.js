@@ -257,7 +257,7 @@ describe("Logger", () => {
     eq(streams[Level.ERROR.name].lines[1], "Error: Oooh, Demons!");
     eq(
       streams[Level.ERROR.name].lines[2],
-      `    at Test._fn (${__filename}:154:18)`
+      `    at Test._fn (${__filename}:239:18)`
     );
 
     ok(streams[Level.ERROR.name].lines.length >= 10);
