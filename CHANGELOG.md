@@ -9,6 +9,7 @@ and this project adheres to Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 - Add node v20 to testing matrix
 - Delete package-lock.json from version control (it was causing issues with node 14)
+- Improve tests
 
 ## 3.0.6
 

@@ -1,4 +1,4 @@
-const { deepStrictEqual: eq, ok } = require("assert");
+const { deepStrictEqual: eq, ok, match } = require("assert");
 const { TestOutputStream } = require("./support");
 const { Level, Logger, processors, transports } = require("..");
 
@@ -244,7 +244,7 @@ describe("Logger", () => {
     eq(streams[Level.INFO.name].lines.length, 5);
     eq(streams[Level.ERROR.name].lines[0], "2022-05-29 13:14:15 ERROR Oooh, Demons!");
     eq(streams[Level.ERROR.name].lines[1], "Error: Oooh, Demons!");
-    eq(streams[Level.ERROR.name].lines[2], `    at Test._fn (${__filename}:239:18)`);
+    match(streams[Level.ERROR.name].lines[2], new RegExp(`^\\s+at Test\\._fn \\(${__filename}:\\d+:\\d+\\)`));
 
     ok(streams[Level.ERROR.name].lines.length >= 10);
   });
