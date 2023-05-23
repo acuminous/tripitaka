@@ -13,13 +13,7 @@ module.exports = class LoggerFactory {
         }),
         timestamp(),
         index({
-          paths: [
-            "request.url",
-            "request.route",
-            "request.status",
-            "request.params.id",
-            "tracerId",
-          ],
+          paths: ["request.url", "request.route", "request.status", "request.params.id", "tracerId"],
           reportComplexTypes: true,
         }),
         json(),

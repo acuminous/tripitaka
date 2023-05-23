@@ -215,9 +215,7 @@ describe("Logger", () => {
 
     logger.info("Tripitaka rocks!", { x: "y" });
 
-    eq(streams[Level.INFO.name].lines, [
-      `{"level":"INFO","message":"Tripitaka rocks!","x":"y","timestamp":"${ts.toISOString()}"}`,
-    ]);
+    eq(streams[Level.INFO.name].lines, [`{"level":"INFO","message":"Tripitaka rocks!","x":"y","timestamp":"${ts.toISOString()}"}`]);
   });
 
   it("should support humans", () => {
@@ -238,27 +236,15 @@ describe("Logger", () => {
     logger.info("Tripitaka rocks!");
     logger.error(new Error("Oooh, Demons!"));
 
-    eq(
-      streams[Level.INFO.name].lines[0],
-      "2022-05-29 13:14:15 INFO  Tripitaka rocks!"
-    );
+    eq(streams[Level.INFO.name].lines[0], "2022-05-29 13:14:15 INFO  Tripitaka rocks!");
     eq(streams[Level.INFO.name].lines[1], "{");
     eq(streams[Level.INFO.name].lines[2], '  "x": "y"');
     eq(streams[Level.INFO.name].lines[3], "}");
-    eq(
-      streams[Level.INFO.name].lines[4],
-      "2022-05-29 13:14:15 INFO  Tripitaka rocks!"
-    );
+    eq(streams[Level.INFO.name].lines[4], "2022-05-29 13:14:15 INFO  Tripitaka rocks!");
     eq(streams[Level.INFO.name].lines.length, 5);
-    eq(
-      streams[Level.ERROR.name].lines[0],
-      "2022-05-29 13:14:15 ERROR Oooh, Demons!"
-    );
+    eq(streams[Level.ERROR.name].lines[0], "2022-05-29 13:14:15 ERROR Oooh, Demons!");
     eq(streams[Level.ERROR.name].lines[1], "Error: Oooh, Demons!");
-    eq(
-      streams[Level.ERROR.name].lines[2],
-      `    at Test._fn (${__filename}:239:18)`
-    );
+    eq(streams[Level.ERROR.name].lines[2], `    at Test._fn (${__filename}:239:18)`);
 
     ok(streams[Level.ERROR.name].lines.length >= 10);
   });

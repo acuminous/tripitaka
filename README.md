@@ -110,11 +110,7 @@ const { stream } = transports;
 
 const logger = new Logger({
   level: Level.INFO,
-  processors: [
-    context(),
-    timestamp(),
-    process.env.NODE_ENV === "production" ? json() : human(),
-  ],
+  processors: [context(), timestamp(), process.env.NODE_ENV === "production" ? json() : human()],
   transports: [stream()],
 });
 ```
@@ -342,11 +338,7 @@ NaN and Infinite values are always silently dropped as they could cause the fiel
 ```js
 const reportComplexTypes = process.env.NODE_ENV !== "production";
 const logger = new Logger({
-  processors: [
-    context(),
-    index({ field: "@fields", paths: ["character.name"], reportComplexTypes }),
-    json(),
-  ],
+  processors: [context(), index({ field: "@fields", paths: ["character.name"], reportComplexTypes }), json()],
 });
 logger.info("How blissful it is, for one who has nothing", {
   character: { name: "Monkey", nature: "Irrepressible" },

@@ -4,11 +4,7 @@ const { context, timestamp, json, human } = processors;
 const { stream } = transports;
 
 const logger = new Logger({
-  processors: [
-    context(),
-    timestamp(),
-    process.env.NODE_ENV === "production" ? json() : human(),
-  ],
+  processors: [context(), timestamp(), process.env.NODE_ENV === "production" ? json() : human()],
   transports: [stream()],
 });
 

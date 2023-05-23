@@ -1,9 +1,4 @@
-type Processor = (params: {
-  level: Level;
-  message: any;
-  ctx: any;
-  record: any;
-}) => any;
+type Processor = (params: { level: Level; message: any; ctx: any; record: any }) => any;
 
 type ProcessorFactory = (...args: any[]) => Processor;
 
@@ -25,11 +20,7 @@ export class Level {
 }
 
 export class Logger {
-  constructor(options?: {
-    level?: Level;
-    processors?: ProcessorFactory[];
-    transports?: TransportFactory[];
-  });
+  constructor(options?: { level?: Level; processors?: ProcessorFactory[]; transports?: TransportFactory[] });
   trace(message: String, context?: any): void;
   debug(message: String, context?: any): void;
   info(message: String, context?: any): void;
