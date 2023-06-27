@@ -491,3 +491,18 @@ logger.info("How blissful it is, for one who has nothing", {
   env: process.env.NODE_ENV,
 });
 ```
+
+### Asynchronous Transports
+
+If one or more of the transports is asynchronous and you want to ensure all messages have been written before terminating your application, you must wait for the `logger.drain` method to yield. This method takes an optional timeout specified in milliseconds. e.g.
+
+```js
+["SIGINT", "SIGTERM"].forEach((signal) => {
+  process.once(signal, async () => {
+    await logger.drain(1000);
+    process.exit();
+  });
+});
+```
+
+Once you have called `logger.drain` any new logged messages will be suppressed without error and calling `logger.drain` repeatedly will yield the original promise.
