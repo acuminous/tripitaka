@@ -498,9 +498,16 @@ If one or more of the transports is asynchronous and you want to ensure all mess
 
 ```js
 ["SIGINT", "SIGTERM"].forEach((signal) => {
-  process.once(signal, async () => {
-    await logger.drain(1000);
-    process.exit();
+  process.once(signal, () => {
+    logger
+      .drain(1000)
+      .then(() => {
+        process.exit();
+      })
+      .catch((err) => {
+        console.error(err);
+        process.exit(1);
+      });
   });
 });
 ```
