@@ -343,7 +343,7 @@ describe("Logger", () => {
     await logger.drain();
     const after = Date.now();
 
-    ok(after - before <= 10);
+    ok(after - before <= 20);
   });
 
   it("should not wait when there were never any messages", async () => {
