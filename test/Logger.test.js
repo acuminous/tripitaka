@@ -297,6 +297,23 @@ describe("Logger", () => {
     eq(testOutputStream.lines.length, 1);
   });
 
+  it("should tolerate transports that return junk", async () => {
+    const testOutputStream = new TestOutputStream();
+    const transport = ({ record }) => {
+      testOutputStream.write(record);
+      testOutputStream.write(EOL);
+      return "not a promise";
+    };
+
+    const logger = new Logger({
+      transports: [transport],
+    });
+
+    logger.info("Tripitaka rocks!");
+
+    eq(testOutputStream.lines.length, 1);
+  });
+
   it("should timeout if asynchronous transports take too long to drain", async () => {
     let resolve;
     const transport = () => {
