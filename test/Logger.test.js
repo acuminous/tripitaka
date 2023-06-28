@@ -1,4 +1,5 @@
-const { deepStrictEqual: eq, ok, match } = require("assert");
+const { EOL } = require("os");
+const { deepStrictEqual: eq, ok, match, rejects } = require("assert");
 const { TestOutputStream } = require("./support");
 const { Level, Logger, processors, transports } = require("..");
 
@@ -31,7 +32,7 @@ describe("Logger", () => {
     });
   };
 
-  const errorPosition = "38:24";
+  const errorPosition = "39:24";
 
   const runScenario = (ts, scenario) => {
     const logger = newLogger(ts);
@@ -269,5 +270,167 @@ describe("Logger", () => {
 
     logger.info("Tripitaka rocks!", { x: "y" });
     eq(streams[Level.INFO.name].lines.length, 4);
+  });
+
+  it("should wait for asynchronous transports to drain", async () => {
+    const testOutputStream = new TestOutputStream();
+    const transport = ({ record }) => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          testOutputStream.write(record);
+          testOutputStream.write(EOL);
+          resolve();
+        }, 100);
+      });
+    };
+
+    const logger = new Logger({
+      transports: [transport],
+    });
+
+    logger.info("Tripitaka rocks!");
+
+    eq(testOutputStream.lines.length, 0);
+
+    await logger.drain();
+
+    eq(testOutputStream.lines.length, 1);
+  });
+
+  it("should tolerate transports that return junk", async () => {
+    const testOutputStream = new TestOutputStream();
+    const transport = ({ record }) => {
+      testOutputStream.write(record);
+      testOutputStream.write(EOL);
+      return "not a promise";
+    };
+
+    const logger = new Logger({
+      transports: [transport],
+    });
+
+    logger.info("Tripitaka rocks!");
+
+    eq(testOutputStream.lines.length, 1);
+  });
+
+  it("should timeout if asynchronous transports take too long to drain", async () => {
+    let resolve;
+    const transport = () => {
+      return new Promise((_resolve) => {
+        resolve = _resolve;
+      });
+    };
+
+    const logger = new Logger({
+      transports: [transport],
+    });
+
+    logger.info("Tripitaka rocks!");
+
+    await rejects(
+      () => logger.drain(100),
+      (err) => {
+        eq(err.message, "Timedout waiting for logger to drain");
+        resolve();
+        return true;
+      }
+    );
+  });
+
+  it("should not wait when messages have already drained", async () => {
+    const testOutputStream = new TestOutputStream();
+    const transport = ({ record }) => {
+      return new Promise((resolve) => {
+        testOutputStream.write(record);
+        testOutputStream.write(EOL);
+        resolve();
+      });
+    };
+
+    const logger = new Logger({
+      transports: [transport],
+    });
+
+    logger.info("Tripitaka rocks!");
+
+    eq(testOutputStream.lines.length, 1);
+
+    const before = Date.now();
+    await logger.drain();
+    const after = Date.now();
+
+    ok(after - before <= 20);
+  });
+
+  it("should not wait when there were never any messages", async () => {
+    const testOutputStream = new TestOutputStream();
+    const transport = ({ record }) => {
+      return new Promise((resolve) => {
+        testOutputStream.write(record);
+        testOutputStream.write(EOL);
+        resolve();
+      });
+    };
+
+    const logger = new Logger({
+      transports: [transport],
+    });
+
+    const before = Date.now();
+    await logger.drain();
+    const after = Date.now();
+
+    ok(after - before <= 10);
+  });
+
+  it("should suppress messages logged while draining", async () => {
+    const testOutputStream = new TestOutputStream();
+    const transport = ({ record }) => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          testOutputStream.write(record);
+          testOutputStream.write(EOL);
+          resolve();
+        }, 100);
+      });
+    };
+
+    const logger = new Logger({
+      transports: [transport],
+    });
+
+    logger.info("Tripitaka rocks!");
+
+    const drained = logger.drain();
+
+    logger.info("Tripitaka sucks!");
+
+    await drained;
+
+    eq(testOutputStream.lines.length, 1);
+  });
+
+  it("should tollerate repeated requests to drain", async () => {
+    const testOutputStream = new TestOutputStream();
+    const transport = ({ record }) => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          testOutputStream.write(record);
+          testOutputStream.write(EOL);
+          resolve();
+        }, 100);
+      });
+    };
+
+    const logger = new Logger({
+      transports: [transport],
+    });
+
+    logger.info("Tripitaka rocks!");
+
+    await Promise.all(new Array(10).fill().map(() => logger.drain()));
+
+    eq(testOutputStream.lines.length, 1);
   });
 });

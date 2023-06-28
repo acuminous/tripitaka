@@ -29,6 +29,7 @@ export class Logger {
   error(context: Error): void;
   enable(): void;
   disable(): void;
+  drain(timeout?: number): Promise<void>;
 }
 
 export const processors: {
