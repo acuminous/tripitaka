@@ -411,6 +411,31 @@ describe("Logger", () => {
     eq(testOutputStream.lines.length, 1);
   });
 
+  it("should enable messages to be logged again after draining", async () => {
+    const testOutputStream = new TestOutputStream();
+    const transport = ({ record }) => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          testOutputStream.write(record);
+          testOutputStream.write(EOL);
+          resolve();
+        }, 100);
+      });
+    };
+
+    const logger = new Logger({
+      transports: [transport],
+    });
+
+    logger.info("Tripitaka rocks!");
+    await logger.drain();
+    logger.info("Tripitaka sucks!");
+    // Have to drain a second time to get second log message.
+    await logger.drain();
+
+    eq(testOutputStream.lines.length, 2);
+  });
+
   it("should tollerate repeated requests to drain", async () => {
     const testOutputStream = new TestOutputStream();
     const transport = ({ record }) => {
