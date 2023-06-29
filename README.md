@@ -427,7 +427,7 @@ The available transports are
 
 - [stream](#stream)
 - [emitter](#emitter)
-- [datadog](https://www.npmjs.com/package/tripitaka-sumologic)
+- [datadog](https://www.npmjs.com/package/tripitaka-datadog)
 - [sumologic](https://www.npmjs.com/package/tripitaka-sumologic)
 - [vax terminal](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
 
