@@ -272,7 +272,7 @@ describe("Logger", () => {
     eq(streams[Level.INFO.name].lines.length, 4);
   });
 
-  it("should wait for asynchronous transports to drain", async () => {
+  it("should wait for asynchronous transports to finish", async () => {
     const testOutputStream = new TestOutputStream();
     const transport = ({ record }) => {
       return new Promise((resolve) => {
@@ -292,7 +292,7 @@ describe("Logger", () => {
 
     eq(testOutputStream.lines.length, 0);
 
-    await logger.drain();
+    await logger.waitForTransports();
 
     eq(testOutputStream.lines.length, 1);
   });
@@ -314,7 +314,7 @@ describe("Logger", () => {
     eq(testOutputStream.lines.length, 1);
   });
 
-  it("should timeout if asynchronous transports take too long to drain", async () => {
+  it("should timeout if asynchronous transports take too long to finish", async () => {
     let resolve;
     const transport = () => {
       return new Promise((_resolve) => {
@@ -329,16 +329,16 @@ describe("Logger", () => {
     logger.info("Tripitaka rocks!");
 
     await rejects(
-      () => logger.drain(100),
+      () => logger.waitForTransports(100),
       (err) => {
-        eq(err.message, "Timedout waiting for logger to drain");
+        eq(err.message, "Timedout waiting for transports to finish");
         resolve();
         return true;
       }
     );
   });
 
-  it("should not wait when messages have already drained", async () => {
+  it("should not wait when messages have already finished", async () => {
     const testOutputStream = new TestOutputStream();
     const transport = ({ record }) => {
       return new Promise((resolve) => {
@@ -357,13 +357,13 @@ describe("Logger", () => {
     eq(testOutputStream.lines.length, 1);
 
     const before = Date.now();
-    await logger.drain();
+    await logger.waitForTransports();
     const after = Date.now();
 
     ok(after - before <= 20);
   });
 
-  it("should not wait when there were never any messages", async () => {
+  it("should not wait for transports when there were never any messages", async () => {
     const testOutputStream = new TestOutputStream();
     const transport = ({ record }) => {
       return new Promise((resolve) => {
@@ -378,13 +378,13 @@ describe("Logger", () => {
     });
 
     const before = Date.now();
-    await logger.drain();
+    await logger.waitForTransports();
     const after = Date.now();
 
     ok(after - before <= 10);
   });
 
-  it("should suppress messages logged while draining", async () => {
+  it("should continue logging while waiting for transports to finish", async () => {
     const testOutputStream = new TestOutputStream();
     const transport = ({ record }) => {
       return new Promise((resolve) => {
@@ -402,16 +402,16 @@ describe("Logger", () => {
 
     logger.info("Tripitaka rocks!");
 
-    const drained = logger.drain();
+    const pendingTransports = logger.waitForTransports();
 
     logger.info("Tripitaka sucks!");
 
-    await drained;
+    await pendingTransports;
 
-    eq(testOutputStream.lines.length, 1);
+    eq(testOutputStream.lines.length, 2);
   });
 
-  it("should tollerate repeated requests to drain", async () => {
+  it("should tollerate repeated requests to wait for transports", async () => {
     const testOutputStream = new TestOutputStream();
     const transport = ({ record }) => {
       return new Promise((resolve) => {
@@ -429,8 +429,14 @@ describe("Logger", () => {
 
     logger.info("Tripitaka rocks!");
 
-    await Promise.all(new Array(10).fill().map(() => logger.drain()));
+    const pendingTransports1 = logger.waitForTransports();
 
-    eq(testOutputStream.lines.length, 1);
+    logger.info("Tripitaka rocks!");
+
+    const pendingTransports2 = logger.waitForTransports();
+
+    await Promise.all([pendingTransports1, pendingTransports2]);
+
+    eq(testOutputStream.lines.length, 2);
   });
 });
