@@ -9,6 +9,7 @@ and this project adheres to Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 - Enable the include processor to target a sub document of the log record
 - Updated engine to Node 17+ due to structuredClone
+- Removed prettier (which does not do what it says on the tin!)
 
 ## 4.2.1
 
