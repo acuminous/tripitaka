@@ -1,5 +1,5 @@
-const { EOL } = require("os");
-const assert = require("assert");
+const { EOL } = require('os');
+const assert = require('assert');
 
 if (!assert.match) {
   assert.match = function match(actual, regexp) {

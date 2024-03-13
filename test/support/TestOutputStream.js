@@ -1,5 +1,5 @@
-const { EOL } = require("os");
-const { Writable } = require("stream");
+const { EOL } = require('os');
+const { Writable } = require('stream');
 
 class TestOutputStream extends Writable {
   constructor() {
@@ -8,7 +8,7 @@ class TestOutputStream extends Writable {
   }
 
   get lines() {
-    return this._chunks.join("").split(EOL).slice(0, -1);
+    return this._chunks.join('').split(EOL).slice(0, -1);
   }
 
   write(chunk) {

@@ -1,4 +1,4 @@
-const LoggerFactory = require("../LoggerFactory");
+const LoggerFactory = require('../LoggerFactory');
 
 module.exports = (req, res, next) => {
   const request = {
@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
     start: Date.now(),
   };
 
-  res.once("finish", function onFinish() {
+  res.once('finish', function onFinish() {
     request.duration = Date.now() - request.start;
     /* eslint-disable-next-line no-invalid-this */
     request.status = this.statusCode;

@@ -1,8 +1,8 @@
-const { deepStrictEqual: eq } = require("assert");
-const { Level } = require("..");
+const { deepStrictEqual: eq } = require('assert');
+const { Level } = require('..');
 
-describe("Level", () => {
-  it("should support pecking order", () => {
+describe('Level', () => {
+  it('should support pecking order', () => {
     eq(Level.TRACE.satisfies(Level.TRACE), true);
     eq(Level.TRACE.satisfies(Level.DEBUG), false);
     eq(Level.TRACE.satisfies(Level.INFO), false);
@@ -34,11 +34,11 @@ describe("Level", () => {
     eq(Level.ERROR.satisfies(Level.ERROR), true);
   });
 
-  it("should convert string to correct level", () => {
-    eq(Level.lookup("TRACE").equals(Level.TRACE), true);
-    eq(Level.lookup("DEBUG").equals(Level.DEBUG), true);
-    eq(Level.lookup("INFO").equals(Level.INFO), true);
-    eq(Level.lookup("WARN").equals(Level.WARN), true);
-    eq(Level.lookup("ERROR").equals(Level.ERROR), true);
+  it('should convert string to correct level', () => {
+    eq(Level.lookup('TRACE').equals(Level.TRACE), true);
+    eq(Level.lookup('DEBUG').equals(Level.DEBUG), true);
+    eq(Level.lookup('INFO').equals(Level.INFO), true);
+    eq(Level.lookup('WARN').equals(Level.WARN), true);
+    eq(Level.lookup('ERROR').equals(Level.ERROR), true);
   });
 });

@@ -1,9 +1,9 @@
-const { EOL } = require("os");
-const { deepStrictEqual: eq, ok, match, rejects } = require("assert");
-const { TestOutputStream } = require("./support");
-const { Level, Logger, processors, transports } = require("..");
+const { EOL } = require('os');
+const { deepStrictEqual: eq, ok, match, rejects } = require('assert');
+const { TestOutputStream } = require('./support');
+const { Level, Logger, processors, transports } = require('..');
 
-describe("Logger", () => {
+describe('Logger', () => {
   let streams;
 
   beforeEach(() => {
@@ -32,7 +32,7 @@ describe("Logger", () => {
     });
   };
 
-  const errorPosition = "39:24";
+  const errorPosition = '39:24';
 
   const runScenario = (ts, scenario) => {
     const logger = newLogger(ts);
@@ -66,139 +66,139 @@ describe("Logger", () => {
     return messageScenario(Level.INFO, msg, context, line, name);
   };
 
-  describe("messages", () => {
+  describe('messages', () => {
     const ts = new Date();
     const timestamp = ts.toISOString();
 
     const messageScenarios = [
       messageScenario(
         Level.TRACE,
-        "Tripitaka traces!",
-        { x: "y" },
-        `{"level":"TRACE","message":"Tripitaka traces!","x":"y","timestamp":"${timestamp}"}`
+        'Tripitaka traces!',
+        { x: 'y' },
+        `{"level":"TRACE","message":"Tripitaka traces!","x":"y","timestamp":"${timestamp}"}`,
       ),
       messageScenario(
         Level.DEBUG,
-        "Tripitaka debugs!",
-        { x: "y" },
-        `{"level":"DEBUG","message":"Tripitaka debugs!","x":"y","timestamp":"${timestamp}"}`
+        'Tripitaka debugs!',
+        { x: 'y' },
+        `{"level":"DEBUG","message":"Tripitaka debugs!","x":"y","timestamp":"${timestamp}"}`,
       ),
       messageScenario(
         Level.INFO,
-        "Tripitaka rocks once!",
-        { x: "y" },
-        `{"level":"INFO","message":"Tripitaka rocks once!","x":"y","timestamp":"${timestamp}"}`
+        'Tripitaka rocks once!',
+        { x: 'y' },
+        `{"level":"INFO","message":"Tripitaka rocks once!","x":"y","timestamp":"${timestamp}"}`,
       ),
       messageScenario(
         Level.WARN,
-        "Tripitaka warns!",
-        { x: "y" },
-        `{"level":"WARN","message":"Tripitaka warns!","x":"y","timestamp":"${timestamp}"}`
+        'Tripitaka warns!',
+        { x: 'y' },
+        `{"level":"WARN","message":"Tripitaka warns!","x":"y","timestamp":"${timestamp}"}`,
       ),
       messageScenario(
         Level.ERROR,
-        "Tripitaka errors!",
-        new Error("Oooh, Demons!"),
-        `{"level":"ERROR","message":"Tripitaka errors!","error":{"message":"Oooh, Demons!"},"timestamp":"${timestamp}"}`
+        'Tripitaka errors!',
+        new Error('Oooh, Demons!'),
+        `{"level":"ERROR","message":"Tripitaka errors!","error":{"message":"Oooh, Demons!"},"timestamp":"${timestamp}"}`,
       ),
     ];
 
     runScenarios(ts, messageScenarios);
   });
 
-  describe("errors", () => {
+  describe('errors', () => {
     const ts = new Date();
     const timestamp = ts.toISOString();
 
     const errorScenarios = [
       errorScenario(
-        "Tripitaka errors!",
-        new Error("Oooh, Demons!"),
+        'Tripitaka errors!',
+        new Error('Oooh, Demons!'),
         `{"level":"ERROR","message":"Tripitaka errors!","error":{"message":"Oooh, Demons!"},"timestamp":"${timestamp}"}`,
-        "msg and error"
+        'msg and error',
       ),
       errorScenario(
-        "Tripitaka errors!",
-        { error: new Error("Oooh, Demons!") },
+        'Tripitaka errors!',
+        { error: new Error('Oooh, Demons!') },
         `{"level":"ERROR","message":"Tripitaka errors!","error":{"message":"Oooh, Demons!"},"timestamp":"${timestamp}"}`,
-        "msg and error object"
+        'msg and error object',
       ),
       errorScenario(
-        "Tripitaka errors!",
-        [new Error("Oooh, Demons!")],
+        'Tripitaka errors!',
+        [new Error('Oooh, Demons!')],
         `{"level":"ERROR","message":"Tripitaka errors!","items":[{"message":"Oooh, Demons!"}],"timestamp":"${timestamp}"}`,
-        "msg and error array"
+        'msg and error array',
       ),
       errorScenario(
         undefined,
-        new Error("Oooh, Demons!"),
+        new Error('Oooh, Demons!'),
         `{"level":"ERROR","message":"Oooh, Demons!","error":{"message":"Oooh, Demons!"},"timestamp":"${timestamp}"}`,
-        "error"
+        'error',
       ),
       errorScenario(
         undefined,
-        { error: new Error("Oooh, Demons!") },
+        { error: new Error('Oooh, Demons!') },
         `{"level":"ERROR","message":"Empty message logged at runScenario (${__filename}:${errorPosition})","error":{"message":"Oooh, Demons!"},"timestamp":"${timestamp}"}`,
-        "error object"
+        'error object',
       ),
       errorScenario(
         undefined,
-        [new Error("Oooh, Demons!")],
+        [new Error('Oooh, Demons!')],
         `{"level":"ERROR","message":"Empty message logged at runScenario (${__filename}:${errorPosition})","items":[{"message":"Oooh, Demons!"}],"timestamp":"${timestamp}"}`,
-        "error array"
+        'error array',
       ),
       errorScenario(
         undefined,
         undefined,
         `{"level":"ERROR","message":"Empty message logged at runScenario (${__filename}:${errorPosition})","timestamp":"${timestamp}"}`,
-        "nothing"
+        'nothing',
       ),
     ];
 
     runScenarios(ts, errorScenarios);
   });
 
-  describe("context", () => {
+  describe('context', () => {
     const ts = new Date();
     const timestamp = ts.toISOString();
 
     const contextScenarios = [
       infoScenario(
-        "Tripitaka rocks!",
-        { x: "y" },
+        'Tripitaka rocks!',
+        { x: 'y' },
         `{"level":"INFO","message":"Tripitaka rocks!","x":"y","timestamp":"${timestamp}"}`,
-        "msg and object"
+        'msg and object',
       ),
       infoScenario(
-        "Tripitaka rocks!",
-        [{ x: "y" }],
+        'Tripitaka rocks!',
+        [{ x: 'y' }],
         `{"level":"INFO","message":"Tripitaka rocks!","items":[{"x":"y"}],"timestamp":"${timestamp}"}`,
-        "msg and array"
+        'msg and array',
       ),
       infoScenario(
         undefined,
-        { x: "y" },
+        { x: 'y' },
         `{"level":"INFO","message":"Empty message logged at runScenario (${__filename}:${errorPosition})","x":"y","timestamp":"${timestamp}"}`,
-        "object"
+        'object',
       ),
       infoScenario(
         undefined,
-        [{ x: "y" }],
+        [{ x: 'y' }],
         `{"level":"INFO","message":"Empty message logged at runScenario (${__filename}:${errorPosition})","items":[{"x":"y"}],"timestamp":"${timestamp}"}`,
-        "array"
+        'array',
       ),
       infoScenario(
         undefined,
         undefined,
         `{"level":"INFO","message":"Empty message logged at runScenario (${__filename}:${errorPosition})","timestamp":"${timestamp}"}`,
-        "nothing"
+        'nothing',
       ),
     ];
 
     runScenarios(ts, contextScenarios);
   });
 
-  it("should ignore falsy processors", () => {
+  it('should ignore falsy processors', () => {
     const ts = new Date();
     const logger = new Logger({
       processors: [
@@ -214,17 +214,17 @@ describe("Logger", () => {
       transports: [transports.stream({ streams })],
     });
 
-    logger.info("Tripitaka rocks!", { x: "y" });
+    logger.info('Tripitaka rocks!', { x: 'y' });
 
     eq(streams[Level.INFO.name].lines, [`{"level":"INFO","message":"Tripitaka rocks!","x":"y","timestamp":"${ts.toISOString()}"}`]);
   });
 
-  it("should support humans", () => {
+  it('should support humans', () => {
     const logger = new Logger({
       processors: [
         processors.context(),
         processors.timestamp({
-          getTimestamp: () => new Date("2022-05-29T13:14:15.001Z"),
+          getTimestamp: () => new Date('2022-05-29T13:14:15.001Z'),
         }),
         processors.empty(),
         processors.human({ colours: 0 }),
@@ -233,34 +233,34 @@ describe("Logger", () => {
       level: Level.TRACE,
     });
 
-    logger.info("Tripitaka rocks!", { x: "y" });
-    logger.info("Tripitaka rocks!");
-    logger.error(new Error("Oooh, Demons!"));
+    logger.info('Tripitaka rocks!', { x: 'y' });
+    logger.info('Tripitaka rocks!');
+    logger.error(new Error('Oooh, Demons!'));
 
-    eq(streams[Level.INFO.name].lines[0], "2022-05-29 13:14:15 INFO  Tripitaka rocks!");
-    eq(streams[Level.INFO.name].lines[1], "{");
+    eq(streams[Level.INFO.name].lines[0], '2022-05-29 13:14:15 INFO  Tripitaka rocks!');
+    eq(streams[Level.INFO.name].lines[1], '{');
     eq(streams[Level.INFO.name].lines[2], '  "x": "y"');
-    eq(streams[Level.INFO.name].lines[3], "}");
-    eq(streams[Level.INFO.name].lines[4], "2022-05-29 13:14:15 INFO  Tripitaka rocks!");
+    eq(streams[Level.INFO.name].lines[3], '}');
+    eq(streams[Level.INFO.name].lines[4], '2022-05-29 13:14:15 INFO  Tripitaka rocks!');
     eq(streams[Level.INFO.name].lines.length, 5);
-    eq(streams[Level.ERROR.name].lines[0], "2022-05-29 13:14:15 ERROR Oooh, Demons!");
-    eq(streams[Level.ERROR.name].lines[1], "Error: Oooh, Demons!");
+    eq(streams[Level.ERROR.name].lines[0], '2022-05-29 13:14:15 ERROR Oooh, Demons!');
+    eq(streams[Level.ERROR.name].lines[1], 'Error: Oooh, Demons!');
     match(streams[Level.ERROR.name].lines[2], new RegExp(`^\\s+at Test\\._fn \\(${__filename}:\\d+:\\d+\\)`));
 
     ok(streams[Level.ERROR.name].lines.length >= 10);
   });
 
-  it("should support being disabled", () => {
+  it('should support being disabled', () => {
     const logger = new Logger({
       transports: [transports.stream({ streams })],
     });
 
     logger.disable();
-    logger.info("Tripitaka rocks!", { x: "y" });
+    logger.info('Tripitaka rocks!', { x: 'y' });
     eq(streams[Level.INFO.name].lines.length, 0);
   });
 
-  it("should support being enabled", () => {
+  it('should support being enabled', () => {
     const logger = new Logger({
       transports: [transports.stream({ streams })],
     });
@@ -268,11 +268,11 @@ describe("Logger", () => {
     logger.disable();
     logger.enable();
 
-    logger.info("Tripitaka rocks!", { x: "y" });
+    logger.info('Tripitaka rocks!', { x: 'y' });
     eq(streams[Level.INFO.name].lines.length, 4);
   });
 
-  it("should wait for asynchronous transports to finish", async () => {
+  it('should wait for asynchronous transports to finish', async () => {
     const testOutputStream = new TestOutputStream();
     const transport = ({ record }) => {
       return new Promise((resolve) => {
@@ -288,7 +288,7 @@ describe("Logger", () => {
       transports: [transport],
     });
 
-    logger.info("Tripitaka rocks!");
+    logger.info('Tripitaka rocks!');
 
     eq(testOutputStream.lines.length, 0);
 
@@ -297,24 +297,24 @@ describe("Logger", () => {
     eq(testOutputStream.lines.length, 1);
   });
 
-  it("should tolerate transports that return junk", async () => {
+  it('should tolerate transports that return junk', async () => {
     const testOutputStream = new TestOutputStream();
     const transport = ({ record }) => {
       testOutputStream.write(record);
       testOutputStream.write(EOL);
-      return "not a promise";
+      return 'not a promise';
     };
 
     const logger = new Logger({
       transports: [transport],
     });
 
-    logger.info("Tripitaka rocks!");
+    logger.info('Tripitaka rocks!');
 
     eq(testOutputStream.lines.length, 1);
   });
 
-  it("should timeout if asynchronous transports take too long to finish", async () => {
+  it('should timeout if asynchronous transports take too long to finish', async () => {
     let resolve;
     const transport = () => {
       return new Promise((_resolve) => {
@@ -326,19 +326,19 @@ describe("Logger", () => {
       transports: [transport],
     });
 
-    logger.info("Tripitaka rocks!");
+    logger.info('Tripitaka rocks!');
 
     await rejects(
       () => logger.waitForTransports(100),
       (err) => {
-        eq(err.message, "Timedout waiting for transports to finish");
+        eq(err.message, 'Timedout waiting for transports to finish');
         resolve();
         return true;
-      }
+      },
     );
   });
 
-  it("should not wait when messages have already finished", async () => {
+  it('should not wait when messages have already finished', async () => {
     const testOutputStream = new TestOutputStream();
     const transport = ({ record }) => {
       return new Promise((resolve) => {
@@ -352,7 +352,7 @@ describe("Logger", () => {
       transports: [transport],
     });
 
-    logger.info("Tripitaka rocks!");
+    logger.info('Tripitaka rocks!');
 
     eq(testOutputStream.lines.length, 1);
 
@@ -363,7 +363,7 @@ describe("Logger", () => {
     ok(after - before <= 20);
   });
 
-  it("should not wait for transports when there were never any messages", async () => {
+  it('should not wait for transports when there were never any messages', async () => {
     const testOutputStream = new TestOutputStream();
     const transport = ({ record }) => {
       return new Promise((resolve) => {
@@ -384,7 +384,7 @@ describe("Logger", () => {
     ok(after - before <= 10);
   });
 
-  it("should continue logging while waiting for transports to finish", async () => {
+  it('should continue logging while waiting for transports to finish', async () => {
     const testOutputStream = new TestOutputStream();
     const transport = ({ record }) => {
       return new Promise((resolve) => {
@@ -400,18 +400,18 @@ describe("Logger", () => {
       transports: [transport],
     });
 
-    logger.info("Tripitaka rocks!");
+    logger.info('Tripitaka rocks!');
 
     const pendingTransports = logger.waitForTransports();
 
-    logger.info("Tripitaka sucks!");
+    logger.info('Tripitaka sucks!');
 
     await pendingTransports;
 
     eq(testOutputStream.lines.length, 2);
   });
 
-  it("should tollerate repeated requests to wait for transports", async () => {
+  it('should tollerate repeated requests to wait for transports', async () => {
     const testOutputStream = new TestOutputStream();
     const transport = ({ record }) => {
       return new Promise((resolve) => {
@@ -427,11 +427,11 @@ describe("Logger", () => {
       transports: [transport],
     });
 
-    logger.info("Tripitaka rocks!");
+    logger.info('Tripitaka rocks!');
 
     const pendingTransports1 = logger.waitForTransports();
 
-    logger.info("Tripitaka rocks!");
+    logger.info('Tripitaka rocks!');
 
     const pendingTransports2 = logger.waitForTransports();
 

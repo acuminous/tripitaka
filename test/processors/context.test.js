@@ -1,31 +1,31 @@
-const { strictEqual: eq, ok, match } = require("assert");
+const { strictEqual: eq, ok, match } = require('assert');
 const {
   processors: { context },
-} = require("../..");
+} = require('../..');
 
-describe("context", () => {
-  describe("context is an Error", () => {
-    it("should nest the error on the record", () => {
+describe('context', () => {
+  describe('context is an Error', () => {
+    it('should nest the error on the record', () => {
       const fn = context();
-      const ctx = new Error("Oooh, Demons!");
-      const result = fn({ message: "Oooh, Demons!", ctx });
+      const ctx = new Error('Oooh, Demons!');
+      const result = fn({ message: 'Oooh, Demons!', ctx });
 
-      eq(result.error.message, "Oooh, Demons!");
+      eq(result.error.message, 'Oooh, Demons!');
       match(result.error.stack, /^Error: Oooh, Demons!/);
     });
 
-    it("should nest with a custom property", () => {
-      const fn = context({ errorField: "e" });
-      const ctx = new Error("Oooh, Demons!");
-      const result = fn({ message: "Oooh, Demons!", ctx });
+    it('should nest with a custom property', () => {
+      const fn = context({ errorField: 'e' });
+      const ctx = new Error('Oooh, Demons!');
+      const result = fn({ message: 'Oooh, Demons!', ctx });
 
-      eq(result.e.message, "Oooh, Demons!");
+      eq(result.e.message, 'Oooh, Demons!');
       match(result.e.stack, /^Error: Oooh, Demons!/);
     });
   });
 
-  describe("context is an Array", () => {
-    it("should nest the array on the record", () => {
+  describe('context is an Array', () => {
+    it('should nest the array on the record', () => {
       const fn = context();
       const ctx = [1, 2, 3];
       const result = fn({ ctx });
@@ -36,8 +36,8 @@ describe("context", () => {
       ok(result.items[2], 3);
     });
 
-    it("should nest with a custom property", () => {
-      const fn = context({ arrayField: "things" });
+    it('should nest with a custom property', () => {
+      const fn = context({ arrayField: 'things' });
       const ctx = [1, 2, 3];
       const result = fn({ ctx });
 
@@ -48,14 +48,14 @@ describe("context", () => {
     });
   });
 
-  describe("context is an Object", () => {
-    it("should correctly capture error details when provided via context", () => {
+  describe('context is an Object', () => {
+    it('should correctly capture error details when provided via context', () => {
       const fn = context();
-      const ctx = { a: "b", error: new Error("Oooh, Demons!"), x: "y" };
+      const ctx = { a: 'b', error: new Error('Oooh, Demons!'), x: 'y' };
 
       const result = fn({ ctx });
 
-      eq(result.error.message, "Oooh, Demons!");
+      eq(result.error.message, 'Oooh, Demons!');
       match(result.error.stack, /^Error: Oooh, Demons!/);
     });
   });

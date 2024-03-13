@@ -1,4 +1,4 @@
-const { Logger, processors } = require("../..");
+const { Logger, processors } = require('../..');
 
 const { augment, context, index, json, timestamp } = processors;
 let logger;
@@ -13,7 +13,7 @@ module.exports = class LoggerFactory {
         }),
         timestamp(),
         index({
-          paths: ["request.url", "request.route", "request.status", "request.params.id", "tracerId"],
+          paths: ['request.url', 'request.route', 'request.status', 'request.params.id', 'tracerId'],
           reportComplexTypes: true,
         }),
         json(),
