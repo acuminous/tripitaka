@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## 5.0.1
+
+- structuredClone throws on unclonable properties (like functions). Replaced with rfdc.
+
 ## 5.0.0
 
 - Enable the include processor to target a sub document of the log record

@@ -323,7 +323,7 @@ logger.info("How blissful it is, for one who has nothing", {
 ### include
 
 Copies the specified paths into a new log record. This is useful to avoid logging every property from a noisy object, including potentially senstive ones (I'm looking at you AxiosError!).
-Please note, this processor uses Node's [structuredClone](https://nodejs.org/api/globals.html#structuredclonevalue-options) function and may therefore be [slow](https://github.com/nodejs/node/issues/50320).
+Please note, this processor uses [rfdc](https://www.npmjs.com/package/rfdc) with 'circles' mode enabled so may be a little slow.
 
 It has the following options:
 

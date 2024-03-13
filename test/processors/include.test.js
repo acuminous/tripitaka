@@ -76,13 +76,28 @@ describe('include', () => {
     });
 
     // See https://github.com/jonschlinkert/get-value/issues/29
-    // it("should work with recursive documents", () => {
-    //   const fn = include({ basePath: 'r' paths: ["a.b.c"] });
-    //   const a = { c: 2 };
-    //   a.b = a;
-    //   const result = fn({ record: { r: { a }, keep: 1 } });
-    //   eq(result, { r: { a: { b: { c: 2 } }, keep: 1 });
-    // });
+    it('should work with recursive documents', () => {
+      const fn = include({ basePath: 'r', paths: ['a.b.c'] });
+      const a = { c: 2 };
+      a.b = a;
+      const result = fn({ record: { r: { a }, keep: 1 } });
+      eq(result, { r: { a: { b: { c: 2 } } }, keep: 1 });
+    });
+
+    it('should clone with recursive documents', () => {
+      const fn = include({ basePath: 'r', paths: ['a'] });
+      const keep = { a: 1 };
+      keep.z = keep;
+      const result = fn({ record: { r: { a: 1 }, keep } });
+      eq(result, { r: { a: 1 }, keep });
+    });
+
+    it('should tolerate unclonable documents', () => {
+      const fn = include({ basePath: 'r', paths: ['a'] });
+      const keep = () => true;
+      const result = fn({ record: { r: { a: 1 }, keep } });
+      eq(result, { r: { a: 1 }, keep });
+    });
 
     it('should not mutate original record', () => {
       const record = { r: { a: { b: 1, c: 2 }, m: 1, x: { y: 1, z: 2 } }, keep: 1 };
