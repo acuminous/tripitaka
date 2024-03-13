@@ -1,7 +1,5 @@
 const { deepStrictEqual: eq } = require('assert');
-const {
-  processors: { include },
-} = require('../..');
+const { processors: { include } } = require('../..');
 
 describe('include', () => {
   describe('without base path', () => {

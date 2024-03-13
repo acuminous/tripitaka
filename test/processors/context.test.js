@@ -1,7 +1,5 @@
 const { strictEqual: eq, ok, match } = require('assert');
-const {
-  processors: { context },
-} = require('../..');
+const { processors: { context } } = require('../..');
 
 describe('context', () => {
   describe('context is an Error', () => {

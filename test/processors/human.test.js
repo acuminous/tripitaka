@@ -1,8 +1,5 @@
 const { match } = require('assert');
-const {
-  Level,
-  processors: { human },
-} = require('../..');
+const { Level, processors: { human } } = require('../..');
 
 describe('human', () => {
   it('should work out of the box', () => {

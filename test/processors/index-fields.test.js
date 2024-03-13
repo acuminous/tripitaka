@@ -1,7 +1,5 @@
 const { deepStrictEqual: eq, throws } = require('assert');
-const {
-  processors: { index },
-} = require('../..');
+const { processors: { index } } = require('../..');
 
 describe('index', () => {
   it('should index the specified paths', () => {

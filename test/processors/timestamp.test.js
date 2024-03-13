@@ -1,7 +1,5 @@
 const { deepStrictEqual: eq } = require('assert');
-const {
-  processors: { timestamp },
-} = require('../..');
+const { processors: { timestamp } } = require('../..');
 
 describe('timestamp', () => {
   it('should work out of the box', () => {

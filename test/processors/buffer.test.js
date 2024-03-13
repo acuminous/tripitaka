@@ -1,7 +1,5 @@
 const { ok, strictEqual: eq } = require('assert');
-const {
-  processors: { buffer },
-} = require('../..');
+const { processors: { buffer } } = require('../..');
 
 describe('buffer', () => {
   it('should work out of the box', () => {

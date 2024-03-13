@@ -1,7 +1,5 @@
 const { strictEqual: eq } = require('assert');
-const {
-  processors: { json },
-} = require('../..');
+const { processors: { json } } = require('../..');
 
 describe('json', () => {
   it('should stringify the context', () => {

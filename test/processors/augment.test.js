@@ -1,7 +1,5 @@
 const { deepStrictEqual: eq } = require('assert');
-const {
-  processors: { augment },
-} = require('../..');
+const { processors: { augment } } = require('../..');
 
 describe('augment', () => {
   describe('function', () => {
