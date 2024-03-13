@@ -39,6 +39,7 @@ export const processors: {
   empty: ProcessorFactory;
   error: ProcessorFactory;
   human: ProcessorFactory;
+  include: ProcessorFactory;
   index: ProcessorFactory;
   json: ProcessorFactory;
   timestamp: ProcessorFactory;
