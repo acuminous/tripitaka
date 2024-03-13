@@ -5,8 +5,10 @@
   "main": "index.js",
   "dependencies": {
     "chalk": "^4.1.2",
-    "dot-prop": "^6.0.1",
-    "json-stringify-safe": "^5.0.1"
+    "get-value": "^3.0.1",
+    "has-value": "^2.0.2",
+    "json-stringify-safe": "^5.0.1",
+    "set-value": "^4.1.0"
   },
   "devDependencies": {
     "eslint": "^8.27.0",
