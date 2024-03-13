@@ -7,6 +7,7 @@ and this project adheres to Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+- Add include processor
 - Migrate from [dot-prop](https://www.npmjs.com/package/dot-prop) to [has-value](https://www.npmjs.com/package/has-value), [get-value](https://www.npmjs.com/package/get-value) and [set-value](https://www.npmjs.com/package/set-value) due to dot-prop's move to ESM
 
 ## 4.0.0

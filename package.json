@@ -8,7 +8,8 @@
     "get-value": "^3.0.1",
     "has-value": "^2.0.2",
     "json-stringify-safe": "^5.0.1",
-    "set-value": "^4.1.0"
+    "set-value": "^4.1.0",
+    "to-path": "^1.0.1"
   },
   "devDependencies": {
     "eslint": "^8.27.0",

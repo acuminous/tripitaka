@@ -322,13 +322,13 @@ logger.info("How blissful it is, for one who has nothing", {
 
 ### include
 
-Recursively walks the log record, creating a clone that only includes the specified paths. This is useful to avoid logging every property from a noisy object, including potentially senstive ones (I'm looking at you AxiosError!).
+Shallow copies the specified paths into a new log record. This is useful to avoid logging every property from a noisy object, including potentially senstive ones (I'm looking at you AxiosError!).
 
 It has the following options:
 
-| name               | type    | required | default  | notes                                                                                 |
-| ------------------ | ------- | -------- | -------- | ------------------------------------------------------------------------------------- |
-| paths              | array   | no       | []       | Specifies the paths of the fields to include                                          |
+| name  | type  | required | default | notes                                        |
+| ----- | ----- | -------- | ------- | -------------------------------------------- |
+| paths | array | no       | []      | Specifies the paths of the fields to include |
 
 #### example
 
@@ -347,11 +347,29 @@ logger.error(httpError);
     "message": "NOT FOUND",
     "request": {
       "method": "GET",
-      "url": "http://httpbin.org/status/404",
+      "url": "http://httpbin.org/status/404"
     },
     "response": {
       "status": 404
     }
+  }
+}
+```
+
+You can use array notation (e.g. `items[0].name`), however the resulting document will still be yielded as an object, i.e.
+
+```js
+const logger = new Logger({
+  processors: [context(), include({ paths: ["items[1]", "items[2]"]), json()],
+});
+logger.info("How blissful it is, for one who has nothing", { items: ["a", "b", "c", "d"]});
+```
+
+```json
+{
+  "items": {
+    "1": "b",
+    "2": "c"
   }
 }
 ```
