@@ -326,9 +326,10 @@ Shallow copies the specified paths into a new log record. This is useful to avoi
 
 It has the following options:
 
-| name  | type  | required | default | notes                                        |
-| ----- | ----- | -------- | ------- | -------------------------------------------- |
-| paths | array | no       | []      | Specifies the paths of the fields to include |
+| name         | type     | required | default    | notes                                                      |
+| ------------ | -------- | -------- | ---------- | ---------------------------------------------------------- |
+| paths        | array    | no       | []         | Specifies the paths of the fields to include               |
+| precondition | function | no       | () => true | A function which must return true for the processor to run |
 
 #### example
 

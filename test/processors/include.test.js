@@ -37,4 +37,16 @@ describe("include", () => {
     fn({ record });
     eq(record, { a: { b: 1, c: 2 }, m: 1, x: { y: 1, z: 2 } });
   });
+
+  it("should run the processor the precondition passes", () => {
+    const fn = include({ precondition: ({ record }) => record.a.b === 1, paths: ["a.b", "x"] });
+    const result = fn({ record: { a: { b: 1, c: 2 }, m: 1, x: { y: 1, z: 2 } } });
+    eq(result, { a: { b: 1 }, x: { y: 1, z: 2 } });
+  });
+
+  it("should bypass the processor the precondition fails", () => {
+    const fn = include({ precondition: () => false, paths: ["a.b", "x"] });
+    const result = fn({ record: { a: { b: 1, c: 2 }, m: 1, x: { y: 1, z: 2 } } });
+    eq(result, { a: { b: 1, c: 2 }, m: 1, x: { y: 1, z: 2 } });
+  });
 });
