@@ -326,16 +326,17 @@ Shallow copies the specified paths into a new log record. This is useful to avoi
 
 It has the following options:
 
-| name         | type     | required | default    | notes                                                      |
-| ------------ | -------- | -------- | ---------- | ---------------------------------------------------------- |
-| paths        | array    | no       | []         | Specifies the paths of the fields to include               |
-| precondition | function | no       | () => true | A function which must return true for the processor to run |
+| name         | type     | required | default    | notes                                                                          |
+| ------------ | -------- | -------- | ---------- | ------------------------------------------------------------------------------ |
+| basePath     | string   | no       |            | Specifies the base path to work from. Other properties will be copied verbatim |
+| paths        | array    | no       | []         | Specifies the paths (relative to any base path) of the fields to include       |
+| precondition | function | no       | () => true | A function which must return true for the processor to run                     |
 
 #### example
 
 ```js
 const logger = new Logger({
-  processors: [context(), include({ paths: ["error.request.method", "error.request.url", "error.response.status"]), json()],
+  processors: [context(), include({ basePath: "error", paths: ["request.method", "request.url", "response.status"]), json()],
 });
 logger.error(httpError);
 ```
@@ -357,7 +358,7 @@ logger.error(httpError);
 }
 ```
 
-You can use array notation (e.g. `items[0].name`), however the resulting document will still be yielded as an object, i.e.
+Paths can reference arrays (e.g. items[0]), however the resulting document will still be yielded as an object, i.e.
 
 ```js
 const logger = new Logger({
@@ -371,7 +372,9 @@ logger.info("How blissful it is, for one who has nothing", { items: ["a", "b", "
   "items": {
     "1": "b",
     "2": "c"
-  }
+  },
+  "message": "How blissful it is, for one who has nothing",
+  "level": "INFO"
 }
 ```
 
