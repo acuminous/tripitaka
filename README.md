@@ -153,6 +153,7 @@ The out-of-the-box processors are as follows...
 - [context](#context)
 - [empty](#empty)
 - [human](#human)
+- [include](#include)
 - [index](#index)
 - [json](#json)
 - [timestamp](#timestamp)
@@ -316,6 +317,42 @@ logger.info("How blissful it is, for one who has nothing", {
   "heapUsed": 5361608,
   "external": 356316,
   "arrayBuffers": 25566
+}
+```
+
+### include
+
+Recursively walks the log record, creating a clone that only includes the specified paths. This is useful to avoid logging every property from a noisy object, including potentially senstive ones (I'm looking at you AxiosError!).
+
+It has the following options:
+
+| name               | type    | required | default  | notes                                                                                 |
+| ------------------ | ------- | -------- | -------- | ------------------------------------------------------------------------------------- |
+| paths              | array   | no       | []       | Specifies the paths of the fields to include                                          |
+
+#### example
+
+```js
+const logger = new Logger({
+  processors: [context(), include({ paths: ["error.request.method", "error.request.url", "error.response.status"]), json()],
+});
+logger.error(httpError);
+```
+
+```json
+{
+  "message": "NOT FOUND",
+  "level": "ERROR",
+  "error": {
+    "message": "NOT FOUND",
+    "request": {
+      "method": "GET",
+      "url": "http://httpbin.org/status/404",
+    },
+    "response": {
+      "status": 404
+    }
+  }
 }
 ```
 
