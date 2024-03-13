@@ -322,7 +322,8 @@ logger.info("How blissful it is, for one who has nothing", {
 
 ### include
 
-Shallow copies the specified paths into a new log record. This is useful to avoid logging every property from a noisy object, including potentially senstive ones (I'm looking at you AxiosError!).
+Copies the specified paths into a new log record. This is useful to avoid logging every property from a noisy object, including potentially senstive ones (I'm looking at you AxiosError!).
+Please note, this processor uses Node's [structuredClone](https://nodejs.org/api/globals.html#structuredclonevalue-options) function and may therefore be [slow](https://github.com/nodejs/node/issues/50320).
 
 It has the following options:
 
