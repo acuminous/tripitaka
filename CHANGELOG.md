@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## Unreleased
+
+- Migrate from [dot-prop](https://www.npmjs.com/package/dot-prop) to [has-value](https://www.npmjs.com/package/has-value), [get-value](https://www.npmjs.com/package/get-value) and [set-value](https://www.npmjs.com/package/set-value) due to dot-prop's move to ESM
+
 ## 4.0.0
 
 - Replace logger.drain with logger.waitForTransports, which does not block subsequent messages from being logged
