@@ -206,6 +206,15 @@ logger.info("How blissful it is, for one who has nothing");
 }
 ```
 
+The source function will be called with an object containing the following parameters
+
+| name    | type               | notes                                |
+| ------- | ------------------ | ------------------------------------ |
+| level   | Level              | The log level                        |
+| message | string             | The log message                      |
+| context | Object             | The log context                      |
+| record  | Object             | The log record prior to augmentation |
+
 ### buffer
 
 The buffer processor outputs the record as a buffer, optionally encoding it before doing so. For this processor to work, the record must previously have been converted to a string.

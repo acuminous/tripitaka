@@ -12,6 +12,15 @@ describe('augment', () => {
       eq(result, { a: 'b', x: 'y' });
     });
 
+    it('should pass the log arguments to the supplied function', () => {
+      const source = ({ level, message, ctx, record }) => {
+        return { level, message, ctx, record };
+      };
+      const fn = augment({ source });
+      const result = fn({ level: 1, message: 2, ctx: 3, record: { a: 'b' } });
+      eq(result, { a: 'b', level: 1, message: 2, ctx: 3, record: { a: 'b' } });
+    });
+
     it('should prefer source to record', () => {
       const source = () => {
         return { x: 'y' };
