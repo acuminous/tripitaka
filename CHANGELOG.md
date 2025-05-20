@@ -8,6 +8,8 @@ and this project adheres to Semantic Versioning](https://semver.org/spec/v2.0.0.
 ## 5.2.0
 - Make processor parameters optional
 - Fix typescript
+- Add noop processor
+- Add noop transport
 
 ## 5.1.0
 - Pass log arguments to augmentation processor function

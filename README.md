@@ -156,6 +156,7 @@ The out-of-the-box processors are as follows...
 - [include](#include)
 - [index](#index)
 - [json](#json)
+- [noop](#noop)
 - [timestamp](#timestamp)
 
 ### augment
@@ -454,6 +455,16 @@ logger.info("How blissful it is, for one who has nothing", {
 }
 ```
 
+### noop
+
+A noop processor - simply passes all the parameters through. This can be useful if you want to conditionally include a processor, e.g.
+
+```js
+const logger = new Logger({
+  processors: [context(), process.env.INCLUDE_TIMESTAMP_PROCESSOR ? timestamp() : noop(), json()],
+});
+```
+
 ### timestamp
 
 Adds a timestamp. It has the following options:
@@ -494,41 +505,12 @@ Transports are functions which write the Tripitaka record somewhere. The only pa
 
 The available transports are
 
-- [stream](#stream)
 - [emitter](#emitter)
 - [datadog](https://www.npmjs.com/package/tripitaka-datadog)
+- [noop](#noop)
+- [stream](#stream)
 - [sumologic](https://www.npmjs.com/package/tripitaka-sumologic)
 - [vax terminal](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
-
-### stream
-
-The stream transport writes a string to an output stream based on the level. It has the following options:
-
-| name    | type   | required | default     | notes                                                                                                              |
-| ------- | ------ | -------- | ----------- | ------------------------------------------------------------------------------------------------------------------ |
-| level   | Level  | no       | Level.TRACE | The minimum log level for this transport                                                                           |
-| streams | object | no       | See notes   | By default TRACE, DEBUG and INFO messages will be output to stdout, while WARN and ERROR messages routed to stderr |
-
-#### example
-
-```js
-const logger = new Logger({
-  transports: [
-    stream({
-      streams: {
-        [Level.TRACE.name]: process.stdout,
-        [Level.DEBUG.name]: process.stdout,
-        [Level.INFO.name]: process.stdout,
-        [Level.WARN.name]: process.stdout,
-        [Level.ERROR.name]: process.stderr,
-      },
-    }),
-  ],
-});
-logger.info("How blissful it is, for one who has nothing", {
-  env: process.env.NODE_ENV,
-});
-```
 
 ### emitter
 
@@ -552,6 +534,52 @@ const logger = new Logger({
         [Level.INFO.name]: "log_info",
         [Level.WARN.name]: "log_warn",
         [Level.ERROR.name]: "log_error",
+      },
+    }),
+  ],
+});
+logger.info("How blissful it is, for one who has nothing", {
+  env: process.env.NODE_ENV,
+});
+```
+
+### noop
+
+A noop transport. This can be useful if you want to conditionally include a transport, e.g.
+
+```js
+const logger = new Logger({
+  transports: [
+    process.env.INCLUDE_EMITTER_TRANSPORT ? emitter() : noop(),
+    stream(),
+  ],
+});
+logger.info("How blissful it is, for one who has nothing", {
+  env: process.env.NODE_ENV,
+});
+```
+
+### stream
+
+The stream transport writes a string to an output stream based on the level. It has the following options:
+
+| name    | type   | required | default     | notes                                                                                                              |
+| ------- | ------ | -------- | ----------- | ------------------------------------------------------------------------------------------------------------------ |
+| level   | Level  | no       | Level.TRACE | The minimum log level for this transport                                                                           |
+| streams | object | no       | See notes   | By default TRACE, DEBUG and INFO messages will be output to stdout, while WARN and ERROR messages routed to stderr |
+
+#### example
+
+```js
+const logger = new Logger({
+  transports: [
+    stream({
+      streams: {
+        [Level.TRACE.name]: process.stdout,
+        [Level.DEBUG.name]: process.stdout,
+        [Level.INFO.name]: process.stdout,
+        [Level.WARN.name]: process.stdout,
+        [Level.ERROR.name]: process.stderr,
       },
     }),
   ],
