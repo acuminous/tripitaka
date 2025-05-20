@@ -20,7 +20,7 @@ export class Level {
 }
 
 export class Logger {
-  constructor(options?: { level?: Level; processors?: ProcessorFactory[]; transports?: TransportFactory[] });
+  constructor(options?: { level?: Level; processors?: Processor[]; transports?: Transport[] });
   trace(message: String, context?: any): void;
   debug(message: String, context?: any): void;
   info(message: String, context?: any): void;
