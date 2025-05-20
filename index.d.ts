@@ -1,4 +1,4 @@
-type Processor = (params: { level: Level; message: any; ctx: any; record: any }) => any;
+type Processor = (params: { level?: Level; message?: any; ctx?: any; record?: any }) => any;
 
 type ProcessorFactory = (...args: any[]) => Processor;
 
