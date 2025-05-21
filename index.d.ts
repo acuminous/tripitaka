@@ -42,10 +42,12 @@ export const processors: {
   include: ProcessorFactory;
   index: ProcessorFactory;
   json: ProcessorFactory;
+  noop: ProcessorFactory;
   timestamp: ProcessorFactory;
 };
 
 export const transports: {
   emitter: TransportFactory;
+  noop: TransportFactory;
   stream: TransportFactory;
 };
