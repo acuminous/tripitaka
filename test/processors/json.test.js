@@ -15,4 +15,24 @@ describe('json', () => {
     const result = fn({ record });
     eq(result, '{"x":"y"}');
   });
+
+  it('should support custom serializer', () => {
+    const serializer = (key, value) => {
+      return key === 'x' ? 'z' : value;
+    };
+    const fn = json({ serializer });
+    const result = fn({ record: { x: 'y' } });
+    eq(result, '{"x":"z"}');
+  });
+
+  it('should support lazy configuration', () => {
+    const serializer = (key, value) => {
+      return key === 'x' ? 'z' : value;
+    };
+    const params = {};
+    const fn = json(params);
+    Object.assign(params, { serializer });
+    const result = fn({ record: { x: 'y' } });
+    eq(result, '{"x":"z"}');
+  });
 });
